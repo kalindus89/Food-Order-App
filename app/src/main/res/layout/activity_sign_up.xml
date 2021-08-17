@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/my_bg"
+    tools:context=".singin_signup.SignInActivity">
+
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        android:layout_marginTop="50dp"
+        app:srcCompat="@drawable/logo_eat_it" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="20dp"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/phoneNumberNew"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:hint="Phone number"
+            android:inputType="phone"
+            android:textSize="20sp"
+            app:met_baseColor="@color/white"
+            app:met_floatingLabel="highlight"
+            app:met_maxCharacters="12"
+            app:met_primaryColor="@color/white"
+            app:met_singleLineEllipsis="true"
+            app:met_textColor="@color/white" />
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/nameUserNew"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:hint="Name"
+            android:inputType="text"
+            android:textSize="20sp"
+            app:met_baseColor="@color/white"
+            app:met_floatingLabel="highlight"
+            app:met_maxCharacters="12"
+            app:met_primaryColor="@color/white"
+            app:met_singleLineEllipsis="true"
+            app:met_textColor="@color/white" />
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/passwordNew"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:hint="Password"
+            android:inputType="textPassword"
+            android:textSize="20sp"
+            app:met_baseColor="@color/white"
+            app:met_floatingLabel="highlight"
+            app:met_maxCharacters="12"
+            app:met_primaryColor="@color/white"
+            app:met_singleLineEllipsis="true"
+            app:met_textColor="@color/white" />
+
+        <android.widget.Button
+            android:id="@+id/btnSignUpNew"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/round_coners"
+            android:backgroundTint="#A8B61A"
+            android:text="Sing Up"
+            android:textColor="@color/white" />
+
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBarNew"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:visibility="gone"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"/>
+
+    <LinearLayout
+        android:id="@+id/goToSingInNew"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+        android:gravity="center|bottom"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:gravity="center"
+            android:text="Already have an account? "
+            android:textColor="@color/white"
+            android:textSize="15sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="20dp"
+            android:focusable="false"
+            android:gravity="center"
+            android:text=" Sing In"
+            android:textColor="#DD8D17"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+</RelativeLayout>
