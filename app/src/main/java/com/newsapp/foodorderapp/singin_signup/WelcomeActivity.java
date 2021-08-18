@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 
+import com.newsapp.foodorderapp.HomeActivity;
 import com.newsapp.foodorderapp.R;
 
 public class WelcomeActivity extends AppCompatActivity {
@@ -41,7 +42,8 @@ public class WelcomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Intent intent = new Intent(WelcomeActivity.this,SignUpActivity.class);
+                //Intent intent = new Intent(WelcomeActivity.this,SignUpActivity.class);
+                Intent intent = new Intent(WelcomeActivity.this, HomeActivity.class);
                 startActivity(intent);
                 finish();
 
