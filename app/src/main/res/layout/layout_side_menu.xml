@@ -38,7 +38,7 @@
                     android:src="@drawable/logo_app_pink" />
 
                 <TextView
-                    android:id="@+id/tv_dashboardHeader_profileName"
+                    android:id="@+id/userName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"

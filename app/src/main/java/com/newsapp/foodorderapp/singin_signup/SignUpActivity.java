@@ -15,8 +15,6 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -78,7 +76,7 @@ public class SignUpActivity extends AppCompatActivity {
 
                             } else {
 
-                                User user = new User(nameUserNew.getText().toString(),passwordNew.getText().toString());
+                                UserModel user = new UserModel(nameUserNew.getText().toString(),passwordNew.getText().toString());
                                 databaseReference.setValue(user);
 
                                 progressBarNew.setVisibility(View.GONE);

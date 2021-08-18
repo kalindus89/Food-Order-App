@@ -20,6 +20,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.newsapp.foodorderapp.home.HomeActivity;
 import com.newsapp.foodorderapp.R;
 
 public class SignInActivity extends AppCompatActivity {
@@ -66,12 +67,17 @@ public class SignInActivity extends AppCompatActivity {
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                             if (snapshot.exists()) {
-                                User user = snapshot.getValue(User.class);
+                                UserModel user = snapshot.getValue(UserModel.class);
 
                                 if (user.getPassword().equals(password.getText().toString())) {
 
                                     progressBar.setVisibility(View.GONE);
                                     btnSignIn.setEnabled(true);
+
+                                    Intent intent = new Intent(SignInActivity.this, HomeActivity.class);
+                                    intent.putExtra("name",user.getName());
+                                    startActivity(intent);
+                                    finish();
                                     Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
                                 } else {
                                     progressBar.setVisibility(View.GONE);

@@ -8,7 +8,7 @@
     android:background="@drawable/my_bg"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
-    tools:context=".HomeActivity"
+    tools:context=".home.HomeActivity"
     tools:openDrawer="start">
 
     <LinearLayout

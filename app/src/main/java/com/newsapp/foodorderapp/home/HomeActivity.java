@@ -1,17 +1,28 @@
-package com.newsapp.foodorderapp;
+package com.newsapp.foodorderapp.home;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.newsapp.foodorderapp.R;
 import com.newsapp.foodorderapp.singin_signup.WelcomeActivity;
 
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener {
@@ -19,8 +30,13 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     NavigationView navigationView;
     DrawerLayout drawerLayout;
     ImageView drawerIcon;
+    RecyclerView recyclerView;
 
     LinearLayout ll_First,ll_Second,ll_Third,ll_Fourth,ll_Fifth,ll_Sixth;
+
+    FirebaseDatabase firebaseDatabase;
+    DatabaseReference databaseReference;
+    AdapterCategory catAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,8 +45,33 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
+        recyclerView = findViewById(R.id.recyclerView);
+
         onSetNavigationDrawerEvents();
+
+        firebaseDatabase=FirebaseDatabase.getInstance();
+        databaseReference=firebaseDatabase.getReference("Category");
+
+        LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setHasFixedSize(true);
+
+        Query query=databaseReference;
+
+        FirebaseRecyclerOptions<CategoryModel> allUserNotes = new FirebaseRecyclerOptions.Builder<CategoryModel>().setQuery(query, CategoryModel.class).build();
+        catAdapter  = new AdapterCategory(allUserNotes,this);
+
+        recyclerView.setAdapter(catAdapter);
+        catAdapter.notifyDataSetChanged();
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        catAdapter.startListening();
+        recyclerView.setAdapter(catAdapter);
+    }
+
     private void onSetNavigationDrawerEvents() {
         drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
         navigationView = (NavigationView) findViewById(R.id.navigationView);
@@ -38,7 +79,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         //drawerLayout.openDrawer(GravityCompat.END);
 
         drawerIcon = (ImageView) findViewById(R.id.drawerIcon);
-
+       TextView userName = findViewById(R.id.userName);
+        userName.setText(getIntent().getStringExtra("name"));
         ll_First = (LinearLayout) findViewById(R.id.ll_First);
         ll_Second = (LinearLayout) findViewById(R.id.ll_Second);
         ll_Third = (LinearLayout) findViewById(R.id.ll_Third);

@@ -1,14 +1,14 @@
 package com.newsapp.foodorderapp.singin_signup;
 
-public class User {
+public class UserModel {
     String name;
     String password;
 
-    public User() {
+    public UserModel() {
 
     }
 
-    public User(String name, String password) {
+    public UserModel(String name, String password) {
         this.name = name;
         this.password = password;
     }
