@@ -16,6 +16,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.newsapp.foodorderapp.R;
+import com.newsapp.foodorderapp.foods_list.FoodsListActivity;
+import com.newsapp.foodorderapp.singin_signup.SignInActivity;
+import com.newsapp.foodorderapp.singin_signup.SignUpActivity;
 import com.squareup.picasso.Picasso;
 
 public class AdapterCategory extends FirebaseRecyclerAdapter<CategoryModel,AdapterCategory.CatViewHolder> {
@@ -36,7 +39,10 @@ public class AdapterCategory extends FirebaseRecyclerAdapter<CategoryModel,Adapt
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(context, "item clicked", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "item clicked "+getRef(holder.getAbsoluteAdapterPosition()).getKey(), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(context, FoodsListActivity.class);
+                intent.putExtra("cat_id",getRef(holder.getAbsoluteAdapterPosition()).getKey());
+                context.startActivity(intent);
             }
         });
 

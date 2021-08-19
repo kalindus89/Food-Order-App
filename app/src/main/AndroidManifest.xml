@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FoodOrderApp">
         <activity
+            android:name=".foods_list.FoodsListActivity"
+            android:exported="true" />
+        <activity
             android:name=".home.HomeActivity"
             android:exported="true" />
         <activity
