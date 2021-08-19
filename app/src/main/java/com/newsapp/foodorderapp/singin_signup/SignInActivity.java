@@ -20,6 +20,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.newsapp.foodorderapp.SessionManagement;
 import com.newsapp.foodorderapp.home.HomeActivity;
 import com.newsapp.foodorderapp.R;
 
@@ -74,6 +75,7 @@ public class SignInActivity extends AppCompatActivity {
                                     progressBar.setVisibility(View.GONE);
                                     btnSignIn.setEnabled(true);
 
+                                    new SessionManagement().setUserName(SignInActivity.this,phoneNumber.getText().toString());
                                     Intent intent = new Intent(SignInActivity.this, HomeActivity.class);
                                     intent.putExtra("name",user.getName());
                                     startActivity(intent);
