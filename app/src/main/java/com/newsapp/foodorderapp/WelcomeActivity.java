@@ -1,4 +1,4 @@
-package com.newsapp.foodorderapp.singin_signup;
+package com.newsapp.foodorderapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,7 +8,8 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 
-import com.newsapp.foodorderapp.R;
+import com.newsapp.foodorderapp.singin_signup.SignInActivity;
+import com.newsapp.foodorderapp.singin_signup.SignUpActivity;
 
 public class WelcomeActivity extends AppCompatActivity {
 
@@ -41,7 +42,7 @@ public class WelcomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Intent intent = new Intent(WelcomeActivity.this,SignUpActivity.class);
+                Intent intent = new Intent(WelcomeActivity.this, SignUpActivity.class);
                 startActivity(intent);
                 finish();
 

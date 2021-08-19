@@ -1,6 +1,7 @@
 package com.newsapp.foodorderapp.foods_list;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.newsapp.foodorderapp.R;
+import com.newsapp.foodorderapp.food_detail.FoodDetailActivity;
 import com.squareup.picasso.Picasso;
 
 public class FoodsCategoryAdapter extends FirebaseRecyclerAdapter<FoodsModel, FoodsCategoryAdapter.FoodViewHolder> {
@@ -34,8 +36,10 @@ public class FoodsCategoryAdapter extends FirebaseRecyclerAdapter<FoodsModel, Fo
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ;
-                Toast.makeText(context, "item clicked "+getRef(holder.getAbsoluteAdapterPosition()).getKey(), Toast.LENGTH_SHORT).show();
+
+                Intent intent = new Intent(context, FoodDetailActivity.class);
+                intent.putExtra("food_id",getRef(holder.getAbsoluteAdapterPosition()).getKey());
+                context.startActivity(intent);
 
 
             }
