@@ -25,6 +25,8 @@ public class FoodDetailActivity extends AppCompatActivity {
 
     TextView foodName,foodPrice,food_description;
     ImageView img_food;
+
+    // collapsing and expanding layouts or images
     CollapsingToolbarLayout collapsingToolbar;
     FloatingActionButton btnCart;
     ElegantNumberButton number_button;
