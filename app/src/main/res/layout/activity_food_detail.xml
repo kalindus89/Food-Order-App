@@ -52,6 +52,15 @@
         app:pressedTranslationZ="12dp"
         app:useCompatPadding="true" />
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:visibility="gone"
+        app:layout_anchor="@id/nestedScrollView"
+        android:layout_marginBottom="10dp"
+        app:layout_anchorGravity="bottom|center"/>
+
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"

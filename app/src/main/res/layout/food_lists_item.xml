@@ -14,8 +14,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:src="@drawable/vegi_bg"
-            android:scaleType="centerCrop"/>
+            android:scaleType="centerCrop"
+            android:src="@drawable/loading_image" />
 
         <TextView
             android:id="@+id/foodName"
