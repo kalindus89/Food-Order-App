@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 
+import com.newsapp.foodorderapp.home.HomeActivity;
 import com.newsapp.foodorderapp.singin_signup.SignInActivity;
 import com.newsapp.foodorderapp.singin_signup.SignUpActivity;
 
@@ -15,7 +16,17 @@ public class WelcomeActivity extends AppCompatActivity {
 
     Button btnSignUp,btnSignIn;
 
+    @Override
+    protected void onStart() {
+        super.onStart();
 
+        if(new SessionManagement().isLogin(this)==true){
+            Intent intent = new Intent(WelcomeActivity.this, HomeActivity.class);
+            startActivity(intent);
+            finish();
+        }
+
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

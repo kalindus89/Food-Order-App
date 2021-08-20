@@ -11,10 +11,12 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.newsapp.foodorderapp.R;
+import com.newsapp.foodorderapp.food_cart.FoodCartActivity;
 import com.newsapp.foodorderapp.home.AdapterCategory;
 import com.newsapp.foodorderapp.home.CategoryModel;
 
@@ -25,6 +27,8 @@ public class FoodsListActivity extends AppCompatActivity {
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
     FoodsCategoryAdapter foodAdapter;
+    FloatingActionButton viewCart;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +36,7 @@ public class FoodsListActivity extends AppCompatActivity {
 
         recyclerView=findViewById(R.id.recyclerView);
         goBack=findViewById(R.id.goBack);
+        viewCart=findViewById(R.id.viewCart);
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
@@ -39,6 +44,14 @@ public class FoodsListActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 finish();
+            }
+        });
+
+        viewCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+                startActivity(new Intent(FoodsListActivity.this, FoodCartActivity.class));
             }
         });
 

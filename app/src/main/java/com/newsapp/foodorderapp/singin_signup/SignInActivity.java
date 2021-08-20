@@ -75,9 +75,8 @@ public class SignInActivity extends AppCompatActivity {
                                     progressBar.setVisibility(View.GONE);
                                     btnSignIn.setEnabled(true);
 
-                                    new SessionManagement().setUserName(SignInActivity.this,phoneNumber.getText().toString());
+                                    new SessionManagement().setUserName(SignInActivity.this,phoneNumber.getText().toString(),user.getName());
                                     Intent intent = new Intent(SignInActivity.this, HomeActivity.class);
-                                    intent.putExtra("name",user.getName());
                                     startActivity(intent);
                                     finish();
                                     Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();

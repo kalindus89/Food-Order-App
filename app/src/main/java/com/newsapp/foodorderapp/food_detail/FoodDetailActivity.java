@@ -85,7 +85,7 @@ public class FoodDetailActivity extends AppCompatActivity {
                 progressBar.setVisibility(View.VISIBLE);
                 btnCart.setEnabled(false);
 
-                DocumentReference nycRef = firebaseFirestore.collection("FoodOrders").document(new SessionManagement().getUsername(getApplicationContext()));
+                DocumentReference nycRef = firebaseFirestore.collection("FoodOrders").document(new SessionManagement().getPhone(getApplicationContext()));
 
                 nycRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
@@ -123,10 +123,10 @@ public class FoodDetailActivity extends AppCompatActivity {
         note2.put("productName", foodName.getText().toString());
         note2.put("quantity", number_button.getNumber());
         note2.put("status", "draft");
-        DocumentReference nycRef1 = firebaseFirestore.collection("FoodOrders").document(new SessionManagement().getUsername(getApplicationContext())).collection("orderFoods").document();
+        DocumentReference nycRef1 = firebaseFirestore.collection("FoodOrders").document(new SessionManagement().getPhone(getApplicationContext())).collection("orderFoods").document();
         batch.set(nycRef1, note2);
 
-        DocumentReference sfRef2 = firebaseFirestore.document("FoodOrders/"+new SessionManagement().getUsername(getApplicationContext()));
+        DocumentReference sfRef2 = firebaseFirestore.document("FoodOrders/"+new SessionManagement().getPhone(getApplicationContext()));
 
         if(newUser==true) {
             Map<String, Object> note3 = new HashMap<>();

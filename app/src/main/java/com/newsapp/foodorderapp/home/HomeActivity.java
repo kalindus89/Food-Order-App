@@ -15,12 +15,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.newsapp.foodorderapp.R;
+import com.newsapp.foodorderapp.SessionManagement;
 import com.newsapp.foodorderapp.WelcomeActivity;
+import com.newsapp.foodorderapp.food_cart.FoodCartActivity;
+import com.newsapp.foodorderapp.foods_list.FoodsListActivity;
 
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -34,6 +38,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
     AdapterCategory catAdapter;
+    FloatingActionButton viewCart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,11 +48,21 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         recyclerView = findViewById(R.id.recyclerView);
+        viewCart=findViewById(R.id.viewCart);
 
         onSetNavigationDrawerEvents();
 
         firebaseDatabase=FirebaseDatabase.getInstance();
         databaseReference=firebaseDatabase.getReference("Category");
+
+
+
+        viewCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(HomeActivity.this, FoodCartActivity.class));
+            }
+        });
 
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -77,7 +92,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
         drawerIcon = (ImageView) findViewById(R.id.drawerIcon);
        TextView userName = findViewById(R.id.userName);
-        userName.setText(getIntent().getStringExtra("name"));
+        userName.setText(new SessionManagement().getName(this));
         ll_First = (LinearLayout) findViewById(R.id.ll_First);
         ll_Second = (LinearLayout) findViewById(R.id.ll_Second);
         ll_Third = (LinearLayout) findViewById(R.id.ll_Third);
@@ -105,7 +120,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 drawerLayout.closeDrawer(navigationView, true);
                 break;
             case R.id.ll_Second:
-                showToast("ll_Second");
+
+                startActivity(new Intent(HomeActivity.this, FoodCartActivity.class));
                 drawerLayout.closeDrawer(navigationView, true);
                 break;
             case R.id.ll_Third:

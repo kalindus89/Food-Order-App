@@ -7,14 +7,31 @@ import android.content.SharedPreferences;
 
 public class SessionManagement {
 
-    public  void setUserName(Context con, String number){
-        SharedPreferences.Editor editor = con.getSharedPreferences("username", MODE_PRIVATE).edit();
+    public void setUserName(Context con, String number, String name) {
+        SharedPreferences.Editor editor = con.getSharedPreferences("userDetails", MODE_PRIVATE).edit();
         editor.putString("phone", number);
+        editor.putString("name", name);
+        editor.putString("login", "yes");
         editor.apply();
     }
 
-    public String getUsername(Context con){
-        SharedPreferences prefs = con.getSharedPreferences("username", MODE_PRIVATE);
+    public String getPhone(Context con) {
+        SharedPreferences prefs = con.getSharedPreferences("userDetails", MODE_PRIVATE);
         return prefs.getString("phone", "No name defined");
+    }
+
+    public String getName(Context con) {
+        SharedPreferences prefs = con.getSharedPreferences("userDetails", MODE_PRIVATE);
+        return prefs.getString("name", "No name defined");
+    }
+
+    public boolean isLogin(Context con) {
+        SharedPreferences prefs = con.getSharedPreferences("userDetails", MODE_PRIVATE);
+
+        if (prefs.getString("login", "No name defined").equals("yes")) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
