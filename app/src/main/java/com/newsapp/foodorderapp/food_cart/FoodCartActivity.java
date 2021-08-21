@@ -79,7 +79,7 @@ public class FoodCartActivity extends AppCompatActivity {
                 if (snapshot != null && snapshot.exists()) {
                     DecimalFormat formatter = new DecimalFormat("#,###");
 
-                    int iTotal=Integer.parseInt(String.valueOf(snapshot.getData()).replaceAll("[\\D]",""));
+                    int iTotal=Integer.parseInt(String.valueOf(snapshot.getData().get("totalAmount")).replaceAll("[\\D]",""));
                     String total=formatter.format(iTotal);
                     totalAmountTxt.setText(total);
                 } else {
