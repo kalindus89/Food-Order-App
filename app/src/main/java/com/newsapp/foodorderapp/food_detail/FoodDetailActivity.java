@@ -116,12 +116,17 @@ public class FoodDetailActivity extends AppCompatActivity {
 
         WriteBatch batch = firebaseFirestore.batch();
 
+        int iPrice=Integer.parseInt(foodPrice.getText().toString().replaceAll("[\\D]",""));
+        int iQuantity=Integer.parseInt(number_button.getNumber().replaceAll("[\\D]",""));
+        int itemTotalAmount=iPrice*iQuantity;
+
         Map<String, Object> note2 = new HashMap<>();
         note2.put("orderTime", new Date());
         note2.put("price", foodPrice.getText().toString());
+        note2.put("quantity", number_button.getNumber());
+        note2.put("itemTotal", String.valueOf(itemTotalAmount));
         note2.put("productID", productID);
         note2.put("productName", foodName.getText().toString());
-        note2.put("quantity", number_button.getNumber());
         note2.put("status", "draft");
         DocumentReference nycRef1 = firebaseFirestore.collection("FoodOrders").document(new SessionManagement().getPhone(getApplicationContext())).collection("orderFoods").document();
         batch.set(nycRef1, note2);
@@ -131,10 +136,12 @@ public class FoodDetailActivity extends AppCompatActivity {
         if(newUser==true) {
             Map<String, Object> note3 = new HashMap<>();
             note3.put("numberOfOrders", 1);
+            note3.put("totalAmount", itemTotalAmount);
             batch.set(sfRef2, note3);
 
         }else{
             batch.update(sfRef2, "numberOfOrders", FieldValue.increment(1));
+            batch.update(sfRef2, "totalAmount", FieldValue.increment(itemTotalAmount));
         }
 
         // Commit the batch

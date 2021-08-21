@@ -10,17 +10,19 @@ public class CartModel {
     String productName;
     String quantity;
     String status;
+    String itemTotal;
 
     public CartModel() {
     }
 
-    public CartModel(Date orderTime, String price, String productID, String productName, String quantity, String status) {
+    public CartModel(Date orderTime, String price, String productID, String productName, String quantity, String status,String itemTotal) {
         this.orderTime = orderTime;
         this.price = price;
         this.productID = productID;
         this.productName = productName;
         this.quantity = quantity;
         this.status = status;
+        this.itemTotal = itemTotal;
     }
 
     public Date getOrderTime() {
@@ -69,5 +71,13 @@ public class CartModel {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getItemTotal() {
+        return itemTotal;
+    }
+
+    public void setItemTotal(String itemTotal) {
+        this.itemTotal = itemTotal;
     }
 }

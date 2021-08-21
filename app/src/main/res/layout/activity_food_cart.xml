@@ -71,15 +71,16 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginLeft="20dp"
-                    android:text="Total: "
+                    android:text="Total: $"
                     android:textColor="@color/white"
                     android:textSize="20sp" />
 
                 <TextView
+                    android:id="@+id/totalAmountTxt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text=" $1,000"
+                    android:text=" 1,000"
                     android:textColor="@color/white"
                     android:textSize="20sp" />
 

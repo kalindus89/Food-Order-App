@@ -21,10 +21,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.WriteBatch;
 import com.newsapp.foodorderapp.R;
 import com.newsapp.foodorderapp.SessionManagement;
 
@@ -50,10 +54,7 @@ public class FoodCartAdapter extends FirestoreRecyclerAdapter<CartModel,FoodCart
 
         holder.cart_item_quantity.setText(model.getQuantity());
 
-        int iPrice=Integer.parseInt(model.getPrice().replaceAll("[\\D]",""));
-        int iQuantity=Integer.parseInt(model.getQuantity().replaceAll("[\\D]",""));
-
-        holder.cart_item_price.setText("Total: $"+model.getPrice()+" x "+(model.getQuantity())+" = $"+String.valueOf(iPrice*iQuantity));
+        holder.cart_item_price.setText("Total: $"+model.getPrice()+" x "+(model.getQuantity())+" = $"+model.getItemTotal());
 
         String date_time =(new SimpleDateFormat("EEEE MMM d - hh.mm aa").format(model.getOrderTime()));
         holder.cart_item_date.setText(date_time);
@@ -82,8 +83,21 @@ public class FoodCartAdapter extends FirestoreRecyclerAdapter<CartModel,FoodCart
                         documentReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void unused) {
-                                Toast.makeText(context, model.getProductName()+" Item Deleted", Toast.LENGTH_SHORT).show();
                                 popupMenu.dismiss();
+
+                                WriteBatch batch = firebaseFirestore.batch();
+                                DocumentReference sfRef2 = firebaseFirestore.document("FoodOrders/"+new SessionManagement().getPhone(context));
+
+                                batch.update(sfRef2, "numberOfOrders", FieldValue.increment(-1));
+                                batch.update(sfRef2, "totalAmount", FieldValue.increment(-(Integer.parseInt(model.getItemTotal().replaceAll("[\\D]","")))));
+
+                                batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        Toast.makeText(context, model.getProductName()+" Item Deleted", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
