@@ -10,15 +10,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.newsapp.foodorderapp.R;
 import com.newsapp.foodorderapp.foods_list.FoodsListActivity;
-import com.newsapp.foodorderapp.singin_signup.SignInActivity;
-import com.newsapp.foodorderapp.singin_signup.SignUpActivity;
 import com.squareup.picasso.Picasso;
 
 public class AdapterCategory extends FirebaseRecyclerAdapter<CategoryModel,AdapterCategory.CatViewHolder> {
@@ -54,7 +51,7 @@ public class AdapterCategory extends FirebaseRecyclerAdapter<CategoryModel,Adapt
     @NonNull
     @Override
     public AdapterCategory.CatViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.category_item_layout,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_category_layout,parent,false);
         return new CatViewHolder(view);
     }
 

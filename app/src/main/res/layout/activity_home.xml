@@ -77,7 +77,7 @@
 
         <include
             android:id="@+id/layout_side_menu"
-            layout="@layout/layout_side_menu"
+            layout="@layout/menu_layout_side"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 

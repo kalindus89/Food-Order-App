@@ -80,7 +80,7 @@
             android:layout_marginTop="20dp"
             android:layout_marginRight="10dp"
             android:layout_weight="1"
-            android:background="@drawable/round_coners"
+            android:background="@drawable/round_corners"
             android:backgroundTint="#A8B61A"
             android:text="Sing Up"
             android:textColor="@color/white" />
