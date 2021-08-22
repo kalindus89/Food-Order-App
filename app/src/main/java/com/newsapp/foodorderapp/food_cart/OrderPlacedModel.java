@@ -11,8 +11,8 @@ public class OrderPlacedModel {
     String phone;
     String address;
     String total;
-   // Map<String, Object>  ordersList;
    List<String> ordersList;
+   String status;
     public OrderPlacedModel() {
     }
 
@@ -22,6 +22,15 @@ public class OrderPlacedModel {
         this.address = address;
         this.total = total;
         this.ordersList = ordersList;
+        status="0";  // 0=placed, 1=shipping, 2=shipped
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public List<String>  getOrdersList() {

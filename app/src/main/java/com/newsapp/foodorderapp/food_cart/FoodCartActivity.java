@@ -47,8 +47,11 @@ import com.newsapp.foodorderapp.singin_signup.UserModel;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class FoodCartActivity extends AppCompatActivity {
 
@@ -105,7 +108,10 @@ public class FoodCartActivity extends AppCompatActivity {
             }
         });
 
-        getTotalPayableAmount();
+       getTotalPayableAmount();
+
+        syncDataFromFirebase();
+        syncData = true;
 
     }
 
@@ -131,6 +137,10 @@ public class FoodCartActivity extends AppCompatActivity {
                 databaseReference.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+
+                       /* Set<String> hashSet = new LinkedHashSet(ordersList);
+                        List<String> removedDuplicates = new ArrayList(hashSet);*/
 
                             OrderPlacedModel user = new OrderPlacedModel(new SessionManagement().getName(getApplicationContext()),
                                     new SessionManagement().getPhone(getApplicationContext()),editText.getText().toString(),
@@ -182,9 +192,6 @@ public class FoodCartActivity extends AppCompatActivity {
                         preview.setVisibility(View.GONE);
                         recyclerView.setVisibility(View.VISIBLE);
                         bottomLayout.setVisibility(View.VISIBLE);
-
-                        syncDataFromFirebase();
-                        syncData = true;
 
                     }else{
 
