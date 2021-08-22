@@ -31,8 +31,13 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.WriteBatch;
 import com.newsapp.foodorderapp.R;
 import com.newsapp.foodorderapp.SessionManagement;
+import com.newsapp.foodorderapp.foods_list.FoodsModel;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 public class FoodCartAdapter extends FirestoreRecyclerAdapter<CartModel,FoodCartAdapter.CartViewHolder> {
 
@@ -40,15 +45,22 @@ public class FoodCartAdapter extends FirestoreRecyclerAdapter<CartModel,FoodCart
     Context context;
     FirestoreRecyclerOptions<CartModel> fireStoreRecyclerOptions;
     FirebaseFirestore firebaseFirestore;
-
-    public FoodCartAdapter(Context context, @NonNull FirestoreRecyclerOptions<CartModel> fireStoreRecyclerOptions, FirebaseFirestore firebaseFirestore) {
+    //Map<String, Object> ordersList;
+    List<String> ordersList = new ArrayList<>();
+    public FoodCartAdapter(Context context, @NonNull FirestoreRecyclerOptions<CartModel> fireStoreRecyclerOptions, FirebaseFirestore firebaseFirestore,List<String> ordersList) {
         super(fireStoreRecyclerOptions);
         this.context = context;
         this.fireStoreRecyclerOptions = fireStoreRecyclerOptions;
         this.firebaseFirestore = firebaseFirestore;
+        this.ordersList = ordersList;
     }
     @Override
     protected void onBindViewHolder(@NonNull CartViewHolder holder, int position, @NonNull CartModel model) {
+
+       //ordersList.put("firestoreOrderKey", fireStoreRecyclerOptions.getSnapshots().getSnapshot(holder.getAbsoluteAdapterPosition()).getId());
+        ordersList.add(fireStoreRecyclerOptions.getSnapshots().getSnapshot(holder.getAbsoluteAdapterPosition()).getId());
+
+      //  System.out.println("aaaaaaaaaaa "+fireStoreRecyclerOptions.getSnapshots().getSnapshot(holder.getAbsoluteAdapterPosition()).getId());
 
         holder.cart_item_name.setText(model.getProductName());
 

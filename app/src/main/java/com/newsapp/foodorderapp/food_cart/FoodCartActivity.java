@@ -2,15 +2,22 @@ package com.newsapp.foodorderapp.food_cart;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +26,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -27,8 +39,16 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.newsapp.foodorderapp.R;
 import com.newsapp.foodorderapp.SessionManagement;
+import com.newsapp.foodorderapp.foods_list.FoodsModel;
+import com.newsapp.foodorderapp.singin_signup.SignInActivity;
+import com.newsapp.foodorderapp.singin_signup.SignUpActivity;
+import com.newsapp.foodorderapp.singin_signup.UserModel;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class FoodCartActivity extends AppCompatActivity {
 
@@ -36,8 +56,16 @@ public class FoodCartActivity extends AppCompatActivity {
     TextView totalAmountTxt;
     FirebaseFirestore firebaseFirestore;
     RecyclerView recyclerView;
+    CardView bottomLayout;
+    LinearLayout preview;
+    Button btnFoodOrder,btnPlaceOrder;
+
+  //  Map<String, Object> ordersList = new HashMap<>();;
+
+    List<String> ordersList = new ArrayList<>();
 
     FoodCartAdapter cartAdapter;
+    boolean syncData = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +77,10 @@ public class FoodCartActivity extends AppCompatActivity {
         goBack = findViewById(R.id.go_back);
         totalAmountTxt = findViewById(R.id.totalAmountTxt);
         recyclerView = findViewById(R.id.recyclerView);
+        preview = findViewById(R.id.preview);
+        bottomLayout = findViewById(R.id.bottomLayout);
+        btnFoodOrder = findViewById(R.id.btnFoodOrder);
+        btnPlaceOrder = findViewById(R.id.btnPlaceOrder);
 
         firebaseFirestore = FirebaseFirestore.getInstance();
 
@@ -59,10 +91,72 @@ public class FoodCartActivity extends AppCompatActivity {
             }
         });
 
+        btnFoodOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
+        btnPlaceOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                placeAnOrder();
+            }
+        });
+
         getTotalPayableAmount();
 
-        syncDataFromFirebase();
+    }
 
+    private void placeAnOrder() {
+
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(FoodCartActivity.this);
+        alertDialog.setTitle("One More Step!");
+        alertDialog.setMessage("Enter your address");
+
+        final EditText editText = new EditText(FoodCartActivity.this);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams
+                (LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);;
+        editText.setHint("Your address");
+        editText.setLayoutParams(lp);
+        alertDialog.setView(editText);
+        alertDialog.setIcon(R.drawable.ic_baseline_shopping_cart_24);
+
+        alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("PlaceOrders").child(new SessionManagement().getPhone(getApplicationContext())).push();
+                databaseReference.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                            OrderPlacedModel user = new OrderPlacedModel(new SessionManagement().getName(getApplicationContext()),
+                                    new SessionManagement().getPhone(getApplicationContext()),editText.getText().toString(),
+                                    totalAmountTxt.getText().toString(),ordersList);
+                            databaseReference.setValue(user);
+
+                            Toast.makeText(getApplicationContext(), "Order Successfully Placed", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Toast.makeText(getApplicationContext(), "Failed Sign up", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+            }
+        });
+
+        alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+
+        alertDialog.show();
 
     }
 
@@ -77,12 +171,33 @@ public class FoodCartActivity extends AppCompatActivity {
                                 @Nullable FirebaseFirestoreException e) {
 
                 if (snapshot != null && snapshot.exists()) {
-                    DecimalFormat formatter = new DecimalFormat("#,###");
 
-                    int iTotal=Integer.parseInt(String.valueOf(snapshot.getData().get("totalAmount")).replaceAll("[\\D]",""));
-                    String total=formatter.format(iTotal);
-                    totalAmountTxt.setText(total);
+                    if (!String.valueOf(snapshot.getData().get("totalAmount")).equals("0")) {
+
+                        DecimalFormat formatter = new DecimalFormat("#,###");
+                        int iTotal = Integer.parseInt(String.valueOf(snapshot.getData().get("totalAmount")).replaceAll("[\\D]", ""));
+                        String total = formatter.format(iTotal);
+                        totalAmountTxt.setText(total);
+
+                        preview.setVisibility(View.GONE);
+                        recyclerView.setVisibility(View.VISIBLE);
+                        bottomLayout.setVisibility(View.VISIBLE);
+
+                        syncDataFromFirebase();
+                        syncData = true;
+
+                    }else{
+
+                        preview.setVisibility(View.VISIBLE);
+                        recyclerView.setVisibility(View.GONE);
+                        bottomLayout.setVisibility(View.GONE);
+                    }
+
+
                 } else {
+                    preview.setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.GONE);
+                    bottomLayout.setVisibility(View.GONE);
                 }
             }
         });
@@ -93,28 +208,32 @@ public class FoodCartActivity extends AppCompatActivity {
 
         FirestoreRecyclerOptions<CartModel> allUserNotes = new FirestoreRecyclerOptions.Builder<CartModel>().setQuery(query, CartModel.class).build();
 
-        cartAdapter = new FoodCartAdapter(this, allUserNotes, firebaseFirestore);
+        cartAdapter = new FoodCartAdapter(this, allUserNotes, firebaseFirestore,ordersList);
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(cartAdapter);
+        cartAdapter.startListening();
 
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        cartAdapter.startListening();
-        recyclerView.setAdapter(cartAdapter);
+        if (syncData == true) {
+            cartAdapter.startListening();
+            recyclerView.setAdapter(cartAdapter);
+        }
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-
-        if (cartAdapter != null) {
-            cartAdapter.stopListening();
-            //noteAdapter.startListening();
+        if (syncData == true) {
+            if (cartAdapter != null) {
+                cartAdapter.stopListening();
+                //noteAdapter.startListening();
+            }
         }
     }
 }

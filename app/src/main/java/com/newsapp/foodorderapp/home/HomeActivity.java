@@ -140,6 +140,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 showToast("tv_logout");
                 drawerLayout.closeDrawer(navigationView, true);
 
+                new SessionManagement().setUserName(this,"no number","no name","log out");
+
                 Intent intent = new Intent(HomeActivity.this, WelcomeActivity.class);
                 startActivity(intent);
                 finish();

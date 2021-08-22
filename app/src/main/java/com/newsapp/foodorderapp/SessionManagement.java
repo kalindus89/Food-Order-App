@@ -7,11 +7,11 @@ import android.content.SharedPreferences;
 
 public class SessionManagement {
 
-    public void setUserName(Context con, String number, String name) {
+    public void setUserName(Context con, String number, String name, String login) {
         SharedPreferences.Editor editor = con.getSharedPreferences("userDetails", MODE_PRIVATE).edit();
         editor.putString("phone", number);
         editor.putString("name", name);
-        editor.putString("login", "yes");
+        editor.putString("login", login);
         editor.apply();
     }
 

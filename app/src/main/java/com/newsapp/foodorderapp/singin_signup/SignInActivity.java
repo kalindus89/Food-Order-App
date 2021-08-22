@@ -75,7 +75,7 @@ public class SignInActivity extends AppCompatActivity {
                                     progressBar.setVisibility(View.GONE);
                                     btnSignIn.setEnabled(true);
 
-                                    new SessionManagement().setUserName(SignInActivity.this,phoneNumber.getText().toString(),user.getName());
+                                    new SessionManagement().setUserName(SignInActivity.this,phoneNumber.getText().toString(),user.getName(),"yes");
                                     Intent intent = new Intent(SignInActivity.this, HomeActivity.class);
                                     startActivity(intent);
                                     finish();
