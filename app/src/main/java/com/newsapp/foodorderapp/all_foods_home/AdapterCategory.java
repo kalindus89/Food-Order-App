@@ -1,4 +1,4 @@
-package com.newsapp.foodorderapp.home;
+package com.newsapp.foodorderapp.all_foods_home;
 
 import android.content.Context;
 import android.content.Intent;
@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.newsapp.foodorderapp.R;
-import com.newsapp.foodorderapp.foods_list.FoodsListActivity;
+import com.newsapp.foodorderapp.specific_foods_list.FoodsListActivity;
 import com.squareup.picasso.Picasso;
 
 public class AdapterCategory extends FirebaseRecyclerAdapter<CategoryModel,AdapterCategory.CatViewHolder> {

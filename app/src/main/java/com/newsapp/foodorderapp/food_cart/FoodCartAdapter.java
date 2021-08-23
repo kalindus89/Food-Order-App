@@ -1,9 +1,6 @@
 package com.newsapp.foodorderapp.food_cart;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -31,13 +28,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.WriteBatch;
 import com.newsapp.foodorderapp.R;
 import com.newsapp.foodorderapp.SessionManagement;
-import com.newsapp.foodorderapp.foods_list.FoodsModel;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 public class FoodCartAdapter extends FirestoreRecyclerAdapter<CartModel,FoodCartAdapter.CartViewHolder> {
 

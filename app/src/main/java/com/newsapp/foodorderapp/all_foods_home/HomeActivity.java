@@ -1,4 +1,4 @@
-package com.newsapp.foodorderapp.home;
+package com.newsapp.foodorderapp.all_foods_home;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -24,7 +24,7 @@ import com.newsapp.foodorderapp.R;
 import com.newsapp.foodorderapp.SessionManagement;
 import com.newsapp.foodorderapp.WelcomeActivity;
 import com.newsapp.foodorderapp.food_cart.FoodCartActivity;
-import com.newsapp.foodorderapp.foods_list.FoodsListActivity;
+import com.newsapp.foodorderapp.order_status.OrderStatusActivity;
 
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -33,7 +33,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     ImageView drawerIcon;
     RecyclerView recyclerView;
 
-    LinearLayout ll_First,ll_Second,ll_Third,ll_Fourth,ll_Fifth,ll_Sixth;
+    LinearLayout ll_First,ll_Second,current_status,ll_Third,ll_Fourth,ll_Fifth,ll_Sixth;
 
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
@@ -95,6 +95,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         userName.setText(new SessionManagement().getName(this));
         ll_First = (LinearLayout) findViewById(R.id.ll_First);
         ll_Second = (LinearLayout) findViewById(R.id.ll_Second);
+        current_status = (LinearLayout) findViewById(R.id.current_status);
         ll_Third = (LinearLayout) findViewById(R.id.ll_Third);
         ll_Fourth = (LinearLayout) findViewById(R.id.ll_Fourth);
         ll_Fifth = (LinearLayout) findViewById(R.id.ll_Fifth);
@@ -103,6 +104,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         drawerIcon.setOnClickListener(this);
         ll_First.setOnClickListener(this);
         ll_Second.setOnClickListener(this);
+        current_status.setOnClickListener(this);
         ll_Third.setOnClickListener(this);
         ll_Fourth.setOnClickListener(this);
         ll_Fifth.setOnClickListener(this);
@@ -123,6 +125,11 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
                 startActivity(new Intent(HomeActivity.this, FoodCartActivity.class));
                 drawerLayout.closeDrawer(navigationView, true);
+                break;
+            case R.id.current_status:
+                drawerLayout.closeDrawer(navigationView, true);
+                Intent intent2 = new Intent(HomeActivity.this, OrderStatusActivity.class);
+                startActivity(intent2);
                 break;
             case R.id.ll_Third:
                 showToast("ll_Third");

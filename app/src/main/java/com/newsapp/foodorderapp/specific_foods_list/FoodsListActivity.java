@@ -1,4 +1,4 @@
-package com.newsapp.foodorderapp.foods_list;
+package com.newsapp.foodorderapp.specific_foods_list;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -17,8 +17,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.newsapp.foodorderapp.R;
 import com.newsapp.foodorderapp.food_cart.FoodCartActivity;
-import com.newsapp.foodorderapp.home.AdapterCategory;
-import com.newsapp.foodorderapp.home.CategoryModel;
 
 public class FoodsListActivity extends AppCompatActivity {
 

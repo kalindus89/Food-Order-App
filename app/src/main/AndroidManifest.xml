@@ -12,16 +12,19 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".order_status.OrderStatusActivity"
+            android:exported="true" />
+        <activity
             android:name=".food_cart.FoodCartActivity"
             android:exported="true" />
         <activity
             android:name=".food_detail.FoodDetailActivity"
             android:exported="true" />
         <activity
-            android:name=".foods_list.FoodsListActivity"
+            android:name=".specific_foods_list.FoodsListActivity"
             android:exported="true" />
         <activity
-            android:name=".home.HomeActivity"
+            android:name=".all_foods_home.HomeActivity"
             android:exported="true" />
         <activity
             android:name=".singin_signup.SignUpActivity"

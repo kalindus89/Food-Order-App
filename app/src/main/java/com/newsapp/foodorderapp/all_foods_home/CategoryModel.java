@@ -1,4 +1,4 @@
-package com.newsapp.foodorderapp.home;
+package com.newsapp.foodorderapp.all_foods_home;
 
 public class CategoryModel {
 

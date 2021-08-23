@@ -8,7 +8,7 @@
     android:background="@drawable/my_bg"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
-    tools:context=".home.HomeActivity"
+    tools:context=".all_foods_home.HomeActivity"
     tools:openDrawer="start">
 
     <RelativeLayout

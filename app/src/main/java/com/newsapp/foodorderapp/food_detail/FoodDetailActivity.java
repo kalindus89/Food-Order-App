@@ -28,7 +28,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.WriteBatch;
 import com.newsapp.foodorderapp.R;
 import com.newsapp.foodorderapp.SessionManagement;
-import com.newsapp.foodorderapp.foods_list.FoodsModel;
+import com.newsapp.foodorderapp.specific_foods_list.FoodsModel;
 import com.squareup.picasso.Picasso;
 
 import java.util.Date;

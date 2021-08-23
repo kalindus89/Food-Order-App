@@ -1,9 +1,6 @@
 package com.newsapp.foodorderapp.food_cart;
 
-import com.newsapp.foodorderapp.foods_list.FoodsModel;
-
 import java.util.List;
-import java.util.Map;
 
 public class OrderPlacedModel {
 
@@ -11,7 +8,7 @@ public class OrderPlacedModel {
     String phone;
     String address;
     String total;
-   List<String> ordersList;
+    List<String> ordersList;
    String status;
     public OrderPlacedModel() {
     }

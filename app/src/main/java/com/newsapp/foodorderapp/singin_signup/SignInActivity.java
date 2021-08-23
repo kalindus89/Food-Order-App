@@ -21,7 +21,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.newsapp.foodorderapp.SessionManagement;
-import com.newsapp.foodorderapp.home.HomeActivity;
+import com.newsapp.foodorderapp.all_foods_home.HomeActivity;
 import com.newsapp.foodorderapp.R;
 
 public class SignInActivity extends AppCompatActivity {

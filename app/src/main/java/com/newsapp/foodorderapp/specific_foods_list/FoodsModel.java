@@ -1,4 +1,4 @@
-package com.newsapp.foodorderapp.foods_list;
+package com.newsapp.foodorderapp.specific_foods_list;
 
 public class FoodsModel {
 
