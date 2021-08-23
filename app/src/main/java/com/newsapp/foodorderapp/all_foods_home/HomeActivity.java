@@ -1,5 +1,6 @@
 package com.newsapp.foodorderapp.all_foods_home;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -7,8 +8,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -17,28 +22,39 @@ import android.widget.Toast;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.newsapp.foodorderapp.R;
 import com.newsapp.foodorderapp.SessionManagement;
 import com.newsapp.foodorderapp.WelcomeActivity;
 import com.newsapp.foodorderapp.food_cart.FoodCartActivity;
 import com.newsapp.foodorderapp.order_status.OrderStatusActivity;
 
+import java.util.ArrayList;
+
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener {
 
     NavigationView navigationView;
     DrawerLayout drawerLayout;
-    ImageView drawerIcon;
+    ImageView drawerIcon, searchIcon, backToMainPage;
+    TextView textView;
     RecyclerView recyclerView;
+    EditText searchKeyword;
 
-    LinearLayout ll_First,ll_Second,current_status,ll_Third,ll_Fourth,ll_Fifth,ll_Sixth;
+    LinearLayout searchLayout, ll_First, ll_Second, current_status, ll_Third, ll_Fourth, ll_Fifth, ll_Sixth;
 
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
+
     AdapterCategory catAdapter;
     FloatingActionButton viewCart;
+
+    FirebaseRecyclerOptions<CategoryModel> allUserNotes;
+    ArrayList<CategoryModel> categoryModelArrayList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,13 +64,19 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         recyclerView = findViewById(R.id.recyclerView);
-        viewCart=findViewById(R.id.viewCart);
+        viewCart = findViewById(R.id.viewCart);
+        searchIcon = findViewById(R.id.searchIcon);
+        textView = findViewById(R.id.textView);
+        searchLayout = findViewById(R.id.searchLayout);
+        backToMainPage = findViewById(R.id.backToMainPage);
+        searchKeyword = findViewById(R.id.searchKeyword);
 
         onSetNavigationDrawerEvents();
 
-        firebaseDatabase=FirebaseDatabase.getInstance();
-        databaseReference=firebaseDatabase.getReference("Category");
+        categoryModelArrayList = new ArrayList<>();
 
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference("Category");
 
 
         viewCart.setOnClickListener(new View.OnClickListener() {
@@ -64,17 +86,86 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-        LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
+        backToMainPage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                searchIcon.setVisibility(View.VISIBLE);
+                textView.setVisibility(View.VISIBLE);
+                searchLayout.setVisibility(View.GONE);
+                searchKeyword.setText("");
+            }
+        });
+
+        searchIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                searchIcon.setVisibility(View.GONE);
+                textView.setVisibility(View.GONE);
+                searchLayout.setVisibility(View.VISIBLE);
+
+            }
+        });
+
+        searchKeyword.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+                if (editable.toString() != null) {
+                    searchData(editable.toString());
+
+                } else {
+                    searchData("");
+                }
+
+            }
+        });
+
+        loadData();
+
+    }
+
+
+
+    private void loadData() {
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setHasFixedSize(true);
 
-        Query query=databaseReference;
+        Query query = databaseReference;
 
-        FirebaseRecyclerOptions<CategoryModel> allUserNotes = new FirebaseRecyclerOptions.Builder<CategoryModel>().setQuery(query, CategoryModel.class).build();
-        catAdapter  = new AdapterCategory(allUserNotes,this);
+        allUserNotes = new FirebaseRecyclerOptions.Builder<CategoryModel>().setQuery(query, CategoryModel.class).build();
+        catAdapter = new AdapterCategory(allUserNotes, this);
 
         recyclerView.setAdapter(catAdapter);
+        catAdapter.updateOptions(allUserNotes);
+       catAdapter.notifyDataSetChanged();
+
+
+    }
+
+    private void searchData(String keyword) {
+
+        Query query = databaseReference.orderByChild("name").startAt(keyword).endAt(keyword + "\uf8ff");
+
+        FirebaseRecyclerOptions<CategoryModel> allUserNotes2 = new FirebaseRecyclerOptions.Builder<CategoryModel>().setQuery(query, CategoryModel.class).build();
+        catAdapter = new AdapterCategory(allUserNotes2, this);
+
+        recyclerView.setAdapter(catAdapter);
+        catAdapter.startListening();
         catAdapter.notifyDataSetChanged();
+
+
     }
 
     @Override
@@ -91,7 +182,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         //drawerLayout.openDrawer(GravityCompat.END);
 
         drawerIcon = (ImageView) findViewById(R.id.drawerIcon);
-       TextView userName = findViewById(R.id.userName);
+        TextView userName = findViewById(R.id.userName);
         userName.setText(new SessionManagement().getName(this));
         ll_First = (LinearLayout) findViewById(R.id.ll_First);
         ll_Second = (LinearLayout) findViewById(R.id.ll_Second);
@@ -113,7 +204,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.drawerIcon:
                 drawerLayout.openDrawer(navigationView, true);
                 break;
@@ -147,7 +238,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 showToast("tv_logout");
                 drawerLayout.closeDrawer(navigationView, true);
 
-                new SessionManagement().setUserName(this,"no number","no name","log out");
+                new SessionManagement().setUserName(this, "no number", "no name", "log out");
 
                 Intent intent = new Intent(HomeActivity.this, WelcomeActivity.class);
                 startActivity(intent);
@@ -163,16 +254,15 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    private void showToast(String message){
-        Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
+    private void showToast(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onBackPressed() {
         if (drawerLayout.isDrawerOpen(navigationView)) {
             drawerLayout.closeDrawer(navigationView, true);
-        }
-        else{
+        } else {
             super.onBackPressed();
         }
     }
