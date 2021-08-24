@@ -8,6 +8,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
@@ -46,9 +47,9 @@ public class FoodCartActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     CardView bottomLayout;
     LinearLayout preview;
-    Button btnFoodOrder,btnPlaceOrder;
+    Button btnFoodOrder, btnPlaceOrder;
 
-  //  Map<String, Object> ordersList = new HashMap<>();;
+    //  Map<String, Object> ordersList = new HashMap<>();;
 
     List<String> ordersList = new ArrayList<>();
 
@@ -93,67 +94,81 @@ public class FoodCartActivity extends AppCompatActivity {
             }
         });
 
-       getTotalPayableAmount();
+        getTotalPayableAmount();
 
         syncDataFromFirebase();
         syncData = true;
 
     }
 
-    private void placeAnOrder() {
 
+    public void placeAnOrder() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(FoodCartActivity.this);
         alertDialog.setTitle("One More Step!");
         alertDialog.setMessage("Enter your address");
+        alertDialog.setPositiveButton("Yes", null);
+        alertDialog.setNegativeButton("cancel", null);
 
         final EditText editText = new EditText(FoodCartActivity.this);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams
-                (LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT);;
+                (LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
         editText.setHint("Your address");
         editText.setLayoutParams(lp);
         alertDialog.setView(editText);
         alertDialog.setIcon(R.drawable.ic_baseline_shopping_cart_24);
 
-        alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+        final AlertDialog mAlertDialog = alertDialog.create();
+        mAlertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+
             @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
+            public void onShow(DialogInterface dialog) {
 
-                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("PlaceOrders").child(new SessionManagement().getPhone(getApplicationContext())).push();
-                databaseReference.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-
-                       /* Set<String> hashSet = new LinkedHashSet(ordersList);
-                        List<String> removedDuplicates = new ArrayList(hashSet);*/
-
-                            OrderPlacedModel user = new OrderPlacedModel(new SessionManagement().getName(getApplicationContext()),
-                                    new SessionManagement().getPhone(getApplicationContext()),editText.getText().toString(),
-                                    totalAmountTxt.getText().toString(),ordersList);
-                            databaseReference.setValue(user);
-
-                            Toast.makeText(getApplicationContext(), "Order Successfully Placed", Toast.LENGTH_SHORT).show();
-                    }
+                Button b = mAlertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                b.setOnClickListener(new View.OnClickListener() {
 
                     @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        Toast.makeText(getApplicationContext(), "Failed Sign up", Toast.LENGTH_SHORT).show();
+                    public void onClick(View view) {
+
+                        ProgressDialog dialog = ProgressDialog.show(FoodCartActivity.this, "",
+                                "Placing Order. Please wait...", true);
+                        dialog.show();
+
+                        if (!editText.getText().toString().isEmpty()) {
+
+                            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("PlaceOrders").child(new SessionManagement().getPhone(getApplicationContext())).push();
+                            databaseReference.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                                    OrderPlacedModel user = new OrderPlacedModel(new SessionManagement().getName(getApplicationContext()),
+                                            new SessionManagement().getPhone(getApplicationContext()), editText.getText().toString(),
+                                            totalAmountTxt.getText().toString(), ordersList);
+                                    databaseReference.setValue(user);
+
+                                    Toast.makeText(getApplicationContext(), "Order Successfully Placed", Toast.LENGTH_SHORT).show();
+                                    dialog.dismiss();
+                                    mAlertDialog.dismiss();
+
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+                                    mAlertDialog.dismiss();
+                                    Toast.makeText(getApplicationContext(), "Failed place order", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        } else {
+                            dialog.dismiss();
+                            Toast.makeText(getApplicationContext(), "Please enter your address", Toast.LENGTH_SHORT).show();
+                        }
+
                     }
                 });
-
             }
         });
-
-        alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss();
-            }
-        });
-
-        alertDialog.show();
-
+        mAlertDialog.show();
     }
+
 
     private void getTotalPayableAmount() {
 
@@ -178,7 +193,7 @@ public class FoodCartActivity extends AppCompatActivity {
                         recyclerView.setVisibility(View.VISIBLE);
                         bottomLayout.setVisibility(View.VISIBLE);
 
-                    }else{
+                    } else {
 
                         preview.setVisibility(View.VISIBLE);
                         recyclerView.setVisibility(View.GONE);
@@ -200,7 +215,7 @@ public class FoodCartActivity extends AppCompatActivity {
 
         FirestoreRecyclerOptions<CartModel> allUserNotes = new FirestoreRecyclerOptions.Builder<CartModel>().setQuery(query, CartModel.class).build();
 
-        cartAdapter = new FoodCartAdapter(this, allUserNotes, firebaseFirestore,ordersList);
+        cartAdapter = new FoodCartAdapter(this, allUserNotes, firebaseFirestore, ordersList);
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
