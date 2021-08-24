@@ -151,7 +151,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         catAdapter.updateOptions(allUserNotes);
        catAdapter.notifyDataSetChanged();
 
-
     }
 
     private void searchData(String keyword) {
@@ -164,7 +163,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         recyclerView.setAdapter(catAdapter);
         catAdapter.startListening();
         catAdapter.notifyDataSetChanged();
-
 
     }
 
