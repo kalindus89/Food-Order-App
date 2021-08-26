@@ -15,7 +15,7 @@
             android:name=".order_status.OrderStatusActivity"
             android:exported="true" />
         <activity
-            android:name=".food_cart.FoodCartActivity"
+            android:name=".food_cart_place_order.FoodCartActivity"
             android:exported="true" />
         <activity
             android:name=".food_detail.FoodDetailActivity"

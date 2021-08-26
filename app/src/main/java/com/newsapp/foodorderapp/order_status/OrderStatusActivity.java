@@ -14,9 +14,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.newsapp.foodorderapp.R;
 import com.newsapp.foodorderapp.SessionManagement;
-import com.newsapp.foodorderapp.all_foods_home.AdapterCategory;
-import com.newsapp.foodorderapp.all_foods_home.CategoryModel;
-import com.newsapp.foodorderapp.food_cart.OrderPlacedModel;
+import com.newsapp.foodorderapp.food_cart_place_order.OrderPlacedModel;
 
 public class OrderStatusActivity extends AppCompatActivity {
 
@@ -49,6 +47,7 @@ public class OrderStatusActivity extends AppCompatActivity {
         Query query=FirebaseDatabase.getInstance().getReference("PlaceOrders").child(new SessionManagement().getPhone(this));
 
         FirebaseRecyclerOptions<OrderPlacedModel> allUserNotes = new FirebaseRecyclerOptions.Builder<OrderPlacedModel>().setQuery(query, OrderPlacedModel.class).build();
+
         adapterOrderStatus  = new AdapterOrderStatus(allUserNotes,this);
 
         recyclerView.setAdapter(adapterOrderStatus);

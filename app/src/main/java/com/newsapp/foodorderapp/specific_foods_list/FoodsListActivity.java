@@ -16,7 +16,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.newsapp.foodorderapp.R;
-import com.newsapp.foodorderapp.food_cart.FoodCartActivity;
+import com.newsapp.foodorderapp.food_cart_place_order.FoodCartActivity;
 
 public class FoodsListActivity extends AppCompatActivity {
 

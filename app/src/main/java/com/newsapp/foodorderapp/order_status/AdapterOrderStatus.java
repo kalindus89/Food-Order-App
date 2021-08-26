@@ -1,11 +1,9 @@
 package com.newsapp.foodorderapp.order_status;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,10 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.newsapp.foodorderapp.R;
-import com.newsapp.foodorderapp.all_foods_home.CategoryModel;
-import com.newsapp.foodorderapp.food_cart.OrderPlacedModel;
-import com.newsapp.foodorderapp.specific_foods_list.FoodsListActivity;
-import com.squareup.picasso.Picasso;
+import com.newsapp.foodorderapp.food_cart_place_order.OrderPlacedModel;
 
 public class AdapterOrderStatus extends FirebaseRecyclerAdapter<OrderPlacedModel, AdapterOrderStatus.OderStatusViewHolder> {
 
