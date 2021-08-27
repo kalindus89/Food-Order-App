@@ -151,46 +151,84 @@ public class FoodCartActivity extends AppCompatActivity {
                                             totalAmountTxt.getText().toString(), ordersList);
                                     databaseReference.setValue(user);
 
-
-
+                                    WriteBatch batch = FirebaseFirestore.getInstance().batch();
                                     Map<String, Object> note = new HashMap<>();
                                     note.put("driverNumber", "0");
                                     note.put("status", "0");
+                                    note.put("order_id", snapshot.getRef().getKey());
+                                    note.put("total", totalAmountTxt.getText().toString());
+                                    note.put("address", editText.getText().toString());
 
-                                    FirebaseFirestore.getInstance().document("FoodOrders/"+new SessionManagement().getPhone(getApplicationContext())+"/"+"orderFoods/"+"00000orderHistory/"+"orderIds/"+snapshot.getRef().getKey())
-                                            .set(note).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    DocumentReference nycRef = FirebaseFirestore.getInstance().document("FoodOrders/"+new SessionManagement().getPhone(getApplicationContext())+"/"+"orderFoods/"+"00000orderHistory/"+"ongoingOrderIds/"+snapshot.getRef().getKey());
+                                    batch.set(nycRef, note);
+
+                                    Map<String, Object> note2 = new HashMap<>();
+                                    note2.put("driverNumber", "0");
+                                    note2.put("status", "0");
+                                    note2.put("order_id", snapshot.getRef().getKey());
+                                    note2.put("total", totalAmountTxt.getText().toString());
+                                    note2.put("address", editText.getText().toString());
+                                    DocumentReference nycRef2 = FirebaseFirestore.getInstance().document("FoodOrders/"+new SessionManagement().getPhone(getApplicationContext())+"/"+"orderFoods/"+"00000orderHistory/"+"ongoingOrderIds/"+"0000allOrders/"+"placedOrderIds/"+snapshot.getRef().getKey());
+                                    batch.set(nycRef2, note2);
+
+
+                                    // Commit the batch
+                                    batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
-                                        public void onSuccess(Void unused) {
+                                        public void onComplete(@NonNull Task<Void> task) {
 
                                             for (int i = 0; i < ordersList.size(); i++) {
 
-                                                Map<String, Object> note2 = new HashMap<>();
-                                                note2.put("orderTime", ordersList.get(i).getOrderTime());
-                                                note2.put("price", ordersList.get(i).getPrice());
-                                                note2.put("quantity", ordersList.get(i).getQuantity());
-                                                note2.put("itemTotal", ordersList.get(i).getItemTotal());
-                                                note2.put("productID", ordersList.get(i).getProductID());
-                                                note2.put("productName", ordersList.get(i).getProductName());
-                                                note2.put("status", "draft");
+                                                Map<String, Object> note3 = new HashMap<>();
+                                                note3.put("orderTime", ordersList.get(i).getOrderTime());
+                                                note3.put("price", ordersList.get(i).getPrice());
+                                                note3.put("quantity", ordersList.get(i).getQuantity());
+                                                note3.put("itemTotal", ordersList.get(i).getItemTotal());
+                                                note3.put("productID", ordersList.get(i).getProductID());
+                                                note3.put("productName", ordersList.get(i).getProductName());
+                                                note3.put("status", "draft");
 
-                                                FirebaseFirestore.getInstance().document("FoodOrders/"+new SessionManagement().getPhone(getApplicationContext())+"/"+"orderFoods/"+"00000orderHistory/"
-                                                        +"orderIds/"+snapshot.getRef().getKey()+"/orderHistory/"+ordersList.get(i).getOrderID())
-                                                        .set(note2).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                FirebaseFirestore.getInstance().document("FoodOrders/"+new SessionManagement().getPhone(getApplicationContext())+"/"+"orderFoods/"+"00000orderHistory/"+"ongoingOrderIds/"+"0000allOrders/"+"placedOrderIds/"
+                                                        +snapshot.getRef().getKey()+"/orderFoods/"+ordersList.get(i).getOrderID()).set(note3).addOnSuccessListener(new OnSuccessListener<Void>() {
                                                     @Override
                                                     public void onSuccess(Void unused) {
                                                         Toast.makeText(getApplicationContext(), "Order Successfully Placed", Toast.LENGTH_SHORT).show();
 
-                                                        dialog.dismiss();
-                                                        mAlertDialog.dismiss();
 
-                                                        }
+                                                    }
                                                 });
 
                                             }
 
+                                            WriteBatch writeBatch = FirebaseFirestore.getInstance().batch();
+
+
+                                            Map<String, Object> note4 = new HashMap<>();
+                                            note4.put("numberOfOrders", 0);
+                                            note4.put("totalAmount", 0);
+                                            DocumentReference sfRef4 = FirebaseFirestore.getInstance().document("FoodOrders/"+new SessionManagement().getPhone(getApplicationContext()));
+                                            writeBatch.update(sfRef4,note4);
+
+                                            for (int i=0;i<ordersList.size();i++){
+                                                DocumentReference documentReference = FirebaseFirestore.getInstance().document("FoodOrders/"+new SessionManagement().getPhone(getApplicationContext())+"/"+"orderFoods/"+ordersList.get(i).getOrderID());
+                                                writeBatch.delete(documentReference);
+                                            }
+
+                                            writeBatch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    // Do anything here
+                                                    preview.setVisibility(View.VISIBLE);
+                                                    recyclerView.setVisibility(View.GONE);
+                                                    bottomLayout.setVisibility(View.GONE);
+                                                    editText.setText("0.00");
+                                                    dialog.dismiss();
+                                                    mAlertDialog.dismiss();
+                                                }
+                                            });
+
                                         }
                                     });
-
 
                                 }
 
@@ -211,75 +249,6 @@ public class FoodCartActivity extends AppCompatActivity {
         });
         mAlertDialog.show();
     }
-
-
-    /* public void placeAnOrder() {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(FoodCartActivity.this);
-        alertDialog.setTitle("One More Step!");
-        alertDialog.setMessage("Enter your address");
-        alertDialog.setPositiveButton("Yes", null);
-        alertDialog.setNegativeButton("cancel", null);
-
-        final EditText editText = new EditText(FoodCartActivity.this);
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams
-                (LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-        editText.setHint("Your address");
-        editText.setLayoutParams(lp);
-        alertDialog.setView(editText);
-        alertDialog.setIcon(R.drawable.ic_baseline_shopping_cart_24);
-
-        final AlertDialog mAlertDialog = alertDialog.create();
-        mAlertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
-
-            @Override
-            public void onShow(DialogInterface dialog) {
-
-                Button b = mAlertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
-                b.setOnClickListener(new View.OnClickListener() {
-
-                    @Override
-                    public void onClick(View view) {
-
-                        ProgressDialog dialog = ProgressDialog.show(FoodCartActivity.this, "",
-                                "Placing Order. Please wait...", true);
-                        dialog.show();
-
-                        if (!editText.getText().toString().isEmpty()) {
-
-                            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("PlaceOrders").child(new SessionManagement().getPhone(getApplicationContext())).push();
-                            databaseReference.addValueEventListener(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                                    OrderPlacedModel user = new OrderPlacedModel(new SessionManagement().getName(getApplicationContext()),
-                                            new SessionManagement().getPhone(getApplicationContext()), editText.getText().toString(),
-                                            totalAmountTxt.getText().toString(), ordersList);
-                                    databaseReference.setValue(user);
-
-                                    Toast.makeText(getApplicationContext(), "Order Successfully Placed", Toast.LENGTH_SHORT).show();
-                                    dialog.dismiss();
-                                    mAlertDialog.dismiss();
-
-                                }
-
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError error) {
-                                    mAlertDialog.dismiss();
-                                    Toast.makeText(getApplicationContext(), "Failed place order", Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        } else {
-                            dialog.dismiss();
-                            Toast.makeText(getApplicationContext(), "Please enter your address", Toast.LENGTH_SHORT).show();
-                        }
-
-                    }
-                });
-            }
-        });
-        mAlertDialog.show();
-    }*/
-
 
     private void getTotalPayableAmount() {
 

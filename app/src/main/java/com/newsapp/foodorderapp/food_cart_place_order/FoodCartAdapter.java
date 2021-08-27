@@ -84,7 +84,7 @@ public class FoodCartAdapter extends FirestoreRecyclerAdapter<CartModel,FoodCart
                     @Override
                     public boolean onMenuItemClick(MenuItem menuItem) {
 
-                        int itemIndex=ordersList.indexOf(fireStoreRecyclerOptions.getSnapshots().getSnapshot(holder.getAbsoluteAdapterPosition()).getId());
+                        //int itemIndex=ordersList.indexOf(fireStoreRecyclerOptions.getSnapshots().getSnapshot(holder.getAbsoluteAdapterPosition()).getId());
 
                      DocumentReference documentReference = firebaseFirestore.
                              collection("FoodOrders").document(new SessionManagement().getPhone(context)).collection("orderFoods").
@@ -95,7 +95,7 @@ public class FoodCartAdapter extends FirestoreRecyclerAdapter<CartModel,FoodCart
                             public void onSuccess(Void unused) {
                                 popupMenu.dismiss();
 
-                                ordersList.remove(itemIndex);
+                                //ordersList.remove(itemIndex);
                                 WriteBatch batch = firebaseFirestore.batch();
                                 DocumentReference sfRef2 = firebaseFirestore.document("FoodOrders/"+new SessionManagement().getPhone(context));
 

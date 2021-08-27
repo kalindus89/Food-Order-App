@@ -10,10 +10,14 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.newsapp.foodorderapp.R;
 import com.newsapp.foodorderapp.SessionManagement;
+import com.newsapp.foodorderapp.food_cart_place_order.CartModel;
 import com.newsapp.foodorderapp.food_cart_place_order.OrderPlacedModel;
 
 public class OrderStatusActivity extends AppCompatActivity {
@@ -44,14 +48,15 @@ public class OrderStatusActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setHasFixedSize(true);
 
-        Query query=FirebaseDatabase.getInstance().getReference("PlaceOrders").child(new SessionManagement().getPhone(this));
+        Query query = FirebaseFirestore.getInstance().collection("FoodOrders").document(new SessionManagement().getPhone(this)).collection("orderFoods").document("00000orderHistory").collection("ongoingOrderIds");
+        FirestoreRecyclerOptions<OrderPlacedModel> allUserNote= new FirestoreRecyclerOptions.Builder<OrderPlacedModel>().setQuery(query, OrderPlacedModel.class).build();
 
-        FirebaseRecyclerOptions<OrderPlacedModel> allUserNotes = new FirebaseRecyclerOptions.Builder<OrderPlacedModel>().setQuery(query, OrderPlacedModel.class).build();
-
-        adapterOrderStatus  = new AdapterOrderStatus(allUserNotes,this);
+        adapterOrderStatus  = new AdapterOrderStatus(allUserNote,this);
 
         recyclerView.setAdapter(adapterOrderStatus);
         adapterOrderStatus.notifyDataSetChanged();
+
+
 
     }
 
