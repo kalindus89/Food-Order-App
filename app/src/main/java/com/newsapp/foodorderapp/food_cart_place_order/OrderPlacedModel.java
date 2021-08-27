@@ -8,17 +8,15 @@ public class OrderPlacedModel {
     String phone;
     String address;
     String total;
-    List<CartModel> ordersList;
    String status;
     public OrderPlacedModel() {
     }
 
-    public OrderPlacedModel(String name, String phone, String address, String total, List<CartModel>  ordersList) {
+    public OrderPlacedModel(String name, String phone, String address, String total) {
         this.name = name;
         this.phone = phone;
         this.address = address;
         this.total = total;
-        this.ordersList = ordersList;
         status="0";  // 0=placed, 1=shipping, 2=shipped
     }
 
@@ -28,14 +26,6 @@ public class OrderPlacedModel {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public List<CartModel>  getOrdersList() {
-        return ordersList;
-    }
-
-    public void setOrdersList(List<CartModel>  ordersList) {
-        this.ordersList = ordersList;
     }
 
     public String getName() {

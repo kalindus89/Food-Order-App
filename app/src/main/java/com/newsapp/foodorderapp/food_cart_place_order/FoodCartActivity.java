@@ -148,7 +148,7 @@ public class FoodCartActivity extends AppCompatActivity {
 
                                     OrderPlacedModel user = new OrderPlacedModel(new SessionManagement().getName(getApplicationContext()),
                                             new SessionManagement().getPhone(getApplicationContext()), editText.getText().toString(),
-                                            totalAmountTxt.getText().toString(), ordersList);
+                                            totalAmountTxt.getText().toString());
                                     databaseReference.setValue(user);
 
                                     WriteBatch batch = FirebaseFirestore.getInstance().batch();

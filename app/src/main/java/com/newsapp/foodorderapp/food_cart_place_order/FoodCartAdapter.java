@@ -51,12 +51,11 @@ public class FoodCartAdapter extends FirestoreRecyclerAdapter<CartModel,FoodCart
     protected void onBindViewHolder(@NonNull CartViewHolder holder, int position, @NonNull CartModel model) {
 
 
-        if(!ordersList.contains(fireStoreRecyclerOptions.getSnapshots().getSnapshot(holder.getAbsoluteAdapterPosition()).getId())) {
+       /* if(!ordersList.contains(fireStoreRecyclerOptions.getSnapshots().getSnapshot(holder.getAbsoluteAdapterPosition()).getId())) {
            // ordersList.add(fireStoreRecyclerOptions.getSnapshots().getSnapshot(holder.getAbsoluteAdapterPosition()).getId());
             model.setOrderID(fireStoreRecyclerOptions.getSnapshots().getSnapshot(holder.getAbsoluteAdapterPosition()).getId());
-            ordersList.add(model);
 
-        }
+        }*/
 
         holder.cart_item_name.setText(model.getProductName());
 
