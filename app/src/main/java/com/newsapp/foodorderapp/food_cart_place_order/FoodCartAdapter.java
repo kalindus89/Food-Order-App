@@ -39,8 +39,8 @@ public class FoodCartAdapter extends FirestoreRecyclerAdapter<CartModel,FoodCart
     FirestoreRecyclerOptions<CartModel> fireStoreRecyclerOptions;
     FirebaseFirestore firebaseFirestore;
     //Map<String, Object> ordersList;
-    List<String> ordersList ;
-    public FoodCartAdapter(Context context, @NonNull FirestoreRecyclerOptions<CartModel> fireStoreRecyclerOptions, FirebaseFirestore firebaseFirestore,List<String> ordersList) {
+    List<CartModel> ordersList ;
+    public FoodCartAdapter(Context context, @NonNull FirestoreRecyclerOptions<CartModel> fireStoreRecyclerOptions, FirebaseFirestore firebaseFirestore,List<CartModel> ordersList) {
         super(fireStoreRecyclerOptions);
         this.context = context;
         this.fireStoreRecyclerOptions = fireStoreRecyclerOptions;
@@ -52,7 +52,10 @@ public class FoodCartAdapter extends FirestoreRecyclerAdapter<CartModel,FoodCart
 
 
         if(!ordersList.contains(fireStoreRecyclerOptions.getSnapshots().getSnapshot(holder.getAbsoluteAdapterPosition()).getId())) {
-            ordersList.add(fireStoreRecyclerOptions.getSnapshots().getSnapshot(holder.getAbsoluteAdapterPosition()).getId());
+           // ordersList.add(fireStoreRecyclerOptions.getSnapshots().getSnapshot(holder.getAbsoluteAdapterPosition()).getId());
+            model.setOrderID(fireStoreRecyclerOptions.getSnapshots().getSnapshot(holder.getAbsoluteAdapterPosition()).getId());
+            ordersList.add(model);
+
         }
 
         holder.cart_item_name.setText(model.getProductName());

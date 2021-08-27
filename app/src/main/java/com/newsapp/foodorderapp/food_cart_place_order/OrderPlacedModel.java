@@ -8,12 +8,12 @@ public class OrderPlacedModel {
     String phone;
     String address;
     String total;
-    List<String> ordersList;
+    List<CartModel> ordersList;
    String status;
     public OrderPlacedModel() {
     }
 
-    public OrderPlacedModel(String name, String phone, String address, String total, List<String>  ordersList) {
+    public OrderPlacedModel(String name, String phone, String address, String total, List<CartModel>  ordersList) {
         this.name = name;
         this.phone = phone;
         this.address = address;
@@ -30,11 +30,11 @@ public class OrderPlacedModel {
         this.status = status;
     }
 
-    public List<String>  getOrdersList() {
+    public List<CartModel>  getOrdersList() {
         return ordersList;
     }
 
-    public void setOrdersList(List<String>  ordersList) {
+    public void setOrdersList(List<CartModel>  ordersList) {
         this.ordersList = ordersList;
     }
 

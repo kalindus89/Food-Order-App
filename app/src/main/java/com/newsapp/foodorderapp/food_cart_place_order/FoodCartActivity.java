@@ -21,6 +21,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -29,15 +32,20 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.WriteBatch;
 import com.newsapp.foodorderapp.R;
 import com.newsapp.foodorderapp.SessionManagement;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class FoodCartActivity extends AppCompatActivity {
 
@@ -49,9 +57,7 @@ public class FoodCartActivity extends AppCompatActivity {
     LinearLayout preview;
     Button btnFoodOrder, btnPlaceOrder;
 
-    //  Map<String, Object> ordersList = new HashMap<>();;
-
-    List<String> ordersList = new ArrayList<>();
+    List<CartModel> ordersList = new ArrayList<>();
 
     FoodCartAdapter cartAdapter;
     boolean syncData = false;
@@ -135,6 +141,111 @@ public class FoodCartActivity extends AppCompatActivity {
 
                         if (!editText.getText().toString().isEmpty()) {
 
+                            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("PlaceOrders").push();
+                            databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                                    OrderPlacedModel user = new OrderPlacedModel(new SessionManagement().getName(getApplicationContext()),
+                                            new SessionManagement().getPhone(getApplicationContext()), editText.getText().toString(),
+                                            totalAmountTxt.getText().toString(), ordersList);
+                                    databaseReference.setValue(user);
+
+
+
+                                    Map<String, Object> note = new HashMap<>();
+                                    note.put("driverNumber", "0");
+                                    note.put("status", "0");
+
+                                    FirebaseFirestore.getInstance().document("FoodOrders/"+new SessionManagement().getPhone(getApplicationContext())+"/"+"orderFoods/"+"00000orderHistory/"+"orderIds/"+snapshot.getRef().getKey())
+                                            .set(note).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void unused) {
+
+                                            for (int i = 0; i < ordersList.size(); i++) {
+
+                                                Map<String, Object> note2 = new HashMap<>();
+                                                note2.put("orderTime", ordersList.get(i).getOrderTime());
+                                                note2.put("price", ordersList.get(i).getPrice());
+                                                note2.put("quantity", ordersList.get(i).getQuantity());
+                                                note2.put("itemTotal", ordersList.get(i).getItemTotal());
+                                                note2.put("productID", ordersList.get(i).getProductID());
+                                                note2.put("productName", ordersList.get(i).getProductName());
+                                                note2.put("status", "draft");
+
+                                                FirebaseFirestore.getInstance().document("FoodOrders/"+new SessionManagement().getPhone(getApplicationContext())+"/"+"orderFoods/"+"00000orderHistory/"
+                                                        +"orderIds/"+snapshot.getRef().getKey()+"/orderHistory/"+ordersList.get(i).getOrderID())
+                                                        .set(note2).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void unused) {
+                                                        Toast.makeText(getApplicationContext(), "Order Successfully Placed", Toast.LENGTH_SHORT).show();
+
+                                                        dialog.dismiss();
+                                                        mAlertDialog.dismiss();
+
+                                                        }
+                                                });
+
+                                            }
+
+                                        }
+                                    });
+
+
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+                                    mAlertDialog.dismiss();
+                                    Toast.makeText(getApplicationContext(), "Failed place order", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        } else {
+                            dialog.dismiss();
+                            Toast.makeText(getApplicationContext(), "Please enter your address", Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                });
+            }
+        });
+        mAlertDialog.show();
+    }
+
+
+    /* public void placeAnOrder() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(FoodCartActivity.this);
+        alertDialog.setTitle("One More Step!");
+        alertDialog.setMessage("Enter your address");
+        alertDialog.setPositiveButton("Yes", null);
+        alertDialog.setNegativeButton("cancel", null);
+
+        final EditText editText = new EditText(FoodCartActivity.this);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams
+                (LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+        editText.setHint("Your address");
+        editText.setLayoutParams(lp);
+        alertDialog.setView(editText);
+        alertDialog.setIcon(R.drawable.ic_baseline_shopping_cart_24);
+
+        final AlertDialog mAlertDialog = alertDialog.create();
+        mAlertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+
+            @Override
+            public void onShow(DialogInterface dialog) {
+
+                Button b = mAlertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                b.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View view) {
+
+                        ProgressDialog dialog = ProgressDialog.show(FoodCartActivity.this, "",
+                                "Placing Order. Please wait...", true);
+                        dialog.show();
+
+                        if (!editText.getText().toString().isEmpty()) {
+
                             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("PlaceOrders").child(new SessionManagement().getPhone(getApplicationContext())).push();
                             databaseReference.addValueEventListener(new ValueEventListener() {
                                 @Override
@@ -167,7 +278,7 @@ public class FoodCartActivity extends AppCompatActivity {
             }
         });
         mAlertDialog.show();
-    }
+    }*/
 
 
     private void getTotalPayableAmount() {
