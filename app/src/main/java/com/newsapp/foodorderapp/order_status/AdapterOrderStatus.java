@@ -1,9 +1,11 @@
 package com.newsapp.foodorderapp.order_status;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -35,11 +37,14 @@ public class AdapterOrderStatus extends FirestoreRecyclerAdapter<OrderPlacedMode
         holder.order_id.setText("Oder ID: "+fireStoreRecyclerOptions.getSnapshots().getSnapshot(position).getId());
 
         if(model.getStatus().equals("1")){
-            holder.order_status.setText("Status: Shipping");
+            holder.order_status.setText("Status: Processing");
+            holder.order_status.setTextColor(Color.parseColor("#54BF2D"));
         }else if(model.getStatus().equals("2")){
-            holder.order_status.setText("Status: Shipped");
+            holder.order_status.setText("Status: Shipping");
+            holder.order_status.setTextColor(Color.parseColor("#F32183"));
         }else{
             holder.order_status.setText("Status: Placed");
+            holder.order_status.setTextColor(Color.parseColor("#2196F3"));
         }
 
         holder.order_total.setText("Total: $"+model.getTotal());
@@ -56,6 +61,7 @@ public class AdapterOrderStatus extends FirestoreRecyclerAdapter<OrderPlacedMode
 
     public class OderStatusViewHolder extends RecyclerView.ViewHolder {
         private TextView order_id,order_status,order_total,order_address;
+        Button btnTrack;
 
         public OderStatusViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -64,6 +70,7 @@ public class AdapterOrderStatus extends FirestoreRecyclerAdapter<OrderPlacedMode
             order_status =itemView.findViewById(R.id.order_status);
             order_total =itemView.findViewById(R.id.order_total);
             order_address =itemView.findViewById(R.id.order_address);
+            btnTrack =itemView.findViewById(R.id.btnTrack);
         }
     }
 }

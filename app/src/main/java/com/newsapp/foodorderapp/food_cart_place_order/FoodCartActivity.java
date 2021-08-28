@@ -101,8 +101,6 @@ public class FoodCartActivity extends AppCompatActivity {
             public void onClick(View view) {
                 placeAnOrder();
 
-                System.out.println("aaaaaa "+ ordersList.size());
-
             }
         });
 
