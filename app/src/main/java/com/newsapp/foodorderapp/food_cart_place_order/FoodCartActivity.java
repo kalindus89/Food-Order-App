@@ -44,8 +44,11 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class FoodCartActivity extends AppCompatActivity {
 
@@ -97,6 +100,9 @@ public class FoodCartActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 placeAnOrder();
+
+                System.out.println("aaaaaa "+ ordersList.size());
+
             }
         });
 
@@ -177,6 +183,8 @@ public class FoodCartActivity extends AppCompatActivity {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
 
+
+
                                             for (int i = 0; i < ordersList.size(); i++) {
 
                                                 Map<String, Object> note3 = new HashMap<>();
@@ -187,6 +195,7 @@ public class FoodCartActivity extends AppCompatActivity {
                                                 note3.put("productID", ordersList.get(i).getProductID());
                                                 note3.put("productName", ordersList.get(i).getProductName());
                                                 note3.put("status", "draft");
+                                                note2.put("orderID", ordersList.get(i).getOrderID());
 
                                                 FirebaseFirestore.getInstance().document("FoodOrders/"+new SessionManagement().getPhone(getApplicationContext())+"/"+"orderFoods/"+"00000orderHistory/"+"ongoingOrderIds/"+"0000allOrders/"+"placedOrderIds/"
                                                         +snapshot.getRef().getKey()+"/orderFoods/"+ordersList.get(i).getOrderID()).set(note3).addOnSuccessListener(new OnSuccessListener<Void>() {

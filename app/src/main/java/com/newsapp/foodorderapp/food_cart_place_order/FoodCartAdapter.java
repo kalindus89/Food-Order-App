@@ -46,16 +46,16 @@ public class FoodCartAdapter extends FirestoreRecyclerAdapter<CartModel,FoodCart
         this.fireStoreRecyclerOptions = fireStoreRecyclerOptions;
         this.firebaseFirestore = firebaseFirestore;
         this.ordersList = ordersList;
+
     }
     @Override
     protected void onBindViewHolder(@NonNull CartViewHolder holder, int position, @NonNull CartModel model) {
 
 
-       /* if(!ordersList.contains(fireStoreRecyclerOptions.getSnapshots().getSnapshot(holder.getAbsoluteAdapterPosition()).getId())) {
-           // ordersList.add(fireStoreRecyclerOptions.getSnapshots().getSnapshot(holder.getAbsoluteAdapterPosition()).getId());
-            model.setOrderID(fireStoreRecyclerOptions.getSnapshots().getSnapshot(holder.getAbsoluteAdapterPosition()).getId());
+        ordersList.add(model);
+       // System.out.println("aaaaaa "+ ordersList.get(position).getOrderID()+" "+fireStoreRecyclerOptions.getSnapshots().getSnapshot(holder.getAbsoluteAdapterPosition()).getId());
 
-        }*/
+      //  Toast.makeText(context,fireStoreRecyclerOptions.getSnapshots().getSnapshot(holder.getAbsoluteAdapterPosition()).getId(),Toast.LENGTH_SHORT);
 
         holder.cart_item_name.setText(model.getProductName());
 
@@ -84,6 +84,7 @@ public class FoodCartAdapter extends FirestoreRecyclerAdapter<CartModel,FoodCart
                     public boolean onMenuItemClick(MenuItem menuItem) {
 
                         //int itemIndex=ordersList.indexOf(fireStoreRecyclerOptions.getSnapshots().getSnapshot(holder.getAbsoluteAdapterPosition()).getId());
+                        ordersList.remove(holder.getAbsoluteAdapterPosition());
 
                      DocumentReference documentReference = firebaseFirestore.
                              collection("FoodOrders").document(new SessionManagement().getPhone(context)).collection("orderFoods").

@@ -120,6 +120,8 @@ public class FoodDetailActivity extends AppCompatActivity {
         int iQuantity=Integer.parseInt(number_button.getNumber().replaceAll("[\\D]",""));
         int itemTotalAmount=iPrice*iQuantity;
 
+        DocumentReference nycRef1 = firebaseFirestore.collection("FoodOrders").document(new SessionManagement().getPhone(getApplicationContext())).collection("orderFoods").document();
+
         Map<String, Object> note2 = new HashMap<>();
         note2.put("orderTime", new Date());
         note2.put("price", foodPrice.getText().toString());
@@ -128,7 +130,7 @@ public class FoodDetailActivity extends AppCompatActivity {
         note2.put("productID", productID);
         note2.put("productName", foodName.getText().toString());
         note2.put("status", "draft");
-        DocumentReference nycRef1 = firebaseFirestore.collection("FoodOrders").document(new SessionManagement().getPhone(getApplicationContext())).collection("orderFoods").document();
+        note2.put("orderID", nycRef1.getId());
         batch.set(nycRef1, note2);
 
         DocumentReference sfRef2 = firebaseFirestore.document("FoodOrders/"+new SessionManagement().getPhone(getApplicationContext()));
