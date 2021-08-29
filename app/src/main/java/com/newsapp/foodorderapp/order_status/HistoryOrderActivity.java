@@ -1,26 +1,22 @@
 package com.newsapp.foodorderapp.order_status;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
-import com.firebase.ui.database.FirebaseRecyclerOptions;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.newsapp.foodorderapp.R;
 import com.newsapp.foodorderapp.SessionManagement;
-import com.newsapp.foodorderapp.food_cart_place_order.CartModel;
 import com.newsapp.foodorderapp.food_cart_place_order.OrderPlacedModel;
 
-public class OrderStatusActivity extends AppCompatActivity {
+public class HistoryOrderActivity extends AppCompatActivity {
 
 
     ImageView goBack;
@@ -48,15 +44,13 @@ public class OrderStatusActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setHasFixedSize(true);
 
-        Query query = FirebaseFirestore.getInstance().collection("FoodOrders").document(new SessionManagement().getPhone(this)).collection("orderFoods").document("00000orderHistory").collection("ongoingOrderIds");
+        Query query = FirebaseFirestore.getInstance().collection("FoodOrders").document(new SessionManagement().getPhone(this)).collection("orderFoods").document("00000orderHistory").collection("ongoingOrderIds").document("0000allOrders").collection("placedOrderIds");
         FirestoreRecyclerOptions<OrderPlacedModel> allUserNote= new FirestoreRecyclerOptions.Builder<OrderPlacedModel>().setQuery(query, OrderPlacedModel.class).build();
 
-        adapterOrderStatus  = new AdapterOrderStatus(allUserNote,this,false);
+        adapterOrderStatus  = new AdapterOrderStatus(allUserNote,this,true);
 
         recyclerView.setAdapter(adapterOrderStatus);
         adapterOrderStatus.notifyDataSetChanged();
-
-
 
     }
 

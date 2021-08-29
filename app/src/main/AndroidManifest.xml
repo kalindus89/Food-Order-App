@@ -33,6 +33,9 @@
             android:name=".singin_signup.SignInActivity"
             android:exported="true" />
         <activity
+            android:name=".order_status.HistoryOrderActivity"
+            android:exported="true" />
+        <activity
             android:name=".WelcomeActivity"
             android:exported="true">
             <intent-filter>

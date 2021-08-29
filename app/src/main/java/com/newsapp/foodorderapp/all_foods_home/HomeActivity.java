@@ -27,6 +27,7 @@ import com.newsapp.foodorderapp.R;
 import com.newsapp.foodorderapp.SessionManagement;
 import com.newsapp.foodorderapp.WelcomeActivity;
 import com.newsapp.foodorderapp.food_cart_place_order.FoodCartActivity;
+import com.newsapp.foodorderapp.order_status.HistoryOrderActivity;
 import com.newsapp.foodorderapp.order_status.OrderStatusActivity;
 
 import java.util.ArrayList;
@@ -218,6 +219,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.ll_Third:
                 showToast("ll_Third");
                 drawerLayout.closeDrawer(navigationView, true);
+                Intent intent3 = new Intent(HomeActivity.this, HistoryOrderActivity.class);
+                startActivity(intent3);
                 break;
             case R.id.ll_Fourth:
                 showToast("ll_Fourth");

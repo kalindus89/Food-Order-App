@@ -23,11 +23,13 @@ public class AdapterOrderStatus extends FirestoreRecyclerAdapter<OrderPlacedMode
 
     Context context;
     FirestoreRecyclerOptions<OrderPlacedModel> fireStoreRecyclerOptions;
+    boolean hideTrack;
 
-    public AdapterOrderStatus(@NonNull FirestoreRecyclerOptions<OrderPlacedModel> fireStoreRecyclerOptions, Context context) {
+    public AdapterOrderStatus(@NonNull FirestoreRecyclerOptions<OrderPlacedModel> fireStoreRecyclerOptions, Context context,boolean hideTrack) {
         super(fireStoreRecyclerOptions);
         this.context = context;
         this.fireStoreRecyclerOptions = fireStoreRecyclerOptions;
+        this.hideTrack = hideTrack;
     }
 
     @Override
@@ -42,6 +44,9 @@ public class AdapterOrderStatus extends FirestoreRecyclerAdapter<OrderPlacedMode
         }else if(model.getStatus().equals("2")){
             holder.order_status.setText("Status: Shipping");
             holder.order_status.setTextColor(Color.parseColor("#F32183"));
+        }else if(model.getStatus().equals("3")){
+            holder.order_status.setText("Status: Completed");
+            holder.order_status.setTextColor(Color.parseColor("#F32183"));
         }else{
             holder.order_status.setText("Status: Placed");
             holder.order_status.setTextColor(Color.parseColor("#2196F3"));
@@ -49,6 +54,12 @@ public class AdapterOrderStatus extends FirestoreRecyclerAdapter<OrderPlacedMode
 
         holder.order_total.setText("Total: $"+model.getTotal());
         holder.order_address.setText("Address: "+model.getAddress());
+
+        if(hideTrack==true){
+            holder.btnTrack.setVisibility(View.GONE);
+        }else{
+            holder.btnTrack.setVisibility(View.VISIBLE);
+        }
 
     }
 
