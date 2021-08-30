@@ -14,6 +14,16 @@ public class SessionManagement {
         editor.putString("login", login);
         editor.apply();
     }
+    public void setFBToken(Context con, String fbToken) {
+        SharedPreferences.Editor editor = con.getSharedPreferences("userDetails", MODE_PRIVATE).edit();
+        editor.putString("fbToken", fbToken);
+        editor.apply();
+    }
+
+    public String getFBToken(Context con) {
+        SharedPreferences prefs = con.getSharedPreferences("userDetails", MODE_PRIVATE);
+        return prefs.getString("fbToken", "token name defined");
+    }
 
     public String getPhone(Context con) {
         SharedPreferences prefs = con.getSharedPreferences("userDetails", MODE_PRIVATE);

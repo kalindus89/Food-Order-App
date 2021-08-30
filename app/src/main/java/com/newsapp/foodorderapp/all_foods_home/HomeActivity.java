@@ -1,5 +1,6 @@
 package com.newsapp.foodorderapp.all_foods_home;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -18,19 +19,28 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.newsapp.foodorderapp.R;
 import com.newsapp.foodorderapp.SessionManagement;
 import com.newsapp.foodorderapp.WelcomeActivity;
 import com.newsapp.foodorderapp.food_cart_place_order.FoodCartActivity;
 import com.newsapp.foodorderapp.order_status.HistoryOrderActivity;
 import com.newsapp.foodorderapp.order_status.OrderStatusActivity;
+import com.newsapp.foodorderapp.singin_signup.SignInActivity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -128,8 +138,64 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
         loadData();
 
+        updateFirebaseToken();
+
     }
 
+    public void updateFirebaseToken() {
+
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (!task.isSuccessful()) {
+                            Toast.makeText(getApplicationContext(), "token receive failed", Toast.LENGTH_SHORT).show();
+
+                            return;
+                        }
+
+                        String refreshToken = task.getResult();
+
+                        if (!refreshToken.equals(new SessionManagement().getFBToken(getApplicationContext()))) {
+
+                            DocumentReference nycRef = FirebaseFirestore.getInstance().document("FoodOrders/" + new SessionManagement().getPhone(getApplicationContext()));
+                            nycRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+
+                                    DocumentSnapshot document = task.getResult();
+                                    if (document.exists()) {
+                                        Map<String, Object> note = new HashMap<>();
+                                        note.put("messagingToken", refreshToken);
+
+                                        nycRef.update(note).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                new SessionManagement().setFBToken(getApplicationContext(),refreshToken);
+                                            }
+                                        });
+
+                                    } else {
+                                        Map<String, Object> note = new HashMap<>();
+                                        note.put("totalAmount", 0);
+                                        note.put("numberOfOrders", 0);
+                                        note.put("messagingToken", refreshToken);
+                                        nycRef.set(note).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                new SessionManagement().setFBToken(getApplicationContext(),refreshToken);
+                                            }
+                                        });
+
+                                    }
+
+                                }
+                            });
+
+                        }
+                    }
+                });
+    }
 
 
     private void loadData() {
@@ -145,7 +211,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
         recyclerView.setAdapter(catAdapter);
         catAdapter.updateOptions(allUserNotes);
-       catAdapter.notifyDataSetChanged();
+        catAdapter.notifyDataSetChanged();
 
     }
 

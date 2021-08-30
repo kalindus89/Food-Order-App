@@ -15,14 +15,23 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.newsapp.foodorderapp.SessionManagement;
 import com.newsapp.foodorderapp.all_foods_home.HomeActivity;
 import com.newsapp.foodorderapp.R;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class SignInActivity extends AppCompatActivity {
 
@@ -47,7 +56,7 @@ public class SignInActivity extends AppCompatActivity {
         goToSingUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(SignInActivity.this,SignUpActivity.class));
+                startActivity(new Intent(SignInActivity.this, SignUpActivity.class));
                 finish();
             }
         });
@@ -56,7 +65,7 @@ public class SignInActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 hideKeyboard(SignInActivity.this);
-                if (phoneNumber.getText().toString().isEmpty() || password .getText().toString().isEmpty()) {
+                if (phoneNumber.getText().toString().isEmpty() || password.getText().toString().isEmpty()) {
                     Toast.makeText(getApplicationContext(), "Please Enter All Fields", Toast.LENGTH_SHORT).show();
                 } else {
                     progressBar.setVisibility(View.VISIBLE);
@@ -71,15 +80,9 @@ public class SignInActivity extends AppCompatActivity {
                                 UserModel user = snapshot.getValue(UserModel.class);
 
                                 if (user.getPassword().equals(password.getText().toString())) {
+                                    new SessionManagement().setUserName(SignInActivity.this, phoneNumber.getText().toString(), user.getName(), "yes");
+                                    updateFirebaseToken(user);
 
-                                    progressBar.setVisibility(View.GONE);
-                                    btnSignIn.setEnabled(true);
-
-                                    new SessionManagement().setUserName(SignInActivity.this,phoneNumber.getText().toString(),user.getName(),"yes");
-                                    Intent intent = new Intent(SignInActivity.this, HomeActivity.class);
-                                    startActivity(intent);
-                                    finish();
-                                    Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
                                 } else {
                                     progressBar.setVisibility(View.GONE);
                                     btnSignIn.setEnabled(true);
@@ -104,6 +107,76 @@ public class SignInActivity extends AppCompatActivity {
             }
         });
 
+
+    }
+
+    private void updateFirebaseToken(UserModel user) {
+
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (!task.isSuccessful()) {
+                            Toast.makeText(getApplicationContext(), "token receive failed", Toast.LENGTH_SHORT).show();
+
+                            return;
+                        }
+
+                        String refreshToken = task.getResult();
+
+                        // Toast.makeText(getApplicationContext(), refreshToken, Toast.LENGTH_SHORT).show();
+
+
+                        DocumentReference nycRef = FirebaseFirestore.getInstance().document("FoodOrders/" + new SessionManagement().getPhone(getApplicationContext()));
+                        nycRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+
+                                DocumentSnapshot document = task.getResult();
+                                if (document.exists()) {
+                                    Map<String, Object> note = new HashMap<>();
+                                    note.put("messagingToken", refreshToken);
+
+                                    nycRef.update(note).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+
+                                            goHomeActivity(refreshToken);
+                                        }
+                                    });
+
+                                }
+                                else {
+                                    Map<String, Object> note = new HashMap<>();
+                                    note.put("totalAmount", 0);
+                                    note.put("numberOfOrders", 0);
+                                    note.put("messagingToken", refreshToken);
+                                    nycRef.set(note).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            goHomeActivity(refreshToken);
+                                        }
+                                    });
+
+                                }
+
+                            }
+                        });
+
+                    }
+                });
+
+    }
+
+    public void goHomeActivity(String fbToken) {
+        progressBar.setVisibility(View.GONE);
+        btnSignIn.setEnabled(true);
+
+        new SessionManagement().setFBToken(SignInActivity.this,fbToken);
+
+        Intent intent = new Intent(SignInActivity.this, HomeActivity.class);
+        startActivity(intent);
+        finish();
 
     }
 
