@@ -23,6 +23,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
@@ -135,8 +136,13 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-        loadData();
 
+        if (!SessionManagement.isConnectedToInternet(this)) {
+            Toast.makeText(this, "Check your connectivity!", Toast.LENGTH_SHORT).show();
+
+        }
+
+        loadData();
         updateFirebaseToken();
 
     }
@@ -170,7 +176,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                                         nycRef.update(note).addOnCompleteListener(new OnCompleteListener<Void>() {
                                             @Override
                                             public void onComplete(@NonNull Task<Void> task) {
-                                                new SessionManagement().setFBToken(getApplicationContext(),refreshToken);
+                                                new SessionManagement().setFBToken(getApplicationContext(), refreshToken);
                                             }
                                         });
 
@@ -182,7 +188,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                                         nycRef.set(note).addOnCompleteListener(new OnCompleteListener<Void>() {
                                             @Override
                                             public void onComplete(@NonNull Task<Void> task) {
-                                                new SessionManagement().setFBToken(getApplicationContext(),refreshToken);
+                                                new SessionManagement().setFBToken(getApplicationContext(), refreshToken);
                                             }
                                         });
 

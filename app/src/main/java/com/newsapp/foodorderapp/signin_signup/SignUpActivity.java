@@ -15,19 +15,21 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.newsapp.foodorderapp.R;
+import com.newsapp.foodorderapp.SessionManagement;
 
 public class SignUpActivity extends AppCompatActivity {
     EditText nameUserNew, phoneNumberNew, passwordNew;
     Button btnSignUpNew;
     ProgressBar progressBarNew;
     LinearLayout goToSingInNew;
-    boolean newUserCreated=false;
+    boolean newUserCreated = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +45,7 @@ public class SignUpActivity extends AppCompatActivity {
         progressBarNew = findViewById(R.id.progressBarNew);
         goToSingInNew = findViewById(R.id.goToSingInNew);
 
-      goToSingInNew.setOnClickListener(new View.OnClickListener() {
+        goToSingInNew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(SignUpActivity.this, SignInActivity.class));
@@ -58,45 +60,52 @@ public class SignUpActivity extends AppCompatActivity {
                 if (phoneNumberNew.getText().toString().isEmpty() || passwordNew.getText().toString().isEmpty() || nameUserNew.getText().toString().isEmpty()) {
                     Toast.makeText(getApplicationContext(), "Please Enter All Fields", Toast.LENGTH_SHORT).show();
                 } else {
-                    progressBarNew.setVisibility(View.VISIBLE);
-                    btnSignUpNew.setEnabled(false);
 
-                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(phoneNumberNew.getText().toString());
-                    databaseReference.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (SessionManagement.isConnectedToInternet(getApplicationContext())) {
+                        progressBarNew.setVisibility(View.VISIBLE);
+                        btnSignUpNew.setEnabled(false);
 
-                            if (snapshot.exists()) {
+                        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(phoneNumberNew.getText().toString());
+                        databaseReference.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                                progressBarNew.setVisibility(View.GONE);
-                                btnSignUpNew.setEnabled(true);
-                                if(newUserCreated==false) {
-                                    Toast.makeText(getApplicationContext(), "Phone number Already exists", Toast.LENGTH_SHORT).show();
+                                if (snapshot.exists()) {
+
+                                    progressBarNew.setVisibility(View.GONE);
+                                    btnSignUpNew.setEnabled(true);
+                                    if (newUserCreated == false) {
+                                        Toast.makeText(getApplicationContext(), "Phone number Already exists", Toast.LENGTH_SHORT).show();
+                                    }
+
+                                } else {
+
+                                    UserModel user = new UserModel(nameUserNew.getText().toString(), passwordNew.getText().toString());
+                                    databaseReference.setValue(user);
+
+                                    progressBarNew.setVisibility(View.GONE);
+                                    btnSignUpNew.setEnabled(true);
+                                    newUserCreated = true;
+                                    startActivity(new Intent(SignUpActivity.this, SignInActivity.class));
+                                    finish();
+
+                                    Toast.makeText(getApplicationContext(), "Success Sign Up", Toast.LENGTH_SHORT).show();
                                 }
+                            }
 
-                            } else {
-
-                                UserModel user = new UserModel(nameUserNew.getText().toString(),passwordNew.getText().toString());
-                                databaseReference.setValue(user);
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
 
                                 progressBarNew.setVisibility(View.GONE);
                                 btnSignUpNew.setEnabled(true);
-                                newUserCreated=true;
-                                startActivity(new Intent(SignUpActivity.this, SignInActivity.class));
-                                finish();
-
-                                Toast.makeText(getApplicationContext(), "Success Sign Up", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "Failed Sign up", Toast.LENGTH_SHORT).show();
                             }
-                        }
+                        });
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
+                    } else {
+                        Snackbar.make(view, "Check your connectivity!", Snackbar.LENGTH_SHORT).show();
+                    }
 
-                            progressBarNew.setVisibility(View.GONE);
-                            btnSignUpNew.setEnabled(true);
-                            Toast.makeText(getApplicationContext(), "Failed Sign up", Toast.LENGTH_SHORT).show();
-                        }
-                    });
                 }
             }
         });

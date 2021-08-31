@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -27,6 +28,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.newsapp.foodorderapp.SessionManagement;
+import com.newsapp.foodorderapp.WelcomeActivity;
 import com.newsapp.foodorderapp.all_foods_home.HomeActivity;
 import com.newsapp.foodorderapp.R;
 
@@ -68,41 +70,48 @@ public class SignInActivity extends AppCompatActivity {
                 if (phoneNumber.getText().toString().isEmpty() || password.getText().toString().isEmpty()) {
                     Toast.makeText(getApplicationContext(), "Please Enter All Fields", Toast.LENGTH_SHORT).show();
                 } else {
-                    progressBar.setVisibility(View.VISIBLE);
-                    btnSignIn.setEnabled(false);
 
-                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(phoneNumber.getText().toString());
-                    databaseReference.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (SessionManagement.isConnectedToInternet(SignInActivity.this)) {
 
-                            if (snapshot.exists()) {
-                                UserModel user = snapshot.getValue(UserModel.class);
+                        progressBar.setVisibility(View.VISIBLE);
+                        btnSignIn.setEnabled(false);
 
-                                if (user.getPassword().equals(password.getText().toString())) {
-                                    new SessionManagement().setUserName(SignInActivity.this, phoneNumber.getText().toString(), user.getName(), "yes");
-                                    updateFirebaseToken(user);
+                        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(phoneNumber.getText().toString());
+                        databaseReference.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
 
+                                if (snapshot.exists()) {
+                                    UserModel user = snapshot.getValue(UserModel.class);
+
+                                    if (user.getPassword().equals(password.getText().toString())) {
+                                        new SessionManagement().setUserName(SignInActivity.this, phoneNumber.getText().toString(), user.getName(), "yes");
+                                        updateFirebaseToken(user);
+
+                                    } else {
+                                        progressBar.setVisibility(View.GONE);
+                                        btnSignIn.setEnabled(true);
+                                        Toast.makeText(getApplicationContext(), "incorrect password", Toast.LENGTH_SHORT).show();
+                                    }
                                 } else {
                                     progressBar.setVisibility(View.GONE);
                                     btnSignIn.setEnabled(true);
-                                    Toast.makeText(getApplicationContext(), "incorrect password", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getApplicationContext(), "Wrong Username", Toast.LENGTH_SHORT).show();
                                 }
-                            } else {
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
                                 progressBar.setVisibility(View.GONE);
                                 btnSignIn.setEnabled(true);
-                                Toast.makeText(getApplicationContext(), "Wrong Username", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "Failed Login", Toast.LENGTH_SHORT).show();
                             }
-                        }
+                        });
+                    } else {
+                        Snackbar.make(view, "Check your connectivity!", Snackbar.LENGTH_SHORT).show();
+                    }
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-
-                            progressBar.setVisibility(View.GONE);
-                            btnSignIn.setEnabled(true);
-                            Toast.makeText(getApplicationContext(), "Failed Login", Toast.LENGTH_SHORT).show();
-                        }
-                    });
                 }
             }
         });
@@ -145,8 +154,7 @@ public class SignInActivity extends AppCompatActivity {
                                         }
                                     });
 
-                                }
-                                else {
+                                } else {
                                     Map<String, Object> note = new HashMap<>();
                                     note.put("totalAmount", 0);
                                     note.put("numberOfOrders", 0);
@@ -172,7 +180,7 @@ public class SignInActivity extends AppCompatActivity {
         progressBar.setVisibility(View.GONE);
         btnSignIn.setEnabled(true);
 
-        new SessionManagement().setFBToken(SignInActivity.this,fbToken);
+        new SessionManagement().setFBToken(SignInActivity.this, fbToken);
 
         Intent intent = new Intent(SignInActivity.this, HomeActivity.class);
         startActivity(intent);
