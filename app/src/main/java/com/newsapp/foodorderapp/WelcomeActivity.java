@@ -9,8 +9,8 @@ import android.view.WindowManager;
 import android.widget.Button;
 
 import com.newsapp.foodorderapp.all_foods_home.HomeActivity;
-import com.newsapp.foodorderapp.singin_signup.SignInActivity;
-import com.newsapp.foodorderapp.singin_signup.SignUpActivity;
+import com.newsapp.foodorderapp.signin_signup.SignInActivity;
+import com.newsapp.foodorderapp.signin_signup.SignUpActivity;
 
 public class WelcomeActivity extends AppCompatActivity {
 

@@ -41,10 +41,10 @@
             android:name=".all_foods_home.HomeActivity"
             android:exported="true" />
         <activity
-            android:name=".singin_signup.SignUpActivity"
+            android:name=".signin_signup.SignUpActivity"
             android:exported="true" />
         <activity
-            android:name=".singin_signup.SignInActivity"
+            android:name=".signin_signup.SignInActivity"
             android:exported="true" />
         <activity
             android:name=".order_status.HistoryOrderActivity"

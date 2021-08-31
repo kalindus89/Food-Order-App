@@ -1,4 +1,4 @@
-package com.newsapp.foodorderapp.singin_signup;
+package com.newsapp.foodorderapp.signin_signup;
 
 public class UserModel {
     String name;

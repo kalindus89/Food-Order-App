@@ -4,6 +4,8 @@ import static android.content.Context.MODE_PRIVATE;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 
 public class SessionManagement {
 
@@ -43,5 +45,22 @@ public class SessionManagement {
         } else {
             return false;
         }
+    }
+
+    private boolean isConnectedToInternet (Context context) {
+
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if(cm !=null){
+            NetworkInfo[] netInfo = cm.getAllNetworkInfo();
+            if(netInfo !=null){
+
+                for (int i=0; i<netInfo.length;i++){
+
+                    if(netInfo[i].getState()==NetworkInfo.State.CONNECTED)
+                        return  true;
+                }
+            }
+        }
+        return  false;
     }
 }

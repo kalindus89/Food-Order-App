@@ -36,7 +36,6 @@ import com.newsapp.foodorderapp.WelcomeActivity;
 import com.newsapp.foodorderapp.food_cart_place_order.FoodCartActivity;
 import com.newsapp.foodorderapp.order_status.HistoryOrderActivity;
 import com.newsapp.foodorderapp.order_status.OrderStatusActivity;
-import com.newsapp.foodorderapp.singin_signup.SignInActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;

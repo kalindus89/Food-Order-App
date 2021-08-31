@@ -1,4 +1,4 @@
-package com.newsapp.foodorderapp.singin_signup;
+package com.newsapp.foodorderapp.signin_signup;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
