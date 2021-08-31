@@ -1,6 +1,7 @@
 package com.newsapp.foodorderapp.all_foods_home;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -10,6 +11,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
@@ -24,9 +26,13 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
@@ -140,15 +146,17 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         });
 
 
-        if (!SessionManagement.isConnectedToInternet(this)) {
+        /*if (!SessionManagement.isConnectedToInternet(this)) {
             Toast.makeText(this, "Check your connectivity!", Toast.LENGTH_SHORT).show();
 
-        }
+        }*/
 
         loadData();
         updateFirebaseToken();
 
     }
+
+
 
     public void updateFirebaseToken() {
 
@@ -297,10 +305,10 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(intent3);
                 break;
             case R.id.ll_Fourth:
-               // showToast("ll_Fourth");
+                showToast("ll_Fourth");
                 drawerLayout.closeDrawer(navigationView, true);
 
-                DocumentReference nycRef = FirebaseFirestore.getInstance().collection("FoodOrders").document(new SessionManagement().getPhone(getApplicationContext()));
+                /*DocumentReference nycRef = FirebaseFirestore.getInstance().collection("FoodOrders").document(new SessionManagement().getPhone(getApplicationContext()));
 
                 nycRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
@@ -327,7 +335,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                             Toast.makeText(getApplicationContext(), "Not ok big", Toast.LENGTH_SHORT).show();
                         }
                     }
-                });
+                });*/
                 break;
             case R.id.ll_Fifth:
                 showToast("ll_Fifth");

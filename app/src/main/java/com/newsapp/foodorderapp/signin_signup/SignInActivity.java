@@ -27,6 +27,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.protobuf.StringValue;
 import com.newsapp.foodorderapp.SessionManagement;
 import com.newsapp.foodorderapp.WelcomeActivity;
 import com.newsapp.foodorderapp.all_foods_home.HomeActivity;
@@ -177,6 +178,8 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     public void goHomeActivity(String fbToken) {
+
+
         progressBar.setVisibility(View.GONE);
         btnSignIn.setEnabled(true);
 
@@ -185,7 +188,6 @@ public class SignInActivity extends AppCompatActivity {
         Intent intent = new Intent(SignInActivity.this, HomeActivity.class);
         startActivity(intent);
         finish();
-
     }
 
     public static void hideKeyboard(Activity activity) {
