@@ -29,7 +29,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.WriteBatch;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.newsapp.foodorderapp.R;
 import com.newsapp.foodorderapp.SessionManagement;
@@ -40,6 +42,7 @@ import com.newsapp.foodorderapp.order_status.OrderStatusActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener {
@@ -161,7 +164,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
                         String refreshToken = task.getResult();
 
-                        if (!refreshToken.equals(new SessionManagement().getFBToken(getApplicationContext()))) {
+                        if (refreshToken.equals(new SessionManagement().getFBToken(getApplicationContext()))) {
 
                             DocumentReference nycRef = FirebaseFirestore.getInstance().document("FoodOrders/" + new SessionManagement().getPhone(getApplicationContext()));
                             nycRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -294,8 +297,37 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(intent3);
                 break;
             case R.id.ll_Fourth:
-                showToast("ll_Fourth");
+               // showToast("ll_Fourth");
                 drawerLayout.closeDrawer(navigationView, true);
+
+                DocumentReference nycRef = FirebaseFirestore.getInstance().collection("FoodOrders").document(new SessionManagement().getPhone(getApplicationContext()));
+
+                nycRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                Toast.makeText(getApplicationContext(), "update", Toast.LENGTH_SHORT).show();
+
+                                Map<String, Object> note = new HashMap<>();
+                                note.put("favorite", FieldValue.arrayUnion("rrr"));
+                               // note.put("favorite", FieldValue.arrayUnion("rrr"));
+
+                                nycRef.update(note).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+
+
+                                    }
+                                });
+
+                            }
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Not ok big", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
                 break;
             case R.id.ll_Fifth:
                 showToast("ll_Fifth");
