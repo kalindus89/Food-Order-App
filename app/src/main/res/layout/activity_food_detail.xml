@@ -63,7 +63,7 @@
                 app:tint="#E3B736" />
 
             <TextView
-                android:id="@+id/overRollAppRating"
+                android:id="@+id/overallAppRating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
@@ -180,6 +180,32 @@
                 app:cardElevation="5dp"
                 app:cardUseCompatPadding="true">
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:lineSpacingMultiplier="1.5"
+                        android:text="Your Rating:"
+                        android:layout_margin="5dp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:textSize="14dp" />
+                    <RatingBar
+                        android:id="@+id/ratingBar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:scaleX=".7"
+                        android:scaleY=".7"
+                        android:transformPivotX="0dp"
+                        android:transformPivotY="0dp"
+                        android:max="5"
+                        android:rating="0"
+                        android:stepSize="1"
+                        android:isIndicator="true"/>
+
                 <TextView
                     android:id="@+id/food_description"
                     android:layout_width="wrap_content"
@@ -189,7 +215,7 @@
                     android:text="food description"
                     android:textColor="@color/black"
                     android:textSize="14dp" />
-
+                </LinearLayout>
             </androidx.cardview.widget.CardView>
         </LinearLayout>
 

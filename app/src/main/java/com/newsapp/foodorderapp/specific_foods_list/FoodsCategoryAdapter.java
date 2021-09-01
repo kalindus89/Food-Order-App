@@ -85,7 +85,7 @@ public class FoodsCategoryAdapter extends FirebaseRecyclerAdapter<FoodsModel, Fo
 
         Map note = new HashMap();
         note.put("foodId", foodId);
-        note.put("name", FieldValue.increment(1));
+        note.put("name", foodName);
         FirebaseDatabase.getInstance().getReference().child("foodPreferences").child(new SessionManagement().getPhone(context)).child(foodId).setValue(note);
         holder.fav_icon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.heart_on));
         holder.fav_icon.setTag("my Fav");

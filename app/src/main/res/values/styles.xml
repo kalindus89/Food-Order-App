@@ -18,4 +18,21 @@
         <item name="android:color">@color/purple_500</item>
         <item name="android:textStyle">normal</item>
     </style>
+
+    <style name="RatingDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:background">@color/white</item>
+        <item name="android:buttonBarPositiveButtonStyle">@style/RatingButtonDialogStyle</item>
+        <item name="android:buttonBarNegativeButtonStyle">@style/RatingButtonDialogStyle</item>
+    </style>
+
+    <style name="RatingButtonDialogStyle" parent="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textColor">@color/purple_500</item>
+        <item name="android:textSize">@dimen/text_size_medium</item>
+    </style>
+
+    <style name="RatingDialogFadeAnim">
+        <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
+        <item name="android:windowExitAnimation">@android:anim/fade_out</item>
+    </style>
+
 </resources>
