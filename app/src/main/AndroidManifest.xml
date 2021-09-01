@@ -34,7 +34,7 @@
             android:name=".food_cart_place_order.FoodCartActivity"
             android:exported="true" />
         <activity
-            android:name=".food_detail.FoodDetailActivity"
+            android:name=".single_food_detail.FoodDetailActivity"
             android:exported="true" />
         <activity
             android:name=".specific_foods_list.FoodsListActivity"

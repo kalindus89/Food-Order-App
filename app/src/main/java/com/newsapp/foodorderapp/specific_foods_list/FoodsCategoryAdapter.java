@@ -2,14 +2,11 @@ package com.newsapp.foodorderapp.specific_foods_list;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -19,13 +16,12 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.newsapp.foodorderapp.R;
 import com.newsapp.foodorderapp.SessionManagement;
-import com.newsapp.foodorderapp.food_detail.FoodDetailActivity;
+import com.newsapp.foodorderapp.single_food_detail.FoodDetailActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
@@ -49,6 +45,8 @@ public class FoodsCategoryAdapter extends FirebaseRecyclerAdapter<FoodsModel, Fo
 
         holder.foodName.setText(model.getName());
         Picasso.get().load(model.getImage()).placeholder(R.drawable.loading_image).into(holder.foodImage);
+        double totalRating=(Double.valueOf(model.getRating())/ Double.valueOf(model.getTotalVoters()));
+        holder.rating_food.setText("Rating: "+String.format("%.1f", totalRating)+"/5");
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,7 +122,7 @@ public class FoodsCategoryAdapter extends FirebaseRecyclerAdapter<FoodsModel, Fo
     }
 
     public class FoodViewHolder extends RecyclerView.ViewHolder {
-        private TextView foodName;
+        private TextView foodName,rating_food;
         private ImageView foodImage, fav_icon;
 
         public FoodViewHolder(@NonNull View itemView) {
@@ -133,6 +131,7 @@ public class FoodsCategoryAdapter extends FirebaseRecyclerAdapter<FoodsModel, Fo
             foodImage = itemView.findViewById(R.id.foodImage);
             foodName = itemView.findViewById(R.id.foodName);
             fav_icon = itemView.findViewById(R.id.fav_icon);
+            rating_food = itemView.findViewById(R.id.rating_food);
         }
     }
 }

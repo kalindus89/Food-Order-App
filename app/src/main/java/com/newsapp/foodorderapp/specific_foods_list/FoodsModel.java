@@ -8,17 +8,38 @@ public class FoodsModel {
     String discount;
     String price;
     String menuID;
+    int rating;
+    int totalVoters;
 
     public FoodsModel() {
     }
 
-    public FoodsModel(String name, String image, String description, String discount, String price,  String menuID) {
+    public FoodsModel(String name, String image, String description,
+                      String discount, String price, String menuID,int rating, int totalVoters) {
         this.name = name;
         this.image = image;
         this.description = description;
         this.discount = discount;
         this.price = price;
         this.menuID = menuID;
+        this.rating = rating;
+        this.totalVoters = totalVoters;
+    }
+
+    public int getRating() {
+        return rating;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
+    }
+
+    public int getTotalVoters() {
+        return totalVoters;
+    }
+
+    public void setTotalVoters(int totalVoters) {
+        this.totalVoters = totalVoters;
     }
 
     public String getPrice() {

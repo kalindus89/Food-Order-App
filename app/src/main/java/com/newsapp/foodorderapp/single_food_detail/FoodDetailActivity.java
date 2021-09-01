@@ -1,4 +1,4 @@
-package com.newsapp.foodorderapp.food_detail;
+package com.newsapp.foodorderapp.single_food_detail;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;

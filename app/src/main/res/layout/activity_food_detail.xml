@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".food_detail.FoodDetailActivity">
+    tools:context=".single_food_detail.FoodDetailActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar_layout"
@@ -39,14 +39,51 @@
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="114dp"
+        android:layout_height="52dp"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="5dp"
+        app:cardUseCompatPadding="true"
+        app:layout_anchor="@id/app_bar_layout"
+        app:layout_anchorGravity="bottom|left|end"
+        app:useCompatPadding="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:src="@drawable/start_icon"
+                app:tint="#E3B736" />
+
+            <TextView
+                android:id="@+id/overRollAppRating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:text="5.0/5"
+                android:textColor="#E3B736"
+                android:textSize="15dp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btnCart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/white"
-        app:backgroundTint="@color/white"
         android:elevation="6dp"
         android:src="@drawable/ic_baseline_shopping_cart_24"
+        app:backgroundTint="@color/white"
         app:layout_anchor="@id/app_bar_layout"
         app:layout_anchorGravity="bottom|right|end"
         app:pressedTranslationZ="12dp"
@@ -56,10 +93,10 @@
         android:id="@+id/progressBar"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:layout_marginBottom="10dp"
         android:visibility="gone"
         app:layout_anchor="@id/nestedScrollView"
-        android:layout_marginBottom="10dp"
-        app:layout_anchorGravity="bottom|center"/>
+        app:layout_anchorGravity="bottom|center" />
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nestedScrollView"
@@ -76,6 +113,7 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
                 app:cardElevation="5dp"
                 app:cardUseCompatPadding="true">
 
@@ -127,9 +165,9 @@
                         android:layout_marginLeft="8dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginBottom="18dp"
-                        app:textColor="@color/white"
                         app:finalNumber="20"
                         app:initialNumber="1"
+                        app:textColor="@color/white"
                         app:textSize="5sp" />
 
                 </LinearLayout>
@@ -140,8 +178,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:cardElevation="5dp"
-                app:cardUseCompatPadding="true"
-                >
+                app:cardUseCompatPadding="true">
+
                 <TextView
                     android:id="@+id/food_description"
                     android:layout_width="wrap_content"
@@ -150,7 +188,7 @@
                     android:padding="12dp"
                     android:text="food description"
                     android:textColor="@color/black"
-                    android:textSize="14dp"/>
+                    android:textSize="14dp" />
 
             </androidx.cardview.widget.CardView>
         </LinearLayout>
