@@ -1,7 +1,6 @@
 package com.newsapp.foodorderapp.all_foods_home;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -11,7 +10,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
@@ -25,30 +23,22 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.WriteBatch;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.newsapp.foodorderapp.R;
 import com.newsapp.foodorderapp.SessionManagement;
 import com.newsapp.foodorderapp.WelcomeActivity;
 import com.newsapp.foodorderapp.food_cart_place_order.FoodCartActivity;
-import com.newsapp.foodorderapp.order_status.HistoryOrderActivity;
-import com.newsapp.foodorderapp.order_status.OrderStatusActivity;
+import com.newsapp.foodorderapp.order_status_and_history.HistoryOrderActivity;
+import com.newsapp.foodorderapp.order_status_and_history.OrderStatusActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener {
@@ -294,15 +284,16 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 drawerLayout.closeDrawer(navigationView, true);
                 break;
             case R.id.current_status:
-                drawerLayout.closeDrawer(navigationView, true);
                 Intent intent2 = new Intent(HomeActivity.this, OrderStatusActivity.class);
                 startActivity(intent2);
+                drawerLayout.closeDrawer(navigationView, true);
+
                 break;
             case R.id.ll_Third:
                 showToast("ll_Third");
-                drawerLayout.closeDrawer(navigationView, true);
                 Intent intent3 = new Intent(HomeActivity.this, HistoryOrderActivity.class);
                 startActivity(intent3);
+                drawerLayout.closeDrawer(navigationView, true);
                 break;
             case R.id.ll_Fourth:
                 showToast("ll_Fourth");

@@ -1,13 +1,13 @@
-package com.newsapp.foodorderapp.order_status;
+package com.newsapp.foodorderapp.order_status_and_history;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -16,7 +16,7 @@ import com.newsapp.foodorderapp.R;
 import com.newsapp.foodorderapp.SessionManagement;
 import com.newsapp.foodorderapp.food_cart_place_order.OrderPlacedModel;
 
-public class HistoryOrderActivity extends AppCompatActivity {
+public class OrderStatusActivity extends AppCompatActivity {
 
 
     ImageView goBack;
@@ -44,13 +44,15 @@ public class HistoryOrderActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setHasFixedSize(true);
 
-        Query query = FirebaseFirestore.getInstance().collection("FoodOrders").document(new SessionManagement().getPhone(this)).collection("orderFoods").document("00000orderHistory").collection("ongoingOrderIds").document("0000allOrders").collection("placedOrderIds");
+        Query query = FirebaseFirestore.getInstance().collection("FoodOrders").document(new SessionManagement().getPhone(this)).collection("orderFoods").document("00000orderHistory").collection("ongoingOrderIds");
         FirestoreRecyclerOptions<OrderPlacedModel> allUserNote= new FirestoreRecyclerOptions.Builder<OrderPlacedModel>().setQuery(query, OrderPlacedModel.class).build();
 
-        adapterOrderStatus  = new AdapterOrderStatus(allUserNote,this,true);
+        adapterOrderStatus  = new AdapterOrderStatus(allUserNote,this,false);
 
         recyclerView.setAdapter(adapterOrderStatus);
         adapterOrderStatus.notifyDataSetChanged();
+
+
 
     }
 

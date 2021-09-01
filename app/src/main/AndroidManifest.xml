@@ -11,6 +11,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity
+            android:name=".view_order_foods.ViewOrderFoods"
+            android:exported="true" />
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
@@ -28,7 +31,7 @@
             android:value="@string/d_channel_id" />
 
         <activity
-            android:name=".order_status.OrderStatusActivity"
+            android:name=".order_status_and_history.OrderStatusActivity"
             android:exported="true" />
         <activity
             android:name=".food_cart_place_order.FoodCartActivity"
@@ -49,7 +52,7 @@
             android:name=".signin_signup.SignInActivity"
             android:exported="true" />
         <activity
-            android:name=".order_status.HistoryOrderActivity"
+            android:name=".order_status_and_history.HistoryOrderActivity"
             android:exported="true" />
         <activity
             android:name=".WelcomeActivity"

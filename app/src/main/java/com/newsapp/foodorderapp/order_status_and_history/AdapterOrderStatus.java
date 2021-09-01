@@ -1,6 +1,7 @@
-package com.newsapp.foodorderapp.order_status;
+package com.newsapp.foodorderapp.order_status_and_history;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,13 +12,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.newsapp.foodorderapp.R;
-import com.newsapp.foodorderapp.food_cart_place_order.CartModel;
 import com.newsapp.foodorderapp.food_cart_place_order.OrderPlacedModel;
+import com.newsapp.foodorderapp.view_order_foods.ViewOrderFoods;
 
 public class AdapterOrderStatus extends FirestoreRecyclerAdapter<OrderPlacedModel, AdapterOrderStatus.OderStatusViewHolder> {
 
@@ -60,6 +59,19 @@ public class AdapterOrderStatus extends FirestoreRecyclerAdapter<OrderPlacedMode
         }else{
             holder.btnTrack.setVisibility(View.VISIBLE);
         }
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, ViewOrderFoods.class);
+                intent.putExtra("order_id",fireStoreRecyclerOptions.getSnapshots().getSnapshot(holder.getAbsoluteAdapterPosition()).getId());
+                intent.putExtra("order_status",model.getStatus());
+                intent.putExtra("order_total",model.getTotal());
+                intent.putExtra("order_address",model.getAddress());
+                context.startActivity(intent);
+
+            }
+        });
 
     }
 
