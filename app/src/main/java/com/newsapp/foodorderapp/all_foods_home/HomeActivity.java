@@ -308,6 +308,11 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 showToast("ll_Fourth");
                 drawerLayout.closeDrawer(navigationView, true);
 
+                /*Map note = new HashMap();
+                note.put("number", FirebaseDatabase.getInstance().in);
+                FirebaseDatabase.getInstance().getReference().child("test").updateChildren(note);*/
+
+
                 /*DocumentReference nycRef = FirebaseFirestore.getInstance().collection("FoodOrders").document(new SessionManagement().getPhone(getApplicationContext()));
 
                 nycRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {

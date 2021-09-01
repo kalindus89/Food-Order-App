@@ -22,6 +22,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.newsapp.foodorderapp.R;
 import com.newsapp.foodorderapp.SessionManagement;
 import com.newsapp.foodorderapp.food_detail.FoodDetailActivity;
@@ -86,7 +87,7 @@ public class FoodsCategoryAdapter extends FirebaseRecyclerAdapter<FoodsModel, Fo
 
         Map note = new HashMap();
         note.put("foodId", foodId);
-        note.put("name", foodName);
+        note.put("name", FieldValue.increment(1));
         FirebaseDatabase.getInstance().getReference().child("foodPreferences").child(new SessionManagement().getPhone(context)).child(foodId).setValue(note);
         holder.fav_icon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.heart_on));
         holder.fav_icon.setTag("my Fav");
