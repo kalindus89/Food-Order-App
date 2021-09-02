@@ -2,6 +2,8 @@ package com.newsapp.foodorderapp.specific_foods_list;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,10 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.facebook.CallbackManager;
+import com.facebook.share.model.SharePhoto;
+import com.facebook.share.model.SharePhotoContent;
+import com.facebook.share.widget.ShareDialog;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DataSnapshot;
@@ -23,6 +29,7 @@ import com.newsapp.foodorderapp.R;
 import com.newsapp.foodorderapp.SessionManagement;
 import com.newsapp.foodorderapp.single_food_detail.FoodDetailActivity;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,6 +38,9 @@ public class FoodsCategoryAdapter extends FirebaseRecyclerAdapter<FoodsModel, Fo
 
     Context context;
     FirebaseRecyclerOptions<FoodsModel> options;
+    CallbackManager callbackManager;
+    ShareDialog shareDialog;
+
 
     public FoodsCategoryAdapter(@NonNull FirebaseRecyclerOptions<FoodsModel> options, Context context) {
         super(options);
@@ -68,6 +78,14 @@ public class FoodsCategoryAdapter extends FirebaseRecyclerAdapter<FoodsModel, Fo
                     addToFavorites(getRef(holder.getAbsoluteAdapterPosition()).getKey(),model.getName(),holder);
                 }
 
+            }
+        });
+        holder.shareFacebook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, FoodDetailActivity.class);
+                intent.putExtra("food_id", getRef(holder.getAbsoluteAdapterPosition()).getKey());
+                context.startActivity(intent);
             }
         });
 
@@ -123,7 +141,7 @@ public class FoodsCategoryAdapter extends FirebaseRecyclerAdapter<FoodsModel, Fo
 
     public class FoodViewHolder extends RecyclerView.ViewHolder {
         private TextView foodName,rating_food;
-        private ImageView foodImage, fav_icon;
+        private ImageView foodImage, fav_icon,shareFacebook;
 
         public FoodViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -132,6 +150,9 @@ public class FoodsCategoryAdapter extends FirebaseRecyclerAdapter<FoodsModel, Fo
             foodName = itemView.findViewById(R.id.foodName);
             fav_icon = itemView.findViewById(R.id.fav_icon);
             rating_food = itemView.findViewById(R.id.rating_food);
+            shareFacebook = itemView.findViewById(R.id.shareFacebook);
         }
     }
+
+
 }

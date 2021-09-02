@@ -1,15 +1,23 @@
 package com.newsapp.foodorderapp.all_foods_home;
 
+import static android.content.ContentValues.TAG;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
@@ -18,6 +26,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.FacebookSdk;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -37,6 +46,8 @@ import com.newsapp.foodorderapp.food_cart_place_order.FoodCartActivity;
 import com.newsapp.foodorderapp.order_status_and_history.HistoryOrderActivity;
 import com.newsapp.foodorderapp.order_status_and_history.OrderStatusActivity;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -68,6 +79,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
+      // FacebookSdk.setApplicationId("157162859896293");
+        FacebookSdk.sdkInitialize(this);
         recyclerView = findViewById(R.id.recyclerView);
         viewCart = findViewById(R.id.viewCart);
         searchIcon = findViewById(R.id.searchIcon);
@@ -143,7 +156,22 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
         loadData();
         updateFirebaseToken();
-
+       // printHashKey(this);
+    }
+    public static void printHashKey(Context pContext) {
+        try {
+            PackageInfo info = pContext.getPackageManager().getPackageInfo(pContext.getPackageName(), PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                String hashKey = new String(Base64.encode(md.digest(), 0));
+                System.out.println("aaaaa " + hashKey);
+            }
+        } catch (NoSuchAlgorithmException e) {
+            Log.e(TAG, "printHashKey()", e);
+        } catch (Exception e) {
+            Log.e(TAG, "printHashKey()", e);
+        }
     }
 
 

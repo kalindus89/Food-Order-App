@@ -1,9 +1,13 @@
 package com.newsapp.foodorderapp.single_food_detail;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -15,6 +19,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cepheuen.elegantnumberbutton.view.ElegantNumberButton;
+import com.facebook.CallbackManager;
+import com.facebook.share.model.SharePhoto;
+import com.facebook.share.model.SharePhotoContent;
+import com.facebook.share.widget.ShareButton;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
@@ -58,6 +66,27 @@ public class FoodDetailActivity extends AppCompatActivity implements RatingDialo
     DatabaseReference databaseReference;
     FirebaseFirestore firebaseFirestore;
 
+    CallbackManager callbackManager;
+    ShareButton shareButton;
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode,resultCode,data);
+
+
+        BitmapDrawable bitmapDrawable = (BitmapDrawable)img_food.getDrawable();
+        Bitmap bitmap=bitmapDrawable.getBitmap();
+
+        SharePhoto sharePhoto = new SharePhoto.Builder().setBitmap(bitmap).build();
+
+        SharePhotoContent sharePhotoContent = new SharePhotoContent.Builder() .addPhoto(sharePhoto).build();
+
+        shareButton.setShareContent(sharePhotoContent);
+
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,10 +96,12 @@ public class FoodDetailActivity extends AppCompatActivity implements RatingDialo
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         foodId = getIntent().getStringExtra("food_id");
+        callbackManager=CallbackManager.Factory.create();
 
         databaseReference = FirebaseDatabase.getInstance().getReference("Foods").child(foodId);
         firebaseFirestore = FirebaseFirestore.getInstance();
 
+        shareButton = findViewById(R.id.shareButton);
         number_button = findViewById(R.id.number_button);
         btnCart = findViewById(R.id.btnCart);
         overallAppRating = findViewById(R.id.overallAppRating);
