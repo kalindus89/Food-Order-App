@@ -47,7 +47,7 @@ public class AdapterCategory extends FirebaseRecyclerAdapter<CategoryModel,Adapt
         });
 
         holder.catName.setText(model.getName());
-        Picasso.get().load(model.getImage()).placeholder(R.drawable.loading_image).into(holder.cateImage);
+        Picasso.get().load(model.getImage()).placeholder(R.drawable.loading_gif).into(holder.cateImage);
 
     }
 

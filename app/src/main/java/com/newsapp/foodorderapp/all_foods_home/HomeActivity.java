@@ -5,6 +5,7 @@ import static android.content.ContentValues.TAG;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -175,6 +176,10 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
+       // LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(new GridLayoutManager(this,2));
+        recyclerView.setHasFixedSize(true);
+
         loadData();
         updateFirebaseToken();
 
@@ -256,9 +261,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
     private void loadData() {
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setHasFixedSize(true);
+
 
         Query query = databaseReference;
 
