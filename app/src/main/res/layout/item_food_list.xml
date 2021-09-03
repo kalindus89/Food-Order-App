@@ -69,9 +69,9 @@
             android:layout_marginTop="10dp"
             android:layout_marginRight="10dp"
             android:layout_weight="1"
-            android:padding="5dp"
             android:background="@drawable/round_corners"
             android:backgroundTint="#90000000"
+            android:padding="5dp"
             android:src="@drawable/ic_baseline_share_24"
             app:tint="@color/white" />
 

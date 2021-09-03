@@ -23,6 +23,8 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -178,7 +180,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
        // LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(new GridLayoutManager(this,2));
-        recyclerView.setHasFixedSize(true);
+
 
         loadData();
         updateFirebaseToken();
@@ -268,23 +270,23 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         allUserNotes = new FirebaseRecyclerOptions.Builder<CategoryModel>().setQuery(query, CategoryModel.class).build();
         catAdapter = new AdapterCategory(allUserNotes, this);
 
+
         recyclerView.setAdapter(catAdapter);
-       // catAdapter.updateOptions(allUserNotes);
         catAdapter.notifyDataSetChanged();
 
     }
 
     private void loadDataRefresh() {
 
-        Query query = databaseReference;
+        LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(recyclerView.getContext(),
+                R.anim.layout_fall_down);
+        recyclerView.setLayoutAnimation(controller);
 
-        FirebaseRecyclerOptions<CategoryModel> allUserNotesRefresh = new FirebaseRecyclerOptions.Builder<CategoryModel>().setQuery(query, CategoryModel.class).build();
-        catAdapter = new AdapterCategory(allUserNotesRefresh, this);
-
-        recyclerView.setAdapter(catAdapter);
-        catAdapter.notifyDataSetChanged();
         catAdapter.startListening();
         swipeRefreshList.setRefreshing(false);
+
+        recyclerView.getAdapter().notifyDataSetChanged();
+        recyclerView.scheduleLayoutAnimation();
 
     }
 
@@ -293,6 +295,9 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         Query query = databaseReference.orderByChild("name").startAt(keyword).endAt(keyword + "\uf8ff");
 
         FirebaseRecyclerOptions<CategoryModel> allUserNotes2 = new FirebaseRecyclerOptions.Builder<CategoryModel>().setQuery(query, CategoryModel.class).build();
+
+
+
         catAdapter = new AdapterCategory(allUserNotes2, this);
 
         recyclerView.setAdapter(catAdapter);
@@ -305,7 +310,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     protected void onStart() {
         super.onStart();
         catAdapter.startListening();
-        recyclerView.setAdapter(catAdapter);
+      recyclerView.setAdapter(catAdapter);
     }
 
     private void onSetNavigationDrawerEvents() {
