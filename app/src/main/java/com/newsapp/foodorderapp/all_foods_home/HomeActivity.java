@@ -7,7 +7,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -60,6 +62,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     TextView textView;
     RecyclerView recyclerView;
     EditText searchKeyword;
+    SwipeRefreshLayout swipeRefreshList;
 
     LinearLayout searchLayout, ll_First, ll_Second, current_status, ll_Third, ll_Fourth, ll_Fifth, ll_Sixth;
 
@@ -72,6 +75,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     FirebaseRecyclerOptions<CategoryModel> allUserNotes;
     ArrayList<CategoryModel> categoryModelArrayList;
 
+    @SuppressLint("ResourceAsColor")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,7 +83,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-      // FacebookSdk.setApplicationId("157162859896293");
+        // FacebookSdk.setApplicationId("157162859896293");
         FacebookSdk.sdkInitialize(this);
         recyclerView = findViewById(R.id.recyclerView);
         viewCart = findViewById(R.id.viewCart);
@@ -88,6 +92,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         searchLayout = findViewById(R.id.searchLayout);
         backToMainPage = findViewById(R.id.backToMainPage);
         searchKeyword = findViewById(R.id.searchKeyword);
+        swipeRefreshList = findViewById(R.id.swipeRefreshList);
 
         onSetNavigationDrawerEvents();
 
@@ -95,6 +100,28 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference("Category");
+
+        swipeRefreshList.setColorSchemeColors(R.color.purple_500, android.R.color.holo_green_dark, android.R.color.holo_orange_dark, android.R.color.holo_blue_dark);
+        swipeRefreshList.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+                if (SessionManagement.isConnectedToInternet(getApplicationContext())) {
+                    loadDataRefresh();
+                    updateFirebaseToken();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Check your connectivity!", Toast.LENGTH_SHORT).show();
+                    swipeRefreshList.setRefreshing(false);
+                }
+            }
+        });
+
+        // load data first time
+        swipeRefreshList.post(new Runnable() {
+            @Override
+            public void run() {
+            }
+        });
 
 
         viewCart.setOnClickListener(new View.OnClickListener() {
@@ -148,16 +175,12 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-
-        /*if (!SessionManagement.isConnectedToInternet(this)) {
-            Toast.makeText(this, "Check your connectivity!", Toast.LENGTH_SHORT).show();
-
-        }*/
-
         loadData();
         updateFirebaseToken();
-       // printHashKey(this);
+
+
     }
+
     public static void printHashKey(Context pContext) {
         try {
             PackageInfo info = pContext.getPackageManager().getPackageInfo(pContext.getPackageName(), PackageManager.GET_SIGNATURES);
@@ -173,7 +196,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             Log.e(TAG, "printHashKey()", e);
         }
     }
-
 
 
     public void updateFirebaseToken() {
@@ -244,8 +266,22 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         catAdapter = new AdapterCategory(allUserNotes, this);
 
         recyclerView.setAdapter(catAdapter);
-        catAdapter.updateOptions(allUserNotes);
+       // catAdapter.updateOptions(allUserNotes);
         catAdapter.notifyDataSetChanged();
+
+    }
+
+    private void loadDataRefresh() {
+
+        Query query = databaseReference;
+
+        FirebaseRecyclerOptions<CategoryModel> allUserNotesRefresh = new FirebaseRecyclerOptions.Builder<CategoryModel>().setQuery(query, CategoryModel.class).build();
+        catAdapter = new AdapterCategory(allUserNotesRefresh, this);
+
+        recyclerView.setAdapter(catAdapter);
+        catAdapter.notifyDataSetChanged();
+        catAdapter.startListening();
+        swipeRefreshList.setRefreshing(false);
 
     }
 

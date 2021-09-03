@@ -40,9 +40,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginLeft="20dp"
                 android:text="Food Categories"
                 android:textColor="@color/white"
-                android:layout_marginLeft="20dp"
                 android:textSize="20sp"
                 android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -67,9 +67,9 @@
                 android:id="@+id/searchLayout"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:orientation="horizontal"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
+                android:orientation="horizontal"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -89,10 +89,10 @@
                     android:id="@+id/searchKeyword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Search"
                     android:layout_gravity="center"
                     android:drawableLeft="@drawable/ic_baseline_search_24"
                     android:drawableTint="#C16A6969"
+                    android:hint="Search"
                     android:textSize="20sp"
                     app:met_baseColor="@color/white"
                     app:met_primaryColor="@color/white"
@@ -103,11 +103,18 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefreshList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/topLayout" />
+            android:layout_below="@+id/topLayout">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
