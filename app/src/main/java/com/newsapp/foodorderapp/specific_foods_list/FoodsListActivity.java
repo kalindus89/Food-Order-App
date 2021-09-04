@@ -25,7 +25,6 @@ public class FoodsListActivity extends AppCompatActivity {
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
     FoodsCategoryAdapter foodAdapter;
-    FloatingActionButton viewCart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +33,6 @@ public class FoodsListActivity extends AppCompatActivity {
 
         recyclerView=findViewById(R.id.recyclerView);
         goBack=findViewById(R.id.goBack);
-        viewCart=findViewById(R.id.viewCart);
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
@@ -42,14 +40,6 @@ public class FoodsListActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 finish();
-            }
-        });
-
-        viewCart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-                startActivity(new Intent(FoodsListActivity.this, FoodCartActivity.class));
             }
         });
 

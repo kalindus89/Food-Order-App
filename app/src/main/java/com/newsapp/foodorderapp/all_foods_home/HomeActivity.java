@@ -31,9 +31,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.andremion.counterfab.CounterFab;
 import com.facebook.FacebookSdk;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
@@ -73,7 +75,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     DatabaseReference databaseReference;
 
     AdapterCategory catAdapter;
-    FloatingActionButton viewCart;
+   // FloatingActionButton viewCart;
+     CounterFab viewCart;
 
     FirebaseRecyclerOptions<CategoryModel> allUserNotes;
     ArrayList<CategoryModel> categoryModelArrayList;
@@ -103,6 +106,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference("Category");
+
+       // viewCart.setCount(10);
 
         swipeRefreshList.setColorSchemeColors(R.color.purple_500, android.R.color.holo_green_dark, android.R.color.holo_orange_dark, android.R.color.holo_blue_dark);
         swipeRefreshList.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -183,7 +188,21 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
 
         loadData();
+        getTotalFoodItemCount();
         updateFirebaseToken();
+
+
+    }
+    public void getTotalFoodItemCount() {
+
+        FirebaseFirestore.getInstance().document("FoodOrders/" + new SessionManagement().getPhone(getApplicationContext())).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if(documentSnapshot.exists()) {
+                    viewCart.setCount(Integer.parseInt(String.valueOf(documentSnapshot.get("numberOfOrders"))));
+                }
+            }
+        });
 
 
     }
@@ -311,6 +330,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         super.onStart();
         catAdapter.startListening();
       recyclerView.setAdapter(catAdapter);
+        getTotalFoodItemCount();
     }
 
     private void onSetNavigationDrawerEvents() {

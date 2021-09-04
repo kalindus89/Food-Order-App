@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/my_bg"
     tools:context=".specific_foods_list.FoodsListActivity">
 
     <LinearLayout
@@ -39,22 +38,10 @@
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="8dp"
         android:layout_below="@+id/topLayout">
 
     </androidx.recyclerview.widget.RecyclerView>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/viewCart"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:backgroundTint="@color/white"
-        android:elevation="6dp"
-        android:src="@drawable/ic_baseline_shopping_cart_24"
-        app:backgroundTint="@color/white"
-        app:pressedTranslationZ="12dp"
-        app:useCompatPadding="true" />
+
 
 </RelativeLayout>

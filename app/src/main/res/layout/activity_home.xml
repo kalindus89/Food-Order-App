@@ -117,7 +117,19 @@
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
+<!--        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:backgroundTint="@color/white"
+            android:elevation="6dp"
+            android:src="@drawable/ic_baseline_shopping_cart_24"
+            app:backgroundTint="@color/white"
+            app:pressedTranslationZ="12dp"
+            app:useCompatPadding="true" />-->
+
+        <com.andremion.counterfab.CounterFab
             android:id="@+id/viewCart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -125,6 +137,7 @@
             android:layout_alignParentBottom="true"
             android:backgroundTint="@color/white"
             android:elevation="6dp"
+            app:badgeBackgroundColor="@color/purple_500"
             android:src="@drawable/ic_baseline_shopping_cart_24"
             app:backgroundTint="@color/white"
             app:pressedTranslationZ="12dp"
