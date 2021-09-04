@@ -29,6 +29,7 @@ import com.google.firebase.firestore.WriteBatch;
 import com.newsapp.foodorderapp.R;
 import com.newsapp.foodorderapp.SessionManagement;
 import com.newsapp.foodorderapp.food_cart_place_order.CartModel;
+import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -61,6 +62,9 @@ public class FoodViewAdapter extends FirestoreRecyclerAdapter<CartModel, FoodVie
         String date_time =(new SimpleDateFormat("EEEE MMM d - hh.mm aa").format(model.getOrderTime()));
         holder.cart_item_date.setText(date_time);
 
+        Picasso.get().load(model.getImageUrl()).placeholder(R.drawable.loading_gif_2).into(holder.foodImage);
+
+
     }
 
     @NonNull
@@ -73,6 +77,7 @@ public class FoodViewAdapter extends FirestoreRecyclerAdapter<CartModel, FoodVie
 
     public class CartViewHolder extends RecyclerView.ViewHolder {
        private TextView cart_item_name,cart_item_price,cart_item_date,cart_item_quantity;
+        ImageView foodImage;
 
         public CartViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -81,6 +86,8 @@ public class FoodViewAdapter extends FirestoreRecyclerAdapter<CartModel, FoodVie
             cart_item_price = itemView.findViewById(R.id.cart_item_price);
             cart_item_date = itemView.findViewById(R.id.cart_item_date);
             cart_item_quantity = itemView.findViewById(R.id.cart_item_quantity);
+            foodImage =itemView.findViewById(R.id.foodImage);
+
         }
     }
 

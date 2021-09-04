@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -21,9 +22,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -42,10 +49,12 @@ import com.newsapp.foodorderapp.SessionManagement;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -64,6 +73,7 @@ public class FoodCartActivity extends AppCompatActivity {
 
     FoodCartAdapter cartAdapter;
     boolean syncData = false;
+    String searchAddress="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,10 +114,32 @@ public class FoodCartActivity extends AppCompatActivity {
             }
         });
 
+
+        if (!Places.isInitialized()) {
+            Places.initialize(getApplicationContext(), getString(R.string.API_KEY_Google_places), Locale.US);
+            PlacesClient placesClient = Places.createClient(this);
+        }
+
         getTotalPayableAmount();
 
         syncDataFromFirebase();
         syncData = true;
+
+
+
+        //  address_auto_complete.getView().findViewById(R.id.place_autocomplete_search_input);
+
+ /*       address_auto_complete.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(@NonNull com.google.android.libraries.places.api.model.Place place) {
+                Toast.makeText(getApplicationContext(), place.getName(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onError(Status status) {
+
+            }
+        });*/
 
     }
 
@@ -119,12 +151,33 @@ public class FoodCartActivity extends AppCompatActivity {
         alertDialog.setPositiveButton("Yes", null);
         alertDialog.setNegativeButton("cancel", null);
 
-        final EditText editText = new EditText(FoodCartActivity.this);
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams
-                (LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-        editText.setHint("Your address");
-        editText.setLayoutParams(lp);
-        alertDialog.setView(editText);
+
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.address_enter_item, null);
+
+
+        AutocompleteSupportFragment address_auto_complete = (AutocompleteSupportFragment)getSupportFragmentManager().findFragmentById(R.id.address_auto_complete);
+        ( (EditText)address_auto_complete.getView().findViewById(R.id.places_autocomplete_search_input)).setHint("Enter your address");
+        address_auto_complete.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
+
+        address_auto_complete.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(@NonNull Place place) {
+              //  Toast.makeText(getApplicationContext(), place.getName()+" "+place.getId(), Toast.LENGTH_SHORT).show();
+                searchAddress= place.getName();
+            }
+
+            @Override
+            public void onError(@NonNull Status status) {
+
+
+
+            }
+        });
+        alertDialog.setView(view);
+
+
+
         alertDialog.setIcon(R.drawable.ic_baseline_shopping_cart_24);
 
         final AlertDialog mAlertDialog = alertDialog.create();
@@ -143,7 +196,7 @@ public class FoodCartActivity extends AppCompatActivity {
                                 "Placing Order. Please wait...", true);
                         dialog.show();
 
-                        if (!editText.getText().toString().isEmpty()) {
+                        if (!searchAddress.isEmpty()) {
 
                             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("PlaceOrders").push();
                             databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -151,7 +204,7 @@ public class FoodCartActivity extends AppCompatActivity {
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                                     OrderPlacedModel user = new OrderPlacedModel(new SessionManagement().getName(getApplicationContext()),
-                                            new SessionManagement().getPhone(getApplicationContext()), editText.getText().toString(),
+                                            new SessionManagement().getPhone(getApplicationContext()), searchAddress,
                                             totalAmountTxt.getText().toString());
                                     databaseReference.setValue(user);
 
@@ -161,7 +214,7 @@ public class FoodCartActivity extends AppCompatActivity {
                                     note.put("status", "0");
                                     note.put("order_id", snapshot.getRef().getKey());
                                     note.put("total", totalAmountTxt.getText().toString());
-                                    note.put("address", editText.getText().toString());
+                                    note.put("address", searchAddress);
 
                                     DocumentReference nycRef = FirebaseFirestore.getInstance().document("FoodOrders/"+new SessionManagement().getPhone(getApplicationContext())+"/"+"orderFoods/"+"00000orderHistory/"+"ongoingOrderIds/"+snapshot.getRef().getKey());
                                     batch.set(nycRef, note);
@@ -171,7 +224,7 @@ public class FoodCartActivity extends AppCompatActivity {
                                     note2.put("status", "0");
                                     note2.put("order_id", snapshot.getRef().getKey());
                                     note2.put("total", totalAmountTxt.getText().toString());
-                                    note2.put("address", editText.getText().toString());
+                                    note2.put("address", searchAddress);
                                     DocumentReference nycRef2 = FirebaseFirestore.getInstance().document("FoodOrders/"+new SessionManagement().getPhone(getApplicationContext())+"/"+"orderFoods/"+"00000orderHistory/"+"ongoingOrderIds/"+"0000allOrders/"+"placedOrderIds/"+snapshot.getRef().getKey());
                                     batch.set(nycRef2, note2);
 
@@ -193,7 +246,8 @@ public class FoodCartActivity extends AppCompatActivity {
                                                 note3.put("productID", ordersList.get(i).getProductID());
                                                 note3.put("productName", ordersList.get(i).getProductName());
                                                 note3.put("status", "draft");
-                                                note2.put("orderID", ordersList.get(i).getOrderID());
+                                                note3.put("orderID", ordersList.get(i).getOrderID());
+                                                note3.put("imageUrl", ordersList.get(i).getImageUrl());
 
                                                 FirebaseFirestore.getInstance().document("FoodOrders/"+new SessionManagement().getPhone(getApplicationContext())+"/"+"orderFoods/"+"00000orderHistory/"+"ongoingOrderIds/"+"0000allOrders/"+"placedOrderIds/"
                                                         +snapshot.getRef().getKey()+"/orderFoods/"+ordersList.get(i).getOrderID()).set(note3).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -228,7 +282,7 @@ public class FoodCartActivity extends AppCompatActivity {
                                                     preview.setVisibility(View.VISIBLE);
                                                     recyclerView.setVisibility(View.GONE);
                                                     bottomLayout.setVisibility(View.GONE);
-                                                    editText.setText("0.00");
+                                                    searchAddress="";
                                                     dialog.dismiss();
                                                     mAlertDialog.dismiss();
                                                 }

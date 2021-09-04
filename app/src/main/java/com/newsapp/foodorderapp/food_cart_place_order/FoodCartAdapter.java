@@ -28,6 +28,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.WriteBatch;
 import com.newsapp.foodorderapp.R;
 import com.newsapp.foodorderapp.SessionManagement;
+import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -65,6 +66,9 @@ public class FoodCartAdapter extends FirestoreRecyclerAdapter<CartModel,FoodCart
 
         String date_time =(new SimpleDateFormat("EEEE MMM d - hh.mm aa").format(model.getOrderTime()));
         holder.cart_item_date.setText(date_time);
+
+
+        Picasso.get().load(model.getImageUrl()).placeholder(R.drawable.loading_gif_2).into(holder.foodImage);
 
         holder.cart_item_delete.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.M)
@@ -136,7 +140,7 @@ public class FoodCartAdapter extends FirestoreRecyclerAdapter<CartModel,FoodCart
 
     public class CartViewHolder extends RecyclerView.ViewHolder {
        private TextView cart_item_name,cart_item_price,cart_item_date,cart_item_quantity;
-       private ImageView cart_item_delete;
+       private ImageView cart_item_delete,foodImage;
 
         public CartViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -146,6 +150,7 @@ public class FoodCartAdapter extends FirestoreRecyclerAdapter<CartModel,FoodCart
             cart_item_date = itemView.findViewById(R.id.cart_item_date);
             cart_item_quantity = itemView.findViewById(R.id.cart_item_quantity);
             cart_item_delete = itemView.findViewById(R.id.cart_item_delete);
+            foodImage = itemView.findViewById(R.id.foodImage);
         }
     }
 }

@@ -3,6 +3,7 @@ package com.newsapp.foodorderapp.all_foods_home;
 import static android.content.ContentValues.TAG;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -44,7 +45,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.newsapp.foodorderapp.R;
 import com.newsapp.foodorderapp.SessionManagement;
@@ -91,6 +94,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
         // FacebookSdk.setApplicationId("157162859896293");
         FacebookSdk.sdkInitialize(this);
+
         recyclerView = findViewById(R.id.recyclerView);
         viewCart = findViewById(R.id.viewCart);
         searchIcon = findViewById(R.id.searchIcon);
@@ -195,11 +199,11 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     }
     public void getTotalFoodItemCount() {
 
-        FirebaseFirestore.getInstance().document("FoodOrders/" + new SessionManagement().getPhone(getApplicationContext())).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        FirebaseFirestore.getInstance().document("FoodOrders/" + new SessionManagement().getPhone(getApplicationContext())).addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if(documentSnapshot.exists()) {
-                    viewCart.setCount(Integer.parseInt(String.valueOf(documentSnapshot.get("numberOfOrders"))));
+            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                if(value.exists()) {
+                    viewCart.setCount(Integer.parseInt(String.valueOf(value.get("numberOfOrders"))));
                 }
             }
         });

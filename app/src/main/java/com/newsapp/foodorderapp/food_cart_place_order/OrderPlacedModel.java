@@ -9,6 +9,7 @@ public class OrderPlacedModel {
     String address;
     String total;
    String status;
+    String imageUrl;;
     public OrderPlacedModel() {
     }
 
@@ -18,6 +19,14 @@ public class OrderPlacedModel {
         this.address = address;
         this.total = total;
         status="0";  // 0=placed, 1=shipping, 2=shipped
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public String getStatus() {

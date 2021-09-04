@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -17,6 +18,7 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.newsapp.foodorderapp.R;
 import com.newsapp.foodorderapp.food_cart_place_order.OrderPlacedModel;
 import com.newsapp.foodorderapp.view_order_foods.ViewOrderFoods;
+import com.squareup.picasso.Picasso;
 
 public class AdapterOrderStatus extends FirestoreRecyclerAdapter<OrderPlacedModel, AdapterOrderStatus.OderStatusViewHolder> {
 
@@ -56,8 +58,10 @@ public class AdapterOrderStatus extends FirestoreRecyclerAdapter<OrderPlacedMode
 
         if(hideTrack==true){
             holder.btnTrack.setVisibility(View.GONE);
+            holder.btnView.setVisibility(View.VISIBLE);
         }else{
             holder.btnTrack.setVisibility(View.VISIBLE);
+            holder.btnView.setVisibility(View.GONE);
         }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -72,6 +76,19 @@ public class AdapterOrderStatus extends FirestoreRecyclerAdapter<OrderPlacedMode
 
             }
         });
+        holder.btnView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, ViewOrderFoods.class);
+                intent.putExtra("order_id",fireStoreRecyclerOptions.getSnapshots().getSnapshot(holder.getAbsoluteAdapterPosition()).getId());
+                intent.putExtra("order_status",model.getStatus());
+                intent.putExtra("order_total",model.getTotal());
+                intent.putExtra("order_address",model.getAddress());
+                context.startActivity(intent);
+
+            }
+        });
+
 
     }
 
@@ -84,7 +101,7 @@ public class AdapterOrderStatus extends FirestoreRecyclerAdapter<OrderPlacedMode
 
     public class OderStatusViewHolder extends RecyclerView.ViewHolder {
         private TextView order_id,order_status,order_total,order_address;
-        Button btnTrack;
+        Button btnTrack,btnView;
 
         public OderStatusViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -94,6 +111,7 @@ public class AdapterOrderStatus extends FirestoreRecyclerAdapter<OrderPlacedMode
             order_total =itemView.findViewById(R.id.order_total);
             order_address =itemView.findViewById(R.id.order_address);
             btnTrack =itemView.findViewById(R.id.btnTrack);
+            btnView =itemView.findViewById(R.id.btnView);
         }
     }
 }

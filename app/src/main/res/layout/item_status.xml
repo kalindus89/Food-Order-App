@@ -63,6 +63,18 @@
             android:background="@drawable/round_corners"
             android:backgroundTint="#F32183"
             android:text="Track"
+            android:visibility="gone"
+            android:textColor="@color/white" />
+
+        <android.widget.Button
+            android:id="@+id/btnView"
+            android:layout_width="70dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="@drawable/round_corners"
+            android:backgroundTint="#DF2EDC"
+            android:text="View"
             android:textColor="@color/white" />
 
     </LinearLayout>

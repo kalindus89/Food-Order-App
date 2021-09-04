@@ -12,6 +12,7 @@ public class CartModel {
     String status;
     String itemTotal;
     String orderID;
+    String imageUrl;
 
     public CartModel() {
     }
@@ -25,6 +26,14 @@ public class CartModel {
         this.status = status;
         this.itemTotal = itemTotal;
         this.orderID = orderID;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public String getOrderID() {

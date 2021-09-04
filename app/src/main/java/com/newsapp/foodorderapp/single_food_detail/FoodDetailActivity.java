@@ -68,6 +68,7 @@ public class FoodDetailActivity extends AppCompatActivity implements RatingDialo
 
     CallbackManager callbackManager;
     ShareButton shareButton;
+    String foodImageUrl="no image";
 
 
     @Override
@@ -236,6 +237,7 @@ public class FoodDetailActivity extends AppCompatActivity implements RatingDialo
         note2.put("productName", foodName.getText().toString());
         note2.put("status", "draft");
         note2.put("orderID", nycRef1.getId());
+        note2.put("imageUrl", foodImageUrl);
         batch.set(nycRef1, note2);
 
         DocumentReference sfRef2 = firebaseFirestore.document("FoodOrders/" + new SessionManagement().getPhone(getApplicationContext()));
@@ -275,6 +277,7 @@ public class FoodDetailActivity extends AppCompatActivity implements RatingDialo
                 foodPrice.setText(foodsModel.getPrice());
                 foodName.setText(foodsModel.getName());
                 Picasso.get().load(foodsModel.getImage()).placeholder(R.drawable.vegi_bg).into(img_food);
+                foodImageUrl=foodsModel.getImage();
             }
 
             @Override
