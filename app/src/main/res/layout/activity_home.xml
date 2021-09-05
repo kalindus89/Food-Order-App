@@ -110,24 +110,35 @@
             android:layout_height="match_parent"
             android:layout_below="@+id/topLayout">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+            <com.daimajia.slider.library.SliderLayout
+                android:id="@+id/slider_promotions"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 
-<!--        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:backgroundTint="@color/white"
-            android:elevation="6dp"
-            android:src="@drawable/ic_baseline_shopping_cart_24"
-            app:backgroundTint="@color/white"
-            app:pressedTranslationZ="12dp"
-            app:useCompatPadding="true" />-->
+        <!--        <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"
+                    android:backgroundTint="@color/white"
+                    android:elevation="6dp"
+                    android:src="@drawable/ic_baseline_shopping_cart_24"
+                    app:backgroundTint="@color/white"
+                    app:pressedTranslationZ="12dp"
+                    app:useCompatPadding="true" />-->
 
         <com.andremion.counterfab.CounterFab
             android:id="@+id/viewCart"
@@ -137,9 +148,9 @@
             android:layout_alignParentBottom="true"
             android:backgroundTint="@color/white"
             android:elevation="6dp"
-            app:badgeBackgroundColor="@color/purple_500"
             android:src="@drawable/ic_baseline_shopping_cart_24"
             app:backgroundTint="@color/white"
+            app:badgeBackgroundColor="@color/purple_500"
             app:pressedTranslationZ="12dp"
             app:useCompatPadding="true" />
     </RelativeLayout>

@@ -33,6 +33,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.andremion.counterfab.CounterFab;
+import com.daimajia.slider.library.Animations.DescriptionAnimation;
+import com.daimajia.slider.library.SliderLayout;
+import com.daimajia.slider.library.SliderTypes.BaseSliderView;
+import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.facebook.FacebookSdk;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -40,9 +44,12 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -55,6 +62,7 @@ import com.newsapp.foodorderapp.WelcomeActivity;
 import com.newsapp.foodorderapp.food_cart_place_order.FoodCartActivity;
 import com.newsapp.foodorderapp.order_status_and_history.HistoryOrderActivity;
 import com.newsapp.foodorderapp.order_status_and_history.OrderStatusActivity;
+import com.squareup.picasso.Picasso;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -84,6 +92,10 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     FirebaseRecyclerOptions<CategoryModel> allUserNotes;
     ArrayList<CategoryModel> categoryModelArrayList;
 
+    //slider
+    HashMap <String, String> imageList;
+    SliderLayout slider_promotions;
+
     @SuppressLint("ResourceAsColor")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,6 +115,9 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         backToMainPage = findViewById(R.id.backToMainPage);
         searchKeyword = findViewById(R.id.searchKeyword);
         swipeRefreshList = findViewById(R.id.swipeRefreshList);
+        slider_promotions=findViewById(R.id.slider_promotions);
+
+        imageList = new HashMap<>();
 
         onSetNavigationDrawerEvents();
 
@@ -191,11 +206,64 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         recyclerView.setLayoutManager(new GridLayoutManager(this,2));
 
 
+        setUpSlider();
         loadData();
         getTotalFoodItemCount();
         updateFirebaseToken();
 
 
+    }
+
+    public void setUpSlider(){
+
+        DatabaseReference sliderReference= FirebaseDatabase.getInstance().getReference("Banners");
+        sliderReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                for(DataSnapshot dataSnapshot:snapshot.getChildren()){
+
+                        BannerModel bannerModel =dataSnapshot.getValue(BannerModel.class);
+                   imageList.put(bannerModel.getName()+"@@@"+bannerModel.getFoodId(),bannerModel.getImage());
+                }
+
+                for(String key:imageList.keySet()){
+
+                    String[] keySplit = key.split("@@@");
+                    String nameOfFood = keySplit[0];
+                    String idOfFood = keySplit[1];
+
+                    final TextSliderView textSliderView = new TextSliderView(getApplicationContext());
+                    textSliderView
+                            .description(nameOfFood)
+                            .image(imageList.get(key))
+                            .setScaleType(BaseSliderView.ScaleType.FitCenterCrop)
+                            .setOnSliderClickListener(new BaseSliderView.OnSliderClickListener() {
+                                @Override
+                                public void onSliderClick(BaseSliderView slider) {
+
+                                }
+                            });
+                    textSliderView.bundle(new Bundle());
+                    textSliderView.getBundle().putString("food_id",idOfFood);
+
+                    textSliderView.setPicasso(Picasso.get());
+                   slider_promotions.addSlider(textSliderView);
+                    sliderReference.removeEventListener(this);
+
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
+        slider_promotions.setPresetTransformer(SliderLayout.Transformer.Background2Foreground); // change animation
+        slider_promotions.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
+        slider_promotions.setCustomAnimation(new DescriptionAnimation());
+        slider_promotions.setDuration(4000);
     }
     public void getTotalFoodItemCount() {
 
@@ -469,5 +537,11 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        slider_promotions.startAutoCycle();
     }
 }
