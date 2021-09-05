@@ -5,6 +5,7 @@ import static android.content.ContentValues.TAG;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -17,6 +18,7 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -62,6 +64,8 @@ import com.newsapp.foodorderapp.WelcomeActivity;
 import com.newsapp.foodorderapp.food_cart_place_order.FoodCartActivity;
 import com.newsapp.foodorderapp.order_status_and_history.HistoryOrderActivity;
 import com.newsapp.foodorderapp.order_status_and_history.OrderStatusActivity;
+import com.newsapp.foodorderapp.single_food_detail.FoodDetailActivity;
+import com.newsapp.foodorderapp.specific_foods_list.FoodsModel;
 import com.squareup.picasso.Picasso;
 
 import java.security.MessageDigest;
@@ -86,14 +90,14 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     DatabaseReference databaseReference;
 
     AdapterCategory catAdapter;
-   // FloatingActionButton viewCart;
-     CounterFab viewCart;
+    // FloatingActionButton viewCart;
+    CounterFab viewCart;
 
     FirebaseRecyclerOptions<CategoryModel> allUserNotes;
     ArrayList<CategoryModel> categoryModelArrayList;
 
     //slider
-    HashMap <String, String> imageList;
+    HashMap<String, String> imageList;
     SliderLayout slider_promotions;
 
     @SuppressLint("ResourceAsColor")
@@ -115,7 +119,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         backToMainPage = findViewById(R.id.backToMainPage);
         searchKeyword = findViewById(R.id.searchKeyword);
         swipeRefreshList = findViewById(R.id.swipeRefreshList);
-        slider_promotions=findViewById(R.id.slider_promotions);
+        slider_promotions = findViewById(R.id.slider_promotions);
 
         imageList = new HashMap<>();
 
@@ -126,7 +130,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference("Category");
 
-       // viewCart.setCount(10);
+        // viewCart.setCount(10);
 
         swipeRefreshList.setColorSchemeColors(R.color.purple_500, android.R.color.holo_green_dark, android.R.color.holo_orange_dark, android.R.color.holo_blue_dark);
         swipeRefreshList.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -202,8 +206,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-       // LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(new GridLayoutManager(this,2));
+        // LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
 
 
         setUpSlider();
@@ -214,20 +218,22 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    public void setUpSlider(){
+    public void setUpSlider() {
 
-        DatabaseReference sliderReference= FirebaseDatabase.getInstance().getReference("Banners");
-        sliderReference.addValueEventListener(new ValueEventListener() {
+        DatabaseReference sliderReference = FirebaseDatabase.getInstance().getReference("Banners");
+
+        ValueEventListener valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                for(DataSnapshot dataSnapshot:snapshot.getChildren()){
 
-                        BannerModel bannerModel =dataSnapshot.getValue(BannerModel.class);
-                   imageList.put(bannerModel.getName()+"@@@"+bannerModel.getFoodId(),bannerModel.getImage());
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+
+                    BannerModel bannerModel = dataSnapshot.getValue(BannerModel.class);
+                    imageList.put(bannerModel.getName() + "@@@" + bannerModel.getFoodId(), bannerModel.getImage());
                 }
 
-                for(String key:imageList.keySet()){
+                for (String key : imageList.keySet()) {
 
                     String[] keySplit = key.split("@@@");
                     String nameOfFood = keySplit[0];
@@ -237,40 +243,47 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                     textSliderView
                             .description(nameOfFood)
                             .image(imageList.get(key))
-                            .setScaleType(BaseSliderView.ScaleType.FitCenterCrop)
+                            .setScaleType(BaseSliderView.ScaleType.CenterCrop)
                             .setOnSliderClickListener(new BaseSliderView.OnSliderClickListener() {
                                 @Override
                                 public void onSliderClick(BaseSliderView slider) {
-
+                                    Intent intent = new Intent(getApplicationContext(), FoodDetailActivity.class);
+                                    intent.putExtra("food_id", idOfFood);
+                                    startActivity(intent);
                                 }
                             });
                     textSliderView.bundle(new Bundle());
-                    textSliderView.getBundle().putString("food_id",idOfFood);
+                    textSliderView.getBundle().putString("food_id", idOfFood);
 
                     textSliderView.setPicasso(Picasso.get());
-                   slider_promotions.addSlider(textSliderView);
-                    sliderReference.removeEventListener(this);
+
+                    slider_promotions.addSlider(textSliderView);
+                    sliderReference.removeEventListener(this); // help only listen one time from FirebaseDatabase
 
                 }
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
-        });
+        };
+        sliderReference.addValueEventListener(valueEventListener);
 
 
-        slider_promotions.setPresetTransformer(SliderLayout.Transformer.Background2Foreground); // change animation
+        slider_promotions.setPresetTransformer(SliderLayout.Transformer.Default); // change animation
         slider_promotions.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
+        slider_promotions.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.loading_image));
         slider_promotions.setCustomAnimation(new DescriptionAnimation());
         slider_promotions.setDuration(4000);
     }
+
     public void getTotalFoodItemCount() {
 
         FirebaseFirestore.getInstance().document("FoodOrders/" + new SessionManagement().getPhone(getApplicationContext())).addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                if(value.exists()) {
+                if (value.exists()) {
                     viewCart.setCount(Integer.parseInt(String.valueOf(value.get("numberOfOrders"))));
                 }
             }
@@ -355,7 +368,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     private void loadData() {
 
 
-
         Query query = databaseReference;
 
         allUserNotes = new FirebaseRecyclerOptions.Builder<CategoryModel>().setQuery(query, CategoryModel.class).build();
@@ -388,7 +400,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         FirebaseRecyclerOptions<CategoryModel> allUserNotes2 = new FirebaseRecyclerOptions.Builder<CategoryModel>().setQuery(query, CategoryModel.class).build();
 
 
-
         catAdapter = new AdapterCategory(allUserNotes2, this);
 
         recyclerView.setAdapter(catAdapter);
@@ -401,7 +412,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     protected void onStart() {
         super.onStart();
         catAdapter.startListening();
-      recyclerView.setAdapter(catAdapter);
+        recyclerView.setAdapter(catAdapter);
         getTotalFoodItemCount();
     }
 
