@@ -471,8 +471,10 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 drawerLayout.closeDrawer(navigationView, true);
                 break;
             case R.id.ll_Fourth:
-                showToast("ll_Fourth");
+                showToast("subscribe");
                 drawerLayout.closeDrawer(navigationView, true);
+
+                FirebaseMessaging.getInstance().subscribeToTopic("news");
 
                 /*Map note = new HashMap();
                 note.put("number", FirebaseDatabase.getInstance().in);
@@ -509,8 +511,10 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 });*/
                 break;
             case R.id.ll_Fifth:
-                showToast("ll_Fifth");
+                showToast("unsubscribe");
                 drawerLayout.closeDrawer(navigationView, true);
+
+                FirebaseMessaging.getInstance().unsubscribeFromTopic("news");
                 break;
             case R.id.ll_Sixth:
                 showToast("tv_logout");
