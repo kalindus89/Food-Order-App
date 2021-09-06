@@ -80,7 +80,7 @@ public class SignUpActivity extends AppCompatActivity {
 
                                 } else {
 
-                                    UserModel user = new UserModel(nameUserNew.getText().toString(), passwordNew.getText().toString());
+                                    UserModel user = new UserModel(nameUserNew.getText().toString(), passwordNew.getText().toString(), "no");
                                     databaseReference.setValue(user);
 
                                     progressBarNew.setVisibility(View.GONE);

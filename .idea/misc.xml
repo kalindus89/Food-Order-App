@@ -15,6 +15,7 @@
         <entry key="..\:/Work/Android/AndroidStudioProjects/AndroidStudioProjectsAll/FoodOrderApp/app/src/main/res/layout/activity_foods_list.xml" value="0.2" />
         <entry key="..\:/Work/Android/AndroidStudioProjects/AndroidStudioProjectsAll/FoodOrderApp/app/src/main/res/layout/activity_home.xml" value="0.264" />
         <entry key="..\:/Work/Android/AndroidStudioProjects/AndroidStudioProjectsAll/FoodOrderApp/app/src/main/res/layout/activity_main.xml" value="0.353713768115942" />
+        <entry key="..\:/Work/Android/AndroidStudioProjects/AndroidStudioProjectsAll/FoodOrderApp/app/src/main/res/layout/activity_news.xml" value="0.2210144927536232" />
         <entry key="..\:/Work/Android/AndroidStudioProjects/AndroidStudioProjectsAll/FoodOrderApp/app/src/main/res/layout/activity_order_status.xml" value="0.2536231884057971" />
         <entry key="..\:/Work/Android/AndroidStudioProjects/AndroidStudioProjectsAll/FoodOrderApp/app/src/main/res/layout/activity_sign_up.xml" value="0.348731884057971" />
         <entry key="..\:/Work/Android/AndroidStudioProjects/AndroidStudioProjectsAll/FoodOrderApp/app/src/main/res/layout/activity_sing_in.xml" value="0.348731884057971" />
@@ -32,7 +33,9 @@
         <entry key="..\:/Work/Android/AndroidStudioProjects/AndroidStudioProjectsAll/FoodOrderApp/app/src/main/res/layout/item_category_layout.xml" value="0.24954710144927536" />
         <entry key="..\:/Work/Android/AndroidStudioProjects/AndroidStudioProjectsAll/FoodOrderApp/app/src/main/res/layout/item_food_list.xml" value="0.2536231884057971" />
         <entry key="..\:/Work/Android/AndroidStudioProjects/AndroidStudioProjectsAll/FoodOrderApp/app/src/main/res/layout/item_foods_only.xml" value="0.21784420289855072" />
+        <entry key="..\:/Work/Android/AndroidStudioProjects/AndroidStudioProjectsAll/FoodOrderApp/app/src/main/res/layout/item_news.xml" value="0.264" />
         <entry key="..\:/Work/Android/AndroidStudioProjects/AndroidStudioProjectsAll/FoodOrderApp/app/src/main/res/layout/item_status.xml" value="0.2536231884057971" />
+        <entry key="..\:/Work/Android/AndroidStudioProjects/AndroidStudioProjectsAll/FoodOrderApp/app/src/main/res/layout/item_subscribe.xml" value="0.2210144927536232" />
         <entry key="..\:/Work/Android/AndroidStudioProjects/AndroidStudioProjectsAll/FoodOrderApp/app/src/main/res/layout/layout_side_menu.xml" value="0.2" />
         <entry key="..\:/Work/Android/AndroidStudioProjects/AndroidStudioProjectsAll/FoodOrderApp/app/src/main/res/layout/menu_layout_side.xml" value="0.2536231884057971" />
         <entry key="..\:/Work/Android/AndroidStudioProjects/AndroidStudioProjectsAll/FoodOrderApp/app/src/main/res/layout/nav_header_home.xml" value="0.22146739130434784" />

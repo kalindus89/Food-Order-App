@@ -151,7 +151,8 @@ public class SignInActivity extends AppCompatActivity {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
 
-                                            goHomeActivity(refreshToken);
+                                            goHomeActivity(refreshToken,user);
+
                                         }
                                     });
 
@@ -163,7 +164,7 @@ public class SignInActivity extends AppCompatActivity {
                                     nycRef.set(note).addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
-                                            goHomeActivity(refreshToken);
+                                            goHomeActivity(refreshToken,user);
                                         }
                                     });
 
@@ -177,13 +178,19 @@ public class SignInActivity extends AppCompatActivity {
 
     }
 
-    public void goHomeActivity(String fbToken) {
+    public void goHomeActivity(String fbToken, UserModel model) {
 
 
         progressBar.setVisibility(View.GONE);
         btnSignIn.setEnabled(true);
 
         new SessionManagement().setFBToken(SignInActivity.this, fbToken);
+
+        if(model.getSubscribeState().equals("no")){
+            new SessionManagement().setState(SignInActivity.this,"no");
+        }else {
+            new SessionManagement().setState(SignInActivity.this,"yes");
+        }
 
         Intent intent = new Intent(SignInActivity.this, HomeActivity.class);
         startActivity(intent);

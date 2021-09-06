@@ -11,12 +11,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity
+            android:name=".news.NewsActivity"
+            android:exported="true" />
 
-        <meta-data android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCTaI-EnE2DrL3yRk8SDCvD6g4cBRkwzu8"/>
-
-        <meta-data android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id"/>
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCTaI-EnE2DrL3yRk8SDCvD6g4cBRkwzu8" />
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
 
         <activity
             android:name=".view_order_foods.ViewOrderFoods"
@@ -88,10 +92,10 @@
             </intent-filter>
         </service>
 
-        <provider android:authorities="com.facebook.app.FacebookContentProvider157162859896293"
+        <provider
             android:name="com.facebook.FacebookContentProvider"
-            android:exported="true"/>
-
+            android:authorities="com.facebook.app.FacebookContentProvider157162859896293"
+            android:exported="true" />
     </application>
 
 </manifest>

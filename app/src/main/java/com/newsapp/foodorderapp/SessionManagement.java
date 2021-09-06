@@ -27,6 +27,12 @@ public class SessionManagement {
         editor.apply();
     }
 
+    public void setState(Context con, String save) {
+        SharedPreferences.Editor editor = con.getSharedPreferences("userDetails", MODE_PRIVATE).edit();
+        editor.putString("state", save);
+        editor.apply();
+    }
+
     public String getFBToken(Context con) {
         SharedPreferences prefs = con.getSharedPreferences("userDetails", MODE_PRIVATE);
         return prefs.getString("fbToken", "token name defined");
@@ -46,6 +52,14 @@ public class SessionManagement {
         SharedPreferences prefs = con.getSharedPreferences("userDetails", MODE_PRIVATE);
 
         if (prefs.getString("login", "No name defined").equals("yes")) {
+            return true;
+        } else {
+            return false;
+        }
+    }    public boolean getState(Context con) {
+        SharedPreferences prefs = con.getSharedPreferences("userDetails", MODE_PRIVATE);
+
+        if (prefs.getString("state", "no").equals("yes")) {
             return true;
         } else {
             return false;

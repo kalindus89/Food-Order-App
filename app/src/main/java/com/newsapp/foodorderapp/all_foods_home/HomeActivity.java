@@ -4,6 +4,7 @@ import static android.content.ContentValues.TAG;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -13,7 +14,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -24,10 +27,14 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -41,9 +48,13 @@ import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.facebook.FacebookSdk;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DataSnapshot;
@@ -57,11 +68,14 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.WriteBatch;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.newsapp.foodorderapp.R;
 import com.newsapp.foodorderapp.SessionManagement;
 import com.newsapp.foodorderapp.WelcomeActivity;
 import com.newsapp.foodorderapp.food_cart_place_order.FoodCartActivity;
+import com.newsapp.foodorderapp.food_cart_place_order.OrderPlacedModel;
+import com.newsapp.foodorderapp.news.NewsActivity;
 import com.newsapp.foodorderapp.order_status_and_history.HistoryOrderActivity;
 import com.newsapp.foodorderapp.order_status_and_history.OrderStatusActivity;
 import com.newsapp.foodorderapp.single_food_detail.FoodDetailActivity;
@@ -71,6 +85,7 @@ import com.squareup.picasso.Picasso;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -84,7 +99,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     EditText searchKeyword;
     SwipeRefreshLayout swipeRefreshList;
 
-    LinearLayout searchLayout, ll_First, ll_Second, current_status, ll_Third, ll_Fourth, ll_Fifth, ll_Sixth;
+    LinearLayout searchLayout, ll_First, ll_Second, current_status, ll_Third, ll_Fourth, ll_Fifth, ll_Sixth, news, subscribe;
 
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
@@ -432,6 +447,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         ll_Fourth = (LinearLayout) findViewById(R.id.ll_Fourth);
         ll_Fifth = (LinearLayout) findViewById(R.id.ll_Fifth);
         ll_Sixth = (LinearLayout) findViewById(R.id.ll_Sixth);
+        subscribe = (LinearLayout) findViewById(R.id.subscribe);
+        news = (LinearLayout) findViewById(R.id.news);
 
         drawerIcon.setOnClickListener(this);
         ll_First.setOnClickListener(this);
@@ -441,6 +458,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         ll_Fourth.setOnClickListener(this);
         ll_Fifth.setOnClickListener(this);
         ll_Sixth.setOnClickListener(this);
+        subscribe.setOnClickListener(this);
+        news.setOnClickListener(this);
     }
 
     @Override
@@ -474,47 +493,20 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 showToast("subscribe");
                 drawerLayout.closeDrawer(navigationView, true);
 
-                FirebaseMessaging.getInstance().subscribeToTopic("news");
-
-                /*Map note = new HashMap();
-                note.put("number", FirebaseDatabase.getInstance().in);
-                FirebaseDatabase.getInstance().getReference().child("test").updateChildren(note);*/
-
-
-                /*DocumentReference nycRef = FirebaseFirestore.getInstance().collection("FoodOrders").document(new SessionManagement().getPhone(getApplicationContext()));
-
-                nycRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            if (document.exists()) {
-                                Toast.makeText(getApplicationContext(), "update", Toast.LENGTH_SHORT).show();
-
-                                Map<String, Object> note = new HashMap<>();
-                                note.put("favorite", FieldValue.arrayUnion("rrr"));
-                               // note.put("favorite", FieldValue.arrayUnion("rrr"));
-
-                                nycRef.update(note).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-
-
-                                    }
-                                });
-
-                            }
-                        } else {
-                            Toast.makeText(getApplicationContext(), "Not ok big", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });*/
                 break;
             case R.id.ll_Fifth:
                 showToast("unsubscribe");
                 drawerLayout.closeDrawer(navigationView, true);
 
-                FirebaseMessaging.getInstance().unsubscribeFromTopic("news");
+                break;
+            case R.id.subscribe:
+                drawerLayout.closeDrawer(navigationView, true);
+                SubscribeNews();
+                break;
+            case R.id.news:
+                drawerLayout.closeDrawer(navigationView, true);
+                Intent intent7 = new Intent(HomeActivity.this, NewsActivity.class);
+                startActivity(intent7);
                 break;
             case R.id.ll_Sixth:
                 showToast("tv_logout");
@@ -558,5 +550,67 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     protected void onStop() {
         super.onStop();
         slider_promotions.startAutoCycle();
+    }
+
+    public void SubscribeNews() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(HomeActivity.this);
+        alertDialog.setTitle("Subscribe News");
+        alertDialog.setMessage("Get hot promotions");
+        alertDialog.setPositiveButton("OK", null);
+
+
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.item_subscribe, null);
+
+        CheckBox checkSubscribe = (CheckBox) view.findViewById(R.id.ok_not);
+
+        boolean getState = new SessionManagement().getState(this);
+        if (getState == true) {
+            checkSubscribe.setChecked(true);
+        } else {
+            checkSubscribe.setChecked(false);
+        }
+        alertDialog.setView(view);
+
+        alertDialog.setIcon(R.drawable.ic_baseline_rss_feed_24);
+
+        final AlertDialog mAlertDialog = alertDialog.create();
+
+        checkSubscribe.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                ProgressDialog dialog = ProgressDialog.show(HomeActivity.this, "", "Please wait...", true);
+                dialog.show();
+                if (b == true) {
+                    new SessionManagement().setState(getApplicationContext(), "yes");
+                    FirebaseMessaging.getInstance().subscribeToTopic("news");
+
+                    Map<String, Object> note = new HashMap<>();
+                    note.put("subscribeState","yes");
+
+                    FirebaseDatabase.getInstance().getReference("Users").child(new SessionManagement().getPhone(getApplicationContext())).updateChildren(note);
+
+                    dialog.dismiss();
+
+                    Toast.makeText(getApplicationContext(), "You have successfully subscribed us", Toast.LENGTH_SHORT).show();
+
+                } else {
+                    new SessionManagement().setState(getApplicationContext(), "no");
+                    FirebaseMessaging.getInstance().unsubscribeFromTopic("news");
+
+                    Map<String, Object> note = new HashMap<>();
+                    note.put("subscribeState","no");
+
+                    FirebaseDatabase.getInstance().getReference("Users").child(new SessionManagement().getPhone(getApplicationContext())).updateChildren(note);
+
+                    dialog.dismiss();
+
+                    Toast.makeText(getApplicationContext(), "You have unsubscribed us", Toast.LENGTH_SHORT).show();
+
+                }
+            }
+        });
+
+        mAlertDialog.show();
     }
 }
