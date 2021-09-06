@@ -187,8 +187,10 @@ public class SignInActivity extends AppCompatActivity {
         new SessionManagement().setFBToken(SignInActivity.this, fbToken);
 
         if(model.getSubscribeState().equals("no")){
+            FirebaseMessaging.getInstance().unsubscribeFromTopic("news");
             new SessionManagement().setState(SignInActivity.this,"no");
         }else {
+            FirebaseMessaging.getInstance().subscribeToTopic("news");
             new SessionManagement().setState(SignInActivity.this,"yes");
         }
 
