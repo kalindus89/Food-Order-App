@@ -171,7 +171,7 @@ public class FoodDetailActivity extends AppCompatActivity implements RatingDialo
     private void displayUserRating(String foodId) {
 
 
-        FirebaseDatabase.getInstance().getReference().child("foodPreferences").child(new SessionManagement().getPhone(this)).child("foodRating").child(foodId).addValueEventListener(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("foodRating").child(new SessionManagement().getPhone(this)).child(foodId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
@@ -316,7 +316,8 @@ public class FoodDetailActivity extends AppCompatActivity implements RatingDialo
             Map note = new HashMap();
             note.put("rating",i);
             note.put("feedBack",s);
-            FirebaseDatabase.getInstance().getReference().child("foodPreferences").child(new SessionManagement().getPhone(this)).child("foodRating").child(foodId).setValue(note);
+
+            FirebaseDatabase.getInstance().getReference().child("foodRating").child(new SessionManagement().getPhone(this)).child(foodId).setValue(note);
 
             Map note2 = new HashMap();
             note2.put("rating",(foodTotalRatings+i));
@@ -328,7 +329,7 @@ public class FoodDetailActivity extends AppCompatActivity implements RatingDialo
             Map note = new HashMap();
             note.put("rating",i);
             note.put("feedBack",s);
-            FirebaseDatabase.getInstance().getReference().child("foodPreferences").child(new SessionManagement().getPhone(this)).child("foodRating").child(foodId).updateChildren(note);
+            FirebaseDatabase.getInstance().getReference().child("foodRating").child(new SessionManagement().getPhone(this)).child(foodId).updateChildren(note);
 
             int newTotalRating=((foodTotalRatings-currentUserRating)+i);
             Map note2 = new HashMap();

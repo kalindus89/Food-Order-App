@@ -73,6 +73,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.newsapp.foodorderapp.R;
 import com.newsapp.foodorderapp.SessionManagement;
 import com.newsapp.foodorderapp.WelcomeActivity;
+import com.newsapp.foodorderapp.favorites_foods.FavoritesFoodsActivity;
 import com.newsapp.foodorderapp.food_cart_place_order.FoodCartActivity;
 import com.newsapp.foodorderapp.food_cart_place_order.OrderPlacedModel;
 import com.newsapp.foodorderapp.news.NewsActivity;
@@ -99,7 +100,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     EditText searchKeyword;
     SwipeRefreshLayout swipeRefreshList;
 
-    LinearLayout searchLayout, ll_First, ll_Second, current_status, ll_Third, ll_Fourth, ll_Fifth, ll_Sixth, news, subscribe;
+    LinearLayout searchLayout, ll_First, ll_Second, current_status, ll_Third, ll_Fourth,
+            ll_Fifth, ll_Sixth, news, subscribe,favorites;
 
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
@@ -447,6 +449,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         ll_Fourth = (LinearLayout) findViewById(R.id.ll_Fourth);
         ll_Fifth = (LinearLayout) findViewById(R.id.ll_Fifth);
         ll_Sixth = (LinearLayout) findViewById(R.id.ll_Sixth);
+        favorites = (LinearLayout) findViewById(R.id.favorites);
         subscribe = (LinearLayout) findViewById(R.id.subscribe);
         news = (LinearLayout) findViewById(R.id.news);
 
@@ -458,6 +461,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         ll_Fourth.setOnClickListener(this);
         ll_Fifth.setOnClickListener(this);
         ll_Sixth.setOnClickListener(this);
+        favorites.setOnClickListener(this);
         subscribe.setOnClickListener(this);
         news.setOnClickListener(this);
     }
@@ -497,6 +501,12 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.ll_Fifth:
                 showToast("unsubscribe");
                 drawerLayout.closeDrawer(navigationView, true);
+
+                break;
+            case R.id.favorites:
+                drawerLayout.closeDrawer(navigationView, true);
+                Intent fav = new Intent(HomeActivity.this, FavoritesFoodsActivity.class);
+                startActivity(fav);
 
                 break;
             case R.id.subscribe:
