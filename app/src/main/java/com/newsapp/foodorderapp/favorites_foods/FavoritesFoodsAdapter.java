@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -33,8 +34,7 @@ public class FavoritesFoodsAdapter extends FirebaseRecyclerAdapter<FoodsModel, F
 
     Context context;
     FirebaseRecyclerOptions<FoodsModel> options;
-    CallbackManager callbackManager;
-    ShareDialog shareDialog;
+
 
 
     public FavoritesFoodsAdapter(@NonNull FirebaseRecyclerOptions<FoodsModel> options, Context context) {
@@ -45,6 +45,7 @@ public class FavoritesFoodsAdapter extends FirebaseRecyclerAdapter<FoodsModel, F
 
     @Override
     protected void onBindViewHolder(@NonNull FavoritesFoodsAdapter.FavoritesViewHolder holder, int position, @NonNull FoodsModel model) {
+
 
 
         holder.foodName.setText(model.getName());
@@ -85,7 +86,7 @@ public class FavoritesFoodsAdapter extends FirebaseRecyclerAdapter<FoodsModel, F
     @NonNull
     @Override
     public FavoritesFoodsAdapter.FavoritesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_food_list, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_fav_list, parent, false);
         return new FavoritesViewHolder(view);
     }
 
@@ -99,8 +100,9 @@ public class FavoritesFoodsAdapter extends FirebaseRecyclerAdapter<FoodsModel, F
 
 
     public class FavoritesViewHolder extends RecyclerView.ViewHolder {
-        private TextView foodName,item_price;
-        private ImageView foodImage, fav_icon,shareFacebook;
+        public TextView foodName,item_price;
+        public ImageView foodImage, fav_icon,shareFacebook;
+        public RelativeLayout view_background,view_foreground;
 
         public FavoritesViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -110,7 +112,19 @@ public class FavoritesFoodsAdapter extends FirebaseRecyclerAdapter<FoodsModel, F
             fav_icon = itemView.findViewById(R.id.fav_icon);
             shareFacebook = itemView.findViewById(R.id.shareFacebook);
             item_price = itemView.findViewById(R.id.item_price);
+            view_background = itemView.findViewById(R.id.view_background);
+            view_foreground = itemView.findViewById(R.id.view_foreground);
         }
+    }
+
+    public void removeItem(int position){
+        options.getSnapshots().remove(position);
+        notifyItemRemoved(position);
+    }
+
+    public void restoreItem(FoodsModel item,int position){
+        options.getSnapshots().add(position,item);
+        notifyItemInserted(position);
     }
 
 
