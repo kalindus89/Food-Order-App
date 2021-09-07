@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -19,6 +20,7 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.newsapp.foodorderapp.R;
@@ -34,13 +36,14 @@ public class FavoritesFoodsAdapter extends FirebaseRecyclerAdapter<FoodsModel, F
 
     Context context;
     FirebaseRecyclerOptions<FoodsModel> options;
+    DatabaseReference databaseReference;
 
 
-
-    public FavoritesFoodsAdapter(@NonNull FirebaseRecyclerOptions<FoodsModel> options, Context context) {
+    public FavoritesFoodsAdapter(@NonNull FirebaseRecyclerOptions<FoodsModel> options, Context context, DatabaseReference databaseReference) {
         super(options);
         this.context = context;
         this.options = options;
+        this.databaseReference = databaseReference;
     }
 
     @Override
@@ -118,13 +121,20 @@ public class FavoritesFoodsAdapter extends FirebaseRecyclerAdapter<FoodsModel, F
     }
 
     public void removeItem(int position){
-        options.getSnapshots().remove(position);
-        notifyItemRemoved(position);
+       // options.getSnapshots().remove(position);
+
+        String key=options.getSnapshots().getSnapshot(position).getKey();
+        databaseReference.child(key).removeValue();
+
+        Toast.makeText(context, "Remove from favorites", Toast.LENGTH_SHORT).show();
+
+        //list.remove(position)
+       // notifyItemRemoved(position);
     }
 
-    public void restoreItem(FoodsModel item,int position){
-        options.getSnapshots().add(position,item);
-        notifyItemInserted(position);
+    public void restoreItem(FoodsModel item, int position, String foodId){
+       // options.getSnapshots().add(position,item);
+        databaseReference.child(foodId).setValue(item);
     }
 
 

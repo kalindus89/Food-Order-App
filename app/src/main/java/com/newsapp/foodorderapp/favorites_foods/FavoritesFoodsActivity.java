@@ -62,7 +62,7 @@ public class FavoritesFoodsActivity extends AppCompatActivity implements Recycle
 
         FirebaseRecyclerOptions<FoodsModel> allUserNotes = new FirebaseRecyclerOptions.Builder<FoodsModel>().setQuery(query, FoodsModel.class).build();
 
-        favoritesFoodsAdapter  = new FavoritesFoodsAdapter(allUserNotes,this);
+        favoritesFoodsAdapter  = new FavoritesFoodsAdapter(allUserNotes,this,databaseReference);
 
         recyclerView.setAdapter(favoritesFoodsAdapter);
         favoritesFoodsAdapter.notifyDataSetChanged();
@@ -85,19 +85,21 @@ public class FavoritesFoodsActivity extends AppCompatActivity implements Recycle
         if(viewHolder instanceof FavoritesFoodsAdapter.FavoritesViewHolder){
             String name=((FavoritesFoodsAdapter)recyclerView.getAdapter()).getItem(viewHolder.getAbsoluteAdapterPosition()).getName();
             FoodsModel tempFoodModel= ((FavoritesFoodsAdapter)recyclerView.getAdapter()).getItem(viewHolder.getAbsoluteAdapterPosition());
+            String foodId= ((FavoritesFoodsAdapter)recyclerView.getAdapter()).options.getSnapshots().getSnapshot(viewHolder.getAbsoluteAdapterPosition()).getKey();
 
             favoritesFoodsAdapter.removeItem(position);
 
-           /* Snackbar snackbar =  Snackbar.make(rootView,name+" remove from cart!",Snackbar.LENGTH_LONG);
+            Snackbar snackbar =  Snackbar.make(rootView,name+" remove from cart!",Snackbar.LENGTH_LONG);
             snackbar.setAction("UNDO", new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    favoritesFoodsAdapter.restoreItem(tempFoodModel,position);
+                    favoritesFoodsAdapter.restoreItem(tempFoodModel,position,foodId);
+                   // Toast.makeText(getApplicationContext(), "keyy "+key, Toast.LENGTH_SHORT).show();
 
                 }
             });
             snackbar.setActionTextColor(Color.YELLOW);
-            snackbar.show();*/
+            snackbar.show();
         }
 
     }
