@@ -4,9 +4,8 @@
     android:layout_height="215dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:elevation="10dp"
-    app:cardBackgroundColor="#5B6C6B6B"
     android:layout_margin="10dp"
-    app:cardCornerRadius="10dp">
+    app:cardCornerRadius="12dp">
 
     <RelativeLayout
         android:layout_width="match_parent"

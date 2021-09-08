@@ -94,13 +94,13 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
     NavigationView navigationView;
     DrawerLayout drawerLayout;
-    ImageView drawerIcon, searchIcon, backToMainPage;
-    TextView textView;
+    ImageView drawerIcon;
     RecyclerView recyclerView;
     EditText searchKeyword;
     SwipeRefreshLayout swipeRefreshList;
+    TextView user_name;
 
-    LinearLayout searchLayout, ll_First, ll_Second, current_status, ll_Third, ll_Fourth,
+    LinearLayout  ll_First, ll_Second, current_status, ll_Third, ll_Fourth,
             ll_Fifth, ll_Sixth, news, subscribe,favorites;
 
     FirebaseDatabase firebaseDatabase;
@@ -130,13 +130,13 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
         recyclerView = findViewById(R.id.recyclerView);
         viewCart = findViewById(R.id.viewCart);
-        searchIcon = findViewById(R.id.searchIcon);
-        textView = findViewById(R.id.textView);
-        searchLayout = findViewById(R.id.searchLayout);
-        backToMainPage = findViewById(R.id.backToMainPage);
         searchKeyword = findViewById(R.id.searchKeyword);
         swipeRefreshList = findViewById(R.id.swipeRefreshList);
         slider_promotions = findViewById(R.id.slider_promotions);
+        user_name = findViewById(R.id.user_name);
+
+
+        user_name.setText(new SessionManagement().getName(this));
 
         imageList = new HashMap<>();
 
@@ -176,26 +176,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(HomeActivity.this, FoodCartActivity.class));
-            }
-        });
-
-        backToMainPage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                searchIcon.setVisibility(View.VISIBLE);
-                textView.setVisibility(View.VISIBLE);
-                searchLayout.setVisibility(View.GONE);
-                searchKeyword.setText("");
-            }
-        });
-
-        searchIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                searchIcon.setVisibility(View.GONE);
-                textView.setVisibility(View.GONE);
-                searchLayout.setVisibility(View.VISIBLE);
-
             }
         });
 
