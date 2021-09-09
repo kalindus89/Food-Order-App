@@ -33,13 +33,14 @@
         android:layout_marginTop="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="16dp"
+        android:layout_gravity="center"
         android:background="@drawable/white_skin"
         android:drawableLeft="@drawable/ic_baseline_search_24"
         android:drawablePadding="15dp"
         android:drawableTint="#8F8E8E"
         android:elevation="4dp"
-        android:hint="Search"
-        android:padding="16dp" />
+        android:paddingLeft="10dp"
+        android:hint="Search" />
 
 
 

@@ -56,6 +56,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DataSnapshot;
@@ -81,6 +82,7 @@ import com.newsapp.foodorderapp.news.NewsActivity;
 import com.newsapp.foodorderapp.order_status_and_history.HistoryOrderActivity;
 import com.newsapp.foodorderapp.order_status_and_history.OrderStatusActivity;
 import com.newsapp.foodorderapp.single_food_detail.FoodDetailActivity;
+import com.newsapp.foodorderapp.specific_foods_list.FoodsListActivity;
 import com.newsapp.foodorderapp.specific_foods_list.FoodsModel;
 import com.squareup.picasso.Picasso;
 
@@ -101,8 +103,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     SwipeRefreshLayout swipeRefreshList;
     TextView user_name;
 
-    LinearLayout  ll_First, ll_Second, current_status, ll_Third, ll_Fourth,
-            ll_Fifth, ll_Sixth, news, subscribe,favorites;
+    LinearLayout topViewPromotions, ll_First, ll_Second, current_status, ll_Third, ll_Fourth,
+            ll_Fifth, ll_Sixth, news, subscribe, favorites;
 
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
@@ -113,7 +115,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
     FirebaseRecyclerOptions<CategoryModel> allUserNotes;
     ArrayList<CategoryModel> categoryModelArrayList;
-
+    MaterialCardView quick_one, quick_two, quick_three, quick_four;
     //slider
     HashMap<String, String> imageList;
     SliderLayout slider_promotions;
@@ -127,7 +129,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         // FacebookSdk.setApplicationId("157162859896293");
-       // FacebookSdk.sdkInitialize(this);
+        // FacebookSdk.sdkInitialize(this);
 
         recyclerView = findViewById(R.id.recyclerView);
         viewCart = findViewById(R.id.viewCart);
@@ -135,7 +137,14 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         swipeRefreshList = findViewById(R.id.swipeRefreshList);
         slider_promotions = findViewById(R.id.slider_promotions);
         user_name = findViewById(R.id.user_name);
-       TextView seeMore = findViewById(R.id.seeMore);
+        topViewPromotions = findViewById(R.id.topViewPromotions);
+
+        quick_one = findViewById(R.id.quick_one);
+        quick_two = findViewById(R.id.quick_two);
+        quick_three = findViewById(R.id.quick_three);
+        quick_four = findViewById(R.id.quick_four);
+        TextView seeMore = findViewById(R.id.seeMore);
+
         seeMore.setPaintFlags(seeMore.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
         user_name.setText(new SessionManagement().getName(this));
@@ -174,6 +183,52 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         });
 
 
+        quick_one.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(HomeActivity.this, FoodsListActivity.class);
+                intent.putExtra("cat_id","01");
+                startActivity(intent);
+            }
+        });
+
+
+        quick_two.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(HomeActivity.this, FoodsListActivity.class);
+                intent.putExtra("cat_id","03");
+                startActivity(intent);
+            }
+        });
+
+
+        quick_three.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(HomeActivity.this, FoodsListActivity.class);
+                intent.putExtra("cat_id","-Mhw724lP980dq35bGkH");
+                startActivity(intent);
+            }
+        });
+
+
+        quick_four.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(HomeActivity.this, FoodsListActivity.class);
+                intent.putExtra("cat_id","08");
+                startActivity(intent);
+            }
+        });
+
+
+        seeMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(HomeActivity.this, FavoritesFoodsActivity.class));
+            }
+        });
         viewCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -195,11 +250,12 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void afterTextChanged(Editable editable) {
 
-                if (editable.toString() != null) {
+                if (editable.toString() != null && !editable.toString().isEmpty()) {
                     searchData(editable.toString());
-
+                    topViewPromotions.setVisibility(View.GONE);
                 } else {
                     searchData("");
+                    topViewPromotions.setVisibility(View.VISIBLE);
                 }
 
             }
@@ -217,7 +273,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
 
     }
-
 
 
     public void setUpSlider() {
@@ -294,23 +349,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    public static void printHashKey(Context pContext) {
-        try {
-            PackageInfo info = pContext.getPackageManager().getPackageInfo(pContext.getPackageName(), PackageManager.GET_SIGNATURES);
-            for (Signature signature : info.signatures) {
-                MessageDigest md = MessageDigest.getInstance("SHA");
-                md.update(signature.toByteArray());
-                String hashKey = new String(Base64.encode(md.digest(), 0));
-                System.out.println("aaaaa " + hashKey);
-            }
-        } catch (NoSuchAlgorithmException e) {
-            Log.e(TAG, "printHashKey()", e);
-        } catch (Exception e) {
-            Log.e(TAG, "printHashKey()", e);
-        }
-    }
-
-
     public void updateFirebaseToken() {
 
         FirebaseMessaging.getInstance().getToken()
@@ -383,6 +421,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         quickFoodAdapter.startListening();
 
     }
+
     private void loadData() {
 
 
@@ -597,7 +636,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                     FirebaseMessaging.getInstance().subscribeToTopic("news");
 
                     Map<String, Object> note = new HashMap<>();
-                    note.put("subscribeState","yes");
+                    note.put("subscribeState", "yes");
 
                     FirebaseDatabase.getInstance().getReference("Users").child(new SessionManagement().getPhone(getApplicationContext())).updateChildren(note);
 
@@ -610,7 +649,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                     FirebaseMessaging.getInstance().unsubscribeFromTopic("news");
 
                     Map<String, Object> note = new HashMap<>();
-                    note.put("subscribeState","no");
+                    note.put("subscribeState", "no");
 
                     FirebaseDatabase.getInstance().getReference("Users").child(new SessionManagement().getPhone(getApplicationContext())).updateChildren(note);
 
