@@ -203,6 +203,42 @@
 
                 </LinearLayout>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:fontFamily="sans-serif-black"
+                        android:includeFontPadding="true"
+                        android:text="Best For You"
+                        android:textColor="#3A3A3a"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/seeMore"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginTop="10dp"
+                        android:gravity="right"
+                        android:fontFamily="sans-serif-black"
+                        android:includeFontPadding="true"
+                        android:text="See More"
+                        android:textColor="#F3039B"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerViewQuick"
+                    android:layout_width="match_parent"
+                    android:layout_height="220dp" />
+
                 <com.daimajia.slider.library.SliderLayout
                     android:id="@+id/slider_promotions"
                     android:layout_width="match_parent"

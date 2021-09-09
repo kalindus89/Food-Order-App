@@ -22,6 +22,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -134,7 +135,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         swipeRefreshList = findViewById(R.id.swipeRefreshList);
         slider_promotions = findViewById(R.id.slider_promotions);
         user_name = findViewById(R.id.user_name);
-
+       TextView seeMore = findViewById(R.id.seeMore);
+        seeMore.setPaintFlags(seeMore.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
         user_name.setText(new SessionManagement().getName(this));
 
@@ -208,12 +210,15 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
 
         setUpSlider();
+        loadDataQuickFoods();
         loadData();
         getTotalFoodItemCount();
         updateFirebaseToken();
 
 
     }
+
+
 
     public void setUpSlider() {
 
@@ -361,7 +366,23 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 });
     }
 
+    private void loadDataQuickFoods() {
+        RecyclerView recyclerViewQuick = findViewById(R.id.recyclerViewQuick);
 
+        Query query = FirebaseDatabase.getInstance().getReference("FoodsQuick");
+
+        FirebaseRecyclerOptions<FoodsModel> allQuickModels = new FirebaseRecyclerOptions.Builder<FoodsModel>().setQuery(query, FoodsModel.class).build();
+        AdapterQuickFoods quickFoodAdapter = new AdapterQuickFoods(allQuickModels, this);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setOrientation(RecyclerView.HORIZONTAL);
+        recyclerViewQuick.setLayoutManager(layoutManager);
+
+        recyclerViewQuick.setAdapter(quickFoodAdapter);
+        quickFoodAdapter.notifyDataSetChanged();
+        quickFoodAdapter.startListening();
+
+    }
     private void loadData() {
 
 

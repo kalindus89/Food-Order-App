@@ -14,4 +14,6 @@
     <color name="light_blue_A400">#FF00B0FF</color>
     <color name="black_overlay">#66000000</color>
     <color name="delete_row_bg_color">#FA315B</color>
+    <color name="yellow">#FBEF09</color>
+    <color name="lightGrey">#8F8F8F</color>
 </resources>
