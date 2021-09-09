@@ -126,7 +126,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         // FacebookSdk.setApplicationId("157162859896293");
-        FacebookSdk.sdkInitialize(this);
+       // FacebookSdk.sdkInitialize(this);
 
         recyclerView = findViewById(R.id.recyclerView);
         viewCart = findViewById(R.id.viewCart);

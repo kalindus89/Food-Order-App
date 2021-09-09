@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".WelcomeActivity"
+            android:exported="true" />
+        <activity
             android:name=".favorites_foods.FavoritesFoodsActivity"
             android:exported="true" />
         <activity
@@ -69,7 +72,7 @@
             android:name=".order_status_and_history.HistoryOrderActivity"
             android:exported="true" />
         <activity
-            android:name=".WelcomeActivity"
+            android:name=".SplashScreenActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
