@@ -168,9 +168,7 @@ public class FoodsListActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        if (foodAdapter != null) {
-            foodAdapter.stopListening();
-        }
+
         slider_promotions.stopAutoCycle();
     }
 }
