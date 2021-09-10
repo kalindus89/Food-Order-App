@@ -2,61 +2,58 @@ package com.newsapp.foodorderapp.specific_foods_list;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.facebook.CallbackManager;
-import com.facebook.share.model.SharePhoto;
-import com.facebook.share.model.SharePhotoContent;
-import com.facebook.share.widget.ShareDialog;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.FieldValue;
 import com.newsapp.foodorderapp.R;
 import com.newsapp.foodorderapp.SessionManagement;
 import com.newsapp.foodorderapp.single_food_detail.FoodDetailActivity;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class FoodsCategoryAdapter extends FirebaseRecyclerAdapter<FoodsModel, FoodsCategoryAdapter.FoodViewHolder> {
+public class FoodsCategoryAdapter extends FirebaseRecyclerAdapter<FoodsModel, FoodsCategoryAdapter.FoodViewHolder2> {
 
     Context context;
     FirebaseRecyclerOptions<FoodsModel> options;
-    CallbackManager callbackManager;
-    ShareDialog shareDialog;
+    ShimmerFrameLayout shimmerFrameLayout_food_Items;
+    LinearLayout shimmerLayout;
 
 
-    public FoodsCategoryAdapter(@NonNull FirebaseRecyclerOptions<FoodsModel> options, Context context) {
+
+    public FoodsCategoryAdapter(@NonNull FirebaseRecyclerOptions<FoodsModel> options, Context context, ShimmerFrameLayout shimmerFrameLayout_food_Items, LinearLayout shimmerLayout) {
         super(options);
         this.context = context;
         this.options = options;
+        this.shimmerFrameLayout_food_Items = shimmerFrameLayout_food_Items;
+        this.shimmerLayout = shimmerLayout;
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull FoodsCategoryAdapter.FoodViewHolder holder, int position, @NonNull FoodsModel model) {
+    protected void onBindViewHolder(@NonNull FoodsCategoryAdapter.FoodViewHolder2 holder, int position, @NonNull FoodsModel model) {
 
         getFavorites(getRef(holder.getAbsoluteAdapterPosition()).getKey(), holder);
 
         holder.foodName.setText(model.getName());
         holder.food_description.setText(model.getDescription());
         holder.item_price.setText("$"+model.getPrice());
-        Picasso.get().load(model.getImage()).placeholder(R.drawable.loading_gif_2).into(holder.foodImage);
+        Picasso.get().load(model.getImage()).placeholder(R.drawable.loader).into(holder.foodImage);
         double totalRating=(Double.valueOf(model.getRating())/ Double.valueOf(model.getTotalVoters()));
         holder.rating_food.setText(String.format("%.1f", totalRating));
 
@@ -91,17 +88,21 @@ public class FoodsCategoryAdapter extends FirebaseRecyclerAdapter<FoodsModel, Fo
             }
         });
 
-
     }
 
     @NonNull
     @Override
-    public FoodsCategoryAdapter.FoodViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public FoodsCategoryAdapter.FoodViewHolder2 onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_food_list, parent, false);
-        return new FoodViewHolder(view);
+
+
+        shimmerFrameLayout_food_Items.stopShimmer();
+        shimmerLayout.setVisibility(View.GONE);
+
+        return new FoodViewHolder2(view);
     }
 
-    public void addToFavorites(String foodId, FoodsModel model, FoodViewHolder holder) {
+    public void addToFavorites(String foodId, FoodsModel model, FoodViewHolder2 holder) {
 
         Map note = new HashMap();
         note.put("foodId", foodId);
@@ -114,14 +115,14 @@ public class FoodsCategoryAdapter extends FirebaseRecyclerAdapter<FoodsModel, Fo
 
     }
 
-    public void removeFromFavorites(String foodId, FoodViewHolder holder) {
+    public void removeFromFavorites(String foodId, FoodViewHolder2 holder) {
         FirebaseDatabase.getInstance().getReference().child("foodPreferences").child(new SessionManagement().getPhone(context)).child(foodId).removeValue();
         holder.fav_icon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.heart_off));
         holder.fav_icon.setTag("Not my Fav");
 
     }
 
-    public void getFavorites(String foodId, FoodViewHolder holder) {
+    public void getFavorites(String foodId, FoodViewHolder2 holder) {
 
         FirebaseDatabase.getInstance().getReference().child("foodPreferences").child(new SessionManagement().getPhone(context)).child(foodId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -143,11 +144,11 @@ public class FoodsCategoryAdapter extends FirebaseRecyclerAdapter<FoodsModel, Fo
         });
     }
 
-    public class FoodViewHolder extends RecyclerView.ViewHolder {
+    public class FoodViewHolder2 extends RecyclerView.ViewHolder {
         private TextView foodName,rating_food,item_price,food_description;
         private ImageView foodImage, fav_icon,shareFacebook;
 
-        public FoodViewHolder(@NonNull View itemView) {
+        public FoodViewHolder2(@NonNull View itemView) {
             super(itemView);
 
             foodImage = itemView.findViewById(R.id.foodImage);

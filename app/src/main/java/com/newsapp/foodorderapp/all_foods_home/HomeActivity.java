@@ -462,6 +462,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         super.onStart();
         catAdapter.startListening();
         recyclerView.setAdapter(catAdapter);
+        slider_promotions.startAutoCycle();
         getTotalFoodItemCount();
     }
 
@@ -591,7 +592,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onStop() {
         super.onStop();
-        slider_promotions.startAutoCycle();
+        slider_promotions.stopAutoCycle();
     }
 
     public void SubscribeNews() {

@@ -11,11 +11,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.daimajia.slider.library.Animations.DescriptionAnimation;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
@@ -40,15 +42,19 @@ public class FoodsListActivity extends AppCompatActivity {
     DatabaseReference databaseReference;
     FoodsCategoryAdapter foodAdapter;
     SliderLayout slider_promotions;
+    ShimmerFrameLayout shimmerFrameLayout_food_Items;
+    LinearLayout shimmerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_foods_list);
 
-        recyclerView=findViewById(R.id.recyclerView);
+        recyclerView = findViewById(R.id.recyclerView);
         slider_promotions = findViewById(R.id.slider_promotions);
-        goBack=findViewById(R.id.goBack);
+        goBack = findViewById(R.id.goBack);
+        shimmerFrameLayout_food_Items = findViewById(R.id.shimmerFrameLayout_food_Items);
+        shimmerLayout = findViewById(R.id.shimmerLayout);
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
@@ -60,24 +66,35 @@ public class FoodsListActivity extends AppCompatActivity {
         });
 
         setUpSlider();
+        shimmerEffects();
+        loadData2();
 
-        String catId=getIntent().getStringExtra("cat_id");
+    }
 
-        firebaseDatabase= FirebaseDatabase.getInstance();
-        databaseReference=firebaseDatabase.getReference("Foods");
+    private void shimmerEffects() {
 
-        LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
+        shimmerFrameLayout_food_Items.setVisibility(View.VISIBLE);
+        shimmerFrameLayout_food_Items.startShimmer();
+
+    }
+
+    private void loadData2() {
+        String catId = getIntent().getStringExtra("cat_id");
+
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference("Foods");
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
-       // recyclerView.setHasFixedSize(true); nested ScrollerView not work
+        // recyclerView.setHasFixedSize(true); nested ScrollerView not work
 
-        Query query=databaseReference.orderByChild("menuID").equalTo(catId);
+        Query query = databaseReference.orderByChild("menuID").equalTo(catId);
 
         FirebaseRecyclerOptions<FoodsModel> allUserNotes = new FirebaseRecyclerOptions.Builder<FoodsModel>().setQuery(query, FoodsModel.class).build();
-        foodAdapter  = new FoodsCategoryAdapter(allUserNotes,this);
+        foodAdapter = new FoodsCategoryAdapter(allUserNotes, this, shimmerFrameLayout_food_Items,shimmerLayout);
 
         recyclerView.setAdapter(foodAdapter);
         foodAdapter.notifyDataSetChanged();
-
     }
 
     @Override
@@ -85,10 +102,11 @@ public class FoodsListActivity extends AppCompatActivity {
         super.onStart();
         foodAdapter.startListening();
         recyclerView.setAdapter(foodAdapter);
+        slider_promotions.startAutoCycle();
     }
 
     public void setUpSlider() {
-        HashMap<String, String> imageList  = new HashMap<>();
+        HashMap<String, String> imageList = new HashMap<>();
         DatabaseReference sliderReference = FirebaseDatabase.getInstance().getReference("Banners");
 
         ValueEventListener valueEventListener = new ValueEventListener() {
@@ -146,9 +164,13 @@ public class FoodsListActivity extends AppCompatActivity {
         slider_promotions.setCustomAnimation(new DescriptionAnimation());
         slider_promotions.setDuration(4000);
     }
+
     @Override
     protected void onStop() {
         super.onStop();
-        slider_promotions.startAutoCycle();
+        if (foodAdapter != null) {
+            foodAdapter.stopListening();
+        }
+        slider_promotions.stopAutoCycle();
     }
 }

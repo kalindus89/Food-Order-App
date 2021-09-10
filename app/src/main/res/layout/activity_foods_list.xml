@@ -77,6 +77,11 @@
                 android:textColor="#3A3A3a"
                 android:textSize="18sp" />
 
+            <include
+                layout="@layout/shimmer_food_items"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
                 android:layout_width="match_parent"

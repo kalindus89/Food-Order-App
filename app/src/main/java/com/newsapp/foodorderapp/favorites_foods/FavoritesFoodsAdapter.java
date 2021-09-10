@@ -6,16 +6,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.facebook.CallbackManager;
 import com.facebook.share.widget.ShareDialog;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DataSnapshot;
@@ -37,13 +40,18 @@ public class FavoritesFoodsAdapter extends FirebaseRecyclerAdapter<FoodsModel, F
     Context context;
     FirebaseRecyclerOptions<FoodsModel> options;
     DatabaseReference databaseReference;
+    ShimmerFrameLayout shimmerFrameLayout_food_Items;
+    LinearLayout shimmerLayout;
 
 
-    public FavoritesFoodsAdapter(@NonNull FirebaseRecyclerOptions<FoodsModel> options, Context context, DatabaseReference databaseReference) {
+
+    public FavoritesFoodsAdapter(@NonNull FirebaseRecyclerOptions<FoodsModel> options, Context context, DatabaseReference databaseReference, ShimmerFrameLayout shimmerFrameLayout_food_Items, LinearLayout shimmerLayout) {
         super(options);
         this.context = context;
         this.options = options;
         this.databaseReference = databaseReference;
+        this.shimmerFrameLayout_food_Items = shimmerFrameLayout_food_Items;
+        this.shimmerLayout = shimmerLayout;
     }
 
     @Override
@@ -53,7 +61,7 @@ public class FavoritesFoodsAdapter extends FirebaseRecyclerAdapter<FoodsModel, F
 
         holder.foodName.setText(model.getName());
         holder.item_price.setText("$"+model.getPrice());
-        Picasso.get().load(model.getImage()).placeholder(R.drawable.loading_image).into(holder.foodImage);
+        Picasso.get().load(model.getImage()).placeholder(R.drawable.loader).into(holder.foodImage);
 
         holder.fav_icon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.heart_on));
 
@@ -90,6 +98,8 @@ public class FavoritesFoodsAdapter extends FirebaseRecyclerAdapter<FoodsModel, F
     @Override
     public FavoritesFoodsAdapter.FavoritesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_fav_list, parent, false);
+        shimmerFrameLayout_food_Items.stopShimmer();
+        shimmerLayout.setVisibility(View.GONE);
         return new FavoritesViewHolder(view);
     }
 
@@ -105,7 +115,8 @@ public class FavoritesFoodsAdapter extends FirebaseRecyclerAdapter<FoodsModel, F
     public class FavoritesViewHolder extends RecyclerView.ViewHolder {
         public TextView foodName,item_price;
         public ImageView foodImage, fav_icon,shareFacebook;
-        public RelativeLayout view_background,view_foreground;
+        public RelativeLayout view_background;
+            ConstraintLayout view_foreground;
 
         public FavoritesViewHolder(@NonNull View itemView) {
             super(itemView);
