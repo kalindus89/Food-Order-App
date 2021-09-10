@@ -54,10 +54,11 @@ public class FoodsCategoryAdapter extends FirebaseRecyclerAdapter<FoodsModel, Fo
         getFavorites(getRef(holder.getAbsoluteAdapterPosition()).getKey(), holder);
 
         holder.foodName.setText(model.getName());
+        holder.food_description.setText(model.getDescription());
         holder.item_price.setText("$"+model.getPrice());
-        Picasso.get().load(model.getImage()).placeholder(R.drawable.loading_image).into(holder.foodImage);
+        Picasso.get().load(model.getImage()).placeholder(R.drawable.loading_gif_2).into(holder.foodImage);
         double totalRating=(Double.valueOf(model.getRating())/ Double.valueOf(model.getTotalVoters()));
-        holder.rating_food.setText("Rating: "+String.format("%.1f", totalRating)+"/5");
+        holder.rating_food.setText(String.format("%.1f", totalRating));
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -143,7 +144,7 @@ public class FoodsCategoryAdapter extends FirebaseRecyclerAdapter<FoodsModel, Fo
     }
 
     public class FoodViewHolder extends RecyclerView.ViewHolder {
-        private TextView foodName,rating_food,item_price;
+        private TextView foodName,rating_food,item_price,food_description;
         private ImageView foodImage, fav_icon,shareFacebook;
 
         public FoodViewHolder(@NonNull View itemView) {
@@ -151,6 +152,7 @@ public class FoodsCategoryAdapter extends FirebaseRecyclerAdapter<FoodsModel, Fo
 
             foodImage = itemView.findViewById(R.id.foodImage);
             foodName = itemView.findViewById(R.id.foodName);
+            food_description = itemView.findViewById(R.id.food_description);
             fav_icon = itemView.findViewById(R.id.fav_icon);
             rating_food = itemView.findViewById(R.id.rating_food);
             shareFacebook = itemView.findViewById(R.id.shareFacebook);

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -11,17 +11,17 @@
         android:id="@+id/topLayout"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:background="@color/purple_500"
+        android:background="@color/white"
         android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/goBack"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_gravity="center"
             android:layout_marginLeft="10dp"
             app:srcCompat="@drawable/go_back"
-            app:tint="@color/white" />
+            app:tint="@color/black" />
 
         <TextView
             android:layout_width="match_parent"
@@ -29,19 +29,62 @@
             android:layout_gravity="center"
             android:layout_marginLeft="20dp"
             android:text="Foods List"
-            android:textColor="@color/white"
-            android:textSize="20sp" />
+            android:textColor="@color/black"
+            android:textSize="16sp" />
 
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/topLayout">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    </androidx.recyclerview.widget.RecyclerView>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="25dp"
+                android:layout_marginBottom="10dp"
+                android:fontFamily="sans-serif-black"
+                android:includeFontPadding="true"
+                android:text="Special Promotions"
+                android:textColor="#3A3A3a"
+                android:textSize="18sp" />
+
+            <com.daimajia.slider.library.SliderLayout
+                android:id="@+id/slider_promotions"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_below="@+id/textView" />
 
 
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/slider_promotions"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="25dp"
+                android:fontFamily="sans-serif-black"
+                android:includeFontPadding="true"
+                android:text="Food List"
+                android:textColor="#3A3A3a"
+                android:textSize="18sp" />
 
-</RelativeLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/textView2">
+
+            </androidx.recyclerview.widget.RecyclerView>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>

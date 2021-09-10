@@ -2,99 +2,123 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="200dp"
-    android:layout_marginTop="0dp"
-    android:layout_marginBottom="5dp"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
     android:elevation="10dp"
-    app:cardCornerRadius="0dp">
+    app:cardCornerRadius="20dp">
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:elevation="1dp"
+        app:cardCornerRadius="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/foodImage"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
+            android:background="@drawable/white_skin"
             android:scaleType="centerCrop"
-            android:src="@drawable/loading_image" />
+            app:srcCompat="@drawable/logo_app_pink" />
+    </androidx.cardview.widget.CardView>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:layout_above="@+id/foodImage"
-            android:layout_alignParentBottom="true"
-            android:orientation="vertical"
-            android:background="#fff">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_above="@+id/foodImage"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="4dp"
-                android:weightSum="10">
+    <TextView
+        android:id="@+id/foodName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="Lanka Dal"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@+id/rating_food"
+        app:layout_constraintStart_toEndOf="@+id/cardView"
+        app:layout_constraintTop_toTopOf="@+id/cardView" />
 
-                <TextView
-                    android:id="@+id/foodName"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="6"
-                    android:gravity="left"
-                    android:text="Category"
-                    android:textColor="@color/purple_500"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+    <TextView
+        android:id="@+id/food_description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Yellow healthy food, eat everyday"
+        app:layout_constraintEnd_toEndOf="@+id/foodName"
+        app:layout_constraintStart_toStartOf="@+id/foodName"
+        app:layout_constraintTop_toBottomOf="@+id/foodName" />
 
-                <TextView
-                    android:id="@+id/rating_food"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="3"
-                    android:gravity="right|center"
-                    android:text="Rating: 5/5"
-                    android:textColor="@color/purple_500"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+    <TextView
+        android:id="@+id/item_price"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Rs.100 per Kg | 2 hours"
+        app:layout_constraintEnd_toEndOf="@+id/food_description"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/food_description"
+        app:layout_constraintTop_toBottomOf="@+id/food_description" />
 
-                <ImageView
-                    android:id="@+id/fav_icon"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:src="@drawable/heart_off"
-                    app:tint="@color/red" />
+    <LinearLayout
+        android:id="@+id/fav_layout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="@+id/item_price"
+        app:layout_constraintStart_toStartOf="@+id/item_price"
+        app:layout_constraintTop_toBottomOf="@+id/item_price">
 
-            </LinearLayout>
-            <TextView
-                android:id="@+id/item_price"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="left|center"
-                android:text="$1000"
-                android:layout_marginLeft="5dp"
-                android:textColor="#53930A"
-                android:textSize="15sp"
-                android:textStyle="bold" />
-        </LinearLayout>
+        <TextView
+            android:id="@+id/shop_discount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add To Favorites"
+            android:textColor="#131313" />
 
         <ImageView
-            android:id="@+id/shareFacebook"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_weight="1"
-            android:background="@drawable/round_corners"
-            android:backgroundTint="#90000000"
-            android:padding="5dp"
-            android:src="@drawable/ic_baseline_share_24"
-            app:tint="@color/white" />
+            android:id="@+id/fav_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:src="@drawable/heart_off"
+            app:tint="@color/red" />
+    </LinearLayout>
 
-    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/rating_food"
+        android:layout_width="35dp"
+        android:layout_height="28dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/round_corners"
+        android:backgroundTint="#4CAF50"
+        android:gravity="center"
+        android:padding="5dp"
+        android:text="4.6"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/foodName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/foodName" />
+
+    <ImageView
+        android:id="@+id/shareFacebook"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/round_corners"
+        android:backgroundTint="#90000000"
+        android:padding="5dp"
+        android:src="@drawable/ic_baseline_share_24"
+        app:layout_constraintBottom_toBottomOf="@+id/fav_layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/fav_layout"
+        app:tint="@color/white" />
+</androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>
