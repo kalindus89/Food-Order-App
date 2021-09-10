@@ -142,7 +142,7 @@ public class FoodsListActivity extends AppCompatActivity {
 
         slider_promotions.setPresetTransformer(SliderLayout.Transformer.Default); // change animation
         slider_promotions.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
-        slider_promotions.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.loading_image));
+        slider_promotions.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.promo_preview));
         slider_promotions.setCustomAnimation(new DescriptionAnimation());
         slider_promotions.setDuration(4000);
     }

@@ -1,7 +1,5 @@
 package com.newsapp.foodorderapp.all_foods_home;
 
-import static android.content.ContentValues.TAG;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -15,25 +13,16 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -47,17 +36,11 @@ import com.daimajia.slider.library.Animations.DescriptionAnimation;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
-import com.facebook.FacebookSdk;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.libraries.places.api.model.Place;
-import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
-import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.material.card.MaterialCardView;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -70,14 +53,12 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.WriteBatch;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.newsapp.foodorderapp.R;
 import com.newsapp.foodorderapp.SessionManagement;
 import com.newsapp.foodorderapp.WelcomeActivity;
 import com.newsapp.foodorderapp.favorites_foods.FavoritesFoodsActivity;
 import com.newsapp.foodorderapp.food_cart_place_order.FoodCartActivity;
-import com.newsapp.foodorderapp.food_cart_place_order.OrderPlacedModel;
 import com.newsapp.foodorderapp.news.NewsActivity;
 import com.newsapp.foodorderapp.order_status_and_history.HistoryOrderActivity;
 import com.newsapp.foodorderapp.order_status_and_history.OrderStatusActivity;
@@ -86,10 +67,7 @@ import com.newsapp.foodorderapp.specific_foods_list.FoodsListActivity;
 import com.newsapp.foodorderapp.specific_foods_list.FoodsModel;
 import com.squareup.picasso.Picasso;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -119,6 +97,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     //slider
     HashMap<String, String> imageList;
     SliderLayout slider_promotions;
+
+    ShimmerFrameLayout  shimmerFrameLayout_Quick,shimmerFrameLayout_Categories;
 
     @SuppressLint("ResourceAsColor")
     @Override
@@ -260,9 +240,10 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
             }
         });
-
+        shimmerEffects();
         // LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+
 
 
         setUpSlider();
@@ -330,7 +311,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
         slider_promotions.setPresetTransformer(SliderLayout.Transformer.Default); // change animation
         slider_promotions.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
-        slider_promotions.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.loading_image));
+        slider_promotions.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.promo_preview));
         slider_promotions.setCustomAnimation(new DescriptionAnimation());
         slider_promotions.setDuration(4000);
     }
@@ -410,7 +391,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         Query query = FirebaseDatabase.getInstance().getReference("FoodsQuick");
 
         FirebaseRecyclerOptions<FoodsModel> allQuickModels = new FirebaseRecyclerOptions.Builder<FoodsModel>().setQuery(query, FoodsModel.class).build();
-        AdapterQuickFoods quickFoodAdapter = new AdapterQuickFoods(allQuickModels, this);
+        AdapterQuickFoods quickFoodAdapter = new AdapterQuickFoods(allQuickModels, this,shimmerFrameLayout_Quick);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(RecyclerView.HORIZONTAL);
@@ -422,13 +403,24 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    private void shimmerEffects(){
+
+        shimmerFrameLayout_Quick = (ShimmerFrameLayout) findViewById(R.id.shimmerFrameLayout_Quick);
+        shimmerFrameLayout_Quick.setVisibility(View.VISIBLE);
+        shimmerFrameLayout_Quick.startShimmer();
+
+        shimmerFrameLayout_Categories = (ShimmerFrameLayout) findViewById(R.id.shimmerFrameLayout_Categories);
+        shimmerFrameLayout_Categories.setVisibility(View.VISIBLE);
+        shimmerFrameLayout_Categories.startShimmer();
+    }
+
     private void loadData() {
 
 
         Query query = databaseReference;
 
         allUserNotes = new FirebaseRecyclerOptions.Builder<CategoryModel>().setQuery(query, CategoryModel.class).build();
-        catAdapter = new AdapterCategory(allUserNotes, this);
+        catAdapter = new AdapterCategory(allUserNotes, this,shimmerFrameLayout_Categories);
 
 
         recyclerView.setAdapter(catAdapter);
@@ -457,7 +449,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         FirebaseRecyclerOptions<CategoryModel> allUserNotes2 = new FirebaseRecyclerOptions.Builder<CategoryModel>().setQuery(query, CategoryModel.class).build();
 
 
-        catAdapter = new AdapterCategory(allUserNotes2, this);
+        catAdapter = new AdapterCategory(allUserNotes2, this, shimmerFrameLayout_Categories);
 
         recyclerView.setAdapter(catAdapter);
         catAdapter.startListening();

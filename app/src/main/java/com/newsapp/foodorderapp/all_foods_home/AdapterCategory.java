@@ -5,18 +5,15 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.Query;
 import com.newsapp.foodorderapp.R;
 import com.newsapp.foodorderapp.specific_foods_list.FoodsListActivity;
 import com.squareup.picasso.Picasso;
@@ -25,12 +22,13 @@ public class AdapterCategory extends FirebaseRecyclerAdapter<CategoryModel,Adapt
 
     Context context;
     FirebaseRecyclerOptions<CategoryModel> options;
+    ShimmerFrameLayout shimmerFrameLayout_Categories;
 
-
-    public AdapterCategory(@NonNull FirebaseRecyclerOptions<CategoryModel> options, Context context) {
+    public AdapterCategory(@NonNull FirebaseRecyclerOptions<CategoryModel> options, Context context, ShimmerFrameLayout shimmerFrameLayout_Categories) {
         super(options);
         this.context = context;
         this.options = options;
+        this.shimmerFrameLayout_Categories = shimmerFrameLayout_Categories;
     }
 
     @Override
@@ -56,6 +54,10 @@ public class AdapterCategory extends FirebaseRecyclerAdapter<CategoryModel,Adapt
     @Override
     public AdapterCategory.CatViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_category_layout,parent,false);
+
+        shimmerFrameLayout_Categories.stopShimmer();
+        shimmerFrameLayout_Categories.setVisibility(View.GONE);
+
         return new CatViewHolder(view);
     }
 

@@ -14,6 +14,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.newsapp.foodorderapp.R;
@@ -25,12 +26,13 @@ public class AdapterQuickFoods extends FirebaseRecyclerAdapter<FoodsModel, Adapt
 
     Context context;
     FirebaseRecyclerOptions<FoodsModel> options;
+    ShimmerFrameLayout shimmerFrameLayout_Quick;
 
-
-    public AdapterQuickFoods(@NonNull FirebaseRecyclerOptions<FoodsModel> options, Context context) {
+    public AdapterQuickFoods(@NonNull FirebaseRecyclerOptions<FoodsModel> options, Context context, ShimmerFrameLayout shimmerFrameLayout_Quick) {
         super(options);
         this.context = context;
         this.options = options;
+        this.shimmerFrameLayout_Quick = shimmerFrameLayout_Quick;
     }
 
     @Override
@@ -60,6 +62,8 @@ public class AdapterQuickFoods extends FirebaseRecyclerAdapter<FoodsModel, Adapt
     @Override
     public AdapterQuickFoods.FoodViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_food_quick_list, parent, false);
+        shimmerFrameLayout_Quick.stopShimmer();
+        shimmerFrameLayout_Quick.setVisibility(View.GONE);
         return new FoodViewHolder(view);
     }
 
