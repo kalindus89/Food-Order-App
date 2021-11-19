@@ -626,7 +626,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 dialog.show();
                 if (b == true) {
                     new SessionManagement().setState(getApplicationContext(), "yes");
-                    FirebaseMessaging.getInstance().subscribeToTopic("news");
+
+                    FirebaseMessaging.getInstance().subscribeToTopic("news"); // enable specific topic
 
                     Map<String, Object> note = new HashMap<>();
                     note.put("subscribeState", "yes");
