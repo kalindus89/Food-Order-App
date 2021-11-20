@@ -24,14 +24,16 @@ import com.newsapp.foodorderapp.R;
 import com.newsapp.foodorderapp.all_foods_home.HomeActivity;
 
 public class MyFireBaseMessagingService extends FirebaseMessagingService {
-    String title,message;
+
+    String title, message;
+
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
-            super.onMessageReceived(remoteMessage);
+        super.onMessageReceived(remoteMessage);
 
-    //    System.out.println("aaaaaaaaaa "+remoteMessage.getData());
-            title=remoteMessage.getData().get("Title");
-            message=remoteMessage.getData().get("Message");
+        // any key send by server
+        title = remoteMessage.getData().get("Title");
+        message = remoteMessage.getData().get("Message");
 
        /* NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(getApplicationContext())
@@ -40,10 +42,10 @@ public class MyFireBaseMessagingService extends FirebaseMessagingService {
                         .setContentText(message);
         NotificationManager manager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
         manager.notify(0, builder.build());*/
-        sendNotification();
+        showNotification();
     }
 
-    private void sendNotification() {
+    private void showNotification() {
         Intent intent = new Intent(this, HomeActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,

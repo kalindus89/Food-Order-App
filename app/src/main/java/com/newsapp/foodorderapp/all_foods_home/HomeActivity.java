@@ -344,7 +344,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
                         String refreshToken = task.getResult();
 
-                        if (refreshToken.equals(new SessionManagement().getFBToken(getApplicationContext()))) {
+                        if (!refreshToken.equals(new SessionManagement().getFBToken(getApplicationContext()))) {
 
                             DocumentReference nycRef = FirebaseFirestore.getInstance().document("FoodOrders/" + new SessionManagement().getPhone(getApplicationContext()));
                             nycRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
