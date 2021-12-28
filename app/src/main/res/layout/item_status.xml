@@ -61,9 +61,10 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:background="@drawable/round_corners"
-            android:backgroundTint="#F32183"
+            android:backgroundTint="#25E1E1"
             android:text="Track"
             android:visibility="gone"
+            android:elevation="3dp"
             android:textColor="@color/white" />
 
         <android.widget.Button
@@ -73,8 +74,9 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:background="@drawable/round_corners"
-            android:backgroundTint="#DF2EDC"
+            android:backgroundTint="#25E1E1"
             android:text="View"
+            android:elevation="3dp"
             android:textColor="@color/white" />
 
     </LinearLayout>
