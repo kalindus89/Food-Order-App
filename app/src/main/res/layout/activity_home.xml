@@ -19,7 +19,7 @@
         <include
             layout="@layout/activity_home_swipe_refresh_list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent" />
 
         <com.andremion.counterfab.CounterFab
             android:id="@+id/viewCart"

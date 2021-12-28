@@ -13,43 +13,45 @@
         android:layout_gravity="center_vertical"
         android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_marginTop="15dp"
-        android:layout_marginRight="15dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginBottom="10dp"
-        android:orientation="horizontal">
-        <ImageView
-            android:layout_width="17dp"
-            android:layout_height="17dp"
-            app:tint="#51DA56"
-            android:layout_gravity="center"
-            android:src="@drawable/full_round_circle"/>
-        <TextView
-            android:id="@+id/news_title"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Food 1"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="10dp"
-            android:textColor="@color/black"
-            android:textSize="15dp"
-            android:textStyle="bold" />
-    </LinearLayout>
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="17dp"
+                android:layout_height="17dp"
+                android:layout_gravity="center"
+                android:src="@drawable/full_round_circle"
+                app:tint="#51DA56" />
+
+            <TextView
+                android:id="@+id/news_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10dp"
+                android:text="Food 1"
+                android:textColor="@color/black"
+                android:textSize="15dp"
+                android:textStyle="bold" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/news_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
             android:layout_marginLeft="15dp"
+            android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
-            android:textColor="@color/black"
             android:gravity="center_vertical|start"
-            android:text="Date: 2020.10.13" />
+            android:text="Date: 2020.10.13"
+            android:textColor="@color/black" />
 
     </LinearLayout>
 

@@ -42,8 +42,5 @@
         android:paddingLeft="10dp"
         android:hint="Search" />
 
-
-
-
 </LinearLayout>
 
