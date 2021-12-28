@@ -40,7 +40,7 @@ public class AdapterQuickFoods extends FirebaseRecyclerAdapter<FoodsModel, Adapt
 
         holder.foodName.setText(model.getName());
         holder.item_price.setText("$"+model.getPrice());
-        Picasso.get().load(model.getImage()).placeholder(R.drawable.loading_image).into(holder.foodImage);
+        Picasso.get().load(model.getImage()).placeholder(R.drawable.loading_gif_2).into(holder.foodImage);
         double totalRating=(Double.valueOf(model.getRating())/ Double.valueOf(model.getTotalVoters()));
        // holder.rating_food.setText("Rating: "+String.format("%.1f", totalRating)+"/5");
 
