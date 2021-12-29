@@ -36,7 +36,7 @@
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
+        android:layout_marginLeft="10dp"
         android:text="Subscribe us to receive latest news and promotions"
         android:gravity="left"
         android:textColor="@color/black"
