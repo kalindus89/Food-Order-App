@@ -11,6 +11,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -28,7 +29,7 @@ public class SignUpActivity extends AppCompatActivity {
     EditText nameUserNew, phoneNumberNew, passwordNew;
     Button btnSignUpNew;
     ProgressBar progressBarNew;
-    LinearLayout goToSingInNew;
+    ImageView go_back;
     boolean newUserCreated = false;
 
     @Override
@@ -43,9 +44,9 @@ public class SignUpActivity extends AppCompatActivity {
         btnSignUpNew = findViewById(R.id.btnSignUpNew);
 
         progressBarNew = findViewById(R.id.progressBarNew);
-        goToSingInNew = findViewById(R.id.goToSingInNew);
+        go_back = findViewById(R.id.go_back);
 
-        goToSingInNew.setOnClickListener(new View.OnClickListener() {
+        go_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(SignUpActivity.this, SignInActivity.class));

@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center_vertical"
-        android:layout_margin="16dp"
+        android:background="@drawable/item_gradient_color2"
         android:orientation="horizontal">
 
         <LinearLayout
@@ -19,6 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_weight="9"
+            android:layout_margin="16dp"
             android:orientation="vertical">
 
             <TextView
@@ -64,6 +65,7 @@
             android:backgroundTint="#25E1E1"
             android:text="Track"
             android:visibility="gone"
+            android:layout_marginRight="3dp"
             android:elevation="3dp"
             android:textColor="@color/white" />
 
@@ -73,6 +75,7 @@
             android:layout_height="30dp"
             android:layout_gravity="center"
             android:layout_weight="1"
+            android:layout_marginRight="3dp"
             android:background="@drawable/round_corners"
             android:backgroundTint="#25E1E1"
             android:text="View"
