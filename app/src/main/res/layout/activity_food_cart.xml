@@ -4,13 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_new"
     tools:context=".food_cart_place_order.FoodCartActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#CB000000"
+        android:background="#fff"
         android:orientation="vertical">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -33,7 +32,7 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="10dp"
                 app:srcCompat="@drawable/go_back"
-                app:tint="@color/white" />
+                app:tint="@color/black" />
 
             <TextView
                 android:id="@+id/goBack"
@@ -42,7 +41,7 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="20dp"
                 android:text="Food Cart"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:textSize="20sp" />
 
         </LinearLayout>
@@ -62,7 +61,7 @@
             android:layout_height="120dp"
             android:layout_margin="8dp"
             android:visibility="gone"
-            app:cardBackgroundColor="@color/purple_500"
+            app:cardBackgroundColor="@color/black"
             app:cardCornerRadius="8dp"
             app:cardElevation="8dp"
             app:layout_constraintBottom_toBottomOf="parent">
@@ -103,11 +102,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/totalLayout"
-                    android:layout_margin="10dp"
-                    android:background="@drawable/round_corners"
-                    android:backgroundTint="#A9D440"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="15dp"
+                    android:background="@drawable/round_corners_full"
+                    android:backgroundTint="#fff"
                     android:text="Place Order"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/black" />
 
             </RelativeLayout>
 
@@ -118,6 +120,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:gravity="center"
             app:layout_constraintBottom_toTopOf="@+id/bottomLayout"
             app:layout_constraintEnd_toEndOf="@+id/recyclerView"
             app:layout_constraintStart_toStartOf="@+id/recyclerView"
@@ -128,6 +131,19 @@
                 android:layout_height="200dp"
                 android:src="@drawable/order_now_image" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Whoops.... Nothing in here"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="5dp"
+                android:text="Explore round to add items in your\nshopping bag"/>
+
             <android.widget.Button
                 android:id="@+id/btnFoodOrder"
                 android:layout_width="match_parent"
@@ -135,9 +151,9 @@
                 android:layout_below="@+id/totalLayout"
                 android:layout_marginTop="50dp"
                 android:background="@drawable/round_corners"
-                android:backgroundTint="#F8F392"
+                android:backgroundTint="#d70d57"
                 android:text="Place An Order"
-                android:textColor="#0B0B0B" />
+                android:textColor="#fff" />
         </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
