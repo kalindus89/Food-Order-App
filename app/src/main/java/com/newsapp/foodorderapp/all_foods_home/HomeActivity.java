@@ -147,7 +147,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
                 if (SessionManagement.isConnectedToInternet(getApplicationContext())) {
                     loadDataRefresh();
-                  //  updateFirebaseToken();
+                    updateFirebaseToken();
                 } else {
                     Toast.makeText(getApplicationContext(), "Check your connectivity!", Toast.LENGTH_SHORT).show();
                     swipeRefreshList.setRefreshing(false);
@@ -250,7 +250,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         loadDataQuickFoods();
         loadData();
         getTotalFoodItemCount();
-        //updateFirebaseToken();
+        updateFirebaseToken();
 
 
     }
@@ -330,7 +330,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-/*    public void updateFirebaseToken() {
+    public void updateFirebaseToken() {
 
         FirebaseMessaging.getInstance().getToken()
                 .addOnCompleteListener(new OnCompleteListener<String>() {
@@ -383,7 +383,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                         }
                     }
                 });
-    }*/
+    }
 
     private void loadDataQuickFoods() {
         RecyclerView recyclerViewQuick = findViewById(R.id.recyclerViewQuick);
